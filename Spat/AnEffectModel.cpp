@@ -12,7 +12,7 @@ void AnEffect::operator()(halp::tick t)
 
     for (int j = 0; j < t.frames; j++)
     {
-      out[j] = inputs.gain * in[j];
+      out[j] = inputs.volume * in[j];
     }
   }
 }

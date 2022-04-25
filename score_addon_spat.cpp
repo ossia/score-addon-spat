@@ -1,9 +1,13 @@
 #include "score_addon_spat.hpp"
 #include <Spat/AnEffect.hpp>
+
 #include <Spat/StereoToMono.hpp>
 #include <Spat/StereoPanning.hpp>
 #include <Spat/Rotator.hpp>
 #include <Spat/AmbiToBinaural.hpp>
+
+#include <Spat/AnEffectUi.hpp>
+
 
 #include <Avnd/Factories.hpp>
 #include <score/plugins/FactorySetup.hpp>

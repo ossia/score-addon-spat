@@ -42,10 +42,4 @@ add_library(
 
 setup_score_plugin(score_addon_spat)
 
-
-target_link_libraries(
-    score_addon_spat
-    PUBLIC
-    score_plugin_engine
-    score_plugin_avnd
-)
+target_link_libraries(score_addon_spat PUBLIC score_plugin_engine score_plugin_avnd)
