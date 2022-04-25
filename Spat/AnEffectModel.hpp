@@ -25,7 +25,7 @@ class AnEffect
 {
 public:
   halp_meta(name, "Mosca-like (examples)")
-  //halp_meta(category, "Audio")
+  halp_meta(category, "Audio")
   halp_meta(c_name, "mosca_like")
   halp_meta(uuid, "0fb2b4f5-8811-472a-abad-905e1fa0e6db")
 
