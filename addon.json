@@ -1,0 +1,11 @@
+{
+  "src": "<url to the .zip file created by the release script>",
+  "name": "My Avnd Effect",
+  "raw_name": "score-addon-my-avnd-effect",
+  "version": "1.0",
+  "kind": "addon",
+  "short": "Test audio effect add-on",
+  "long": "This addon provides an example audio effect",
+  "small": "https://raw.githubusercontent.com/OSSIA/score-addon-tutorial/master/Deployment/icon.png",
+  "key": "b2f2fd7c-7e91-4c32-b21b-1d02aaa7c60c"
+}
