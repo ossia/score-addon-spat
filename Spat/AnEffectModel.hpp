@@ -138,11 +138,97 @@ public:
       halp::xy_type<float> value{};
   };
 
+  struct custom_button
+  {
+      static constexpr double width() { return 300.; }
+      static constexpr double height() { return 300.; }
+
+      void paint(avnd::painter auto ctx)
+      {
+        ctx.set_stroke_color({200, 200, 200, 255});
+        ctx.set_stroke_width(2.);
+        ctx.set_fill_color({100, 100, 100, 255});
+        ctx.begin_path();
+        ctx.draw_rounded_rect(0., 0., width(), height(), 5);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.set_fill_color({0, 0, 0, 255});
+        ctx.begin_path();
+        ctx.set_font("Ubuntu");
+        ctx.set_font_size(press_count +5);
+        ctx.draw_text(150.- press_count*0.95, 150. - press_count*0.95, fmt::format("{}", press_count));
+        ctx.fill();
+
+        ctx.update();
+      }
+
+      bool mouse_press(double x, double y)
+      {
+        on_pressed();
+        return true;
+      }
+
+      void mouse_move(double x, double y)
+      {
+      }
+
+      void mouse_release(double x, double y)
+      {
+      }
+
+      int press_count{0};
+      std::function<void()> on_pressed = [] { };
+  };
+
+  struct custom_color
+  {
+      static constexpr double width() { return 300.; }
+      static constexpr double height() { return 300.; }
+
+      void paint(avnd::painter auto ctx)
+      {
+        uint8_t col = static_cast<uint8_t>(color);
+        ctx.set_stroke_color({200, 200, 200, 255});
+        ctx.set_stroke_width(2.);
+        ctx.set_fill_color({col, col, col, 255});
+        ctx.begin_path();
+        ctx.draw_rounded_rect(0., 0., width(), height(), 5);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.update();
+      }
+
+      bool mouse_press(double x, double y)
+      {
+        on_pressed();
+        return true;
+      }
+
+      void mouse_move(double x, double y)
+      {
+        on_pressed();
+      }
+
+      void mouse_release(double x, double y)
+      {
+      }
+
+      int color{0};
+
+      std::function<void()> on_pressed = [] { };
+  };
+
+
   // Define inputs and outputs ports.
   // See the docs at https://github.com/celtera/avendish
   struct ins
   {
       halp::dynamic_audio_bus<"Input", double> audio;
+
+      halp::hslider_i32<"X", halp::range{.min = 0, .max = 255, .init = 0}> x;
+      halp::hslider_f32<"Y", halp::range{.min = -10, .max = 10, .init = 0}> y;
 
       halp::knob_f32<"Volume", halp::range{.min = 0., .max = 5., .init = 1.}> volume;
       halp::hslider_f32<"Level", halp::range{.min = -10, .max = 10, .init = 0}> level;
@@ -155,6 +241,31 @@ public:
   {
     halp::dynamic_audio_bus<"Output", double> audio;
   } outputs;
+
+  struct ui_to_processor
+  {
+      int utp;
+      float futp;
+  };
+
+  struct processor_to_ui
+  {
+      int ptu;
+      float fptu;
+  };
+
+  void process_message()
+  {
+      fprintf(stderr, "Got message in processing thread !\n");
+      send_message(processor_to_ui{.ptu = 1});
+  }
+
+  void process_color()
+  {
+      send_message(processor_to_ui{.ptu = inputs.x});
+  }
+
+  std::function<void(processor_to_ui)> send_message;
 
   using setup = halp::setup;
   void prepare(halp::setup info)
