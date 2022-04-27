@@ -54,6 +54,15 @@ public:
 
     void operator()(halp::tick tick);
 
+    void yawPitchRoll2Rzyx2
+    (
+        float yaw,
+        float pitch,
+        float roll,
+        int rollPitchYawFLAG,
+        float R[3][3]
+    );
+
 private:
     int order, nSH, nSamples;
     float yaw, pitch, roll;
