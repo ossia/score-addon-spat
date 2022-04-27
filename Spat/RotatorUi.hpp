@@ -1,5 +1,5 @@
 #pragma once
-#include <Spat/RotatorUi.hpp>
+#include <Spat/RotatorModel.hpp>
 #include <halp/layout.hpp>
 
 namespace Spat
