@@ -7,7 +7,7 @@
 #include <Spat/AmbiToBinaural.hpp>
 
 #include <Spat/AnEffectUi.hpp>
-
+#include <Spat/Mosca.hpp>
 
 #include <Avnd/Factories.hpp>
 #include <score/plugins/FactorySetup.hpp>
@@ -29,7 +29,9 @@ score_addon_spat::factories(
           , Spat::StereoToMono
           , Spat::StereoPanning
           , Spat::Rotator
-          , Spat::AmbiToBinaural>(ctx, key);
+          , Spat::AmbiToBinaural
+          , Spat::Mosca
+          >(ctx, key);
 }
 
 std::vector<score::PluginKey> score_addon_spat::required() const

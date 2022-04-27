@@ -26,8 +26,26 @@ struct AnEffect::ui
 
             ui.customColor.color.on_pressed = [&]
             {
-                fprintf(stderr, "Sending message (customColor) from UI thread !\n");
+                fprintf(stderr, "Sending message \"Reset Color\" from UI thread !\n");
                 this->process_color(ui);
+            };
+
+            ui.customColorR.color.on_pressed = [&]
+            {
+                fprintf(stderr, "Sending message \"More Red\" from UI thread !\n");
+                this->process_colorR(ui);
+            };
+
+            ui.customColorG.color.on_pressed = [&]
+            {
+                fprintf(stderr, "Sending message \"More Green\" from UI thread !\n");
+                this->process_colorG(ui);
+            };
+
+            ui.customColorB.color.on_pressed = [&]
+            {
+                fprintf(stderr, "Sending message \"More Blue\" from UI thread !\n");
+                this->process_colorB(ui);
             };
         }
 
@@ -39,7 +57,32 @@ struct AnEffect::ui
 
         static void process_color(ui& self)
         {
-            self.customColor.color.color++;
+            self.customColor.color.colorR = 0;
+            self.customColor.color.colorG = 0;
+            self.customColor.color.colorB = 0;
+            self.customColorR.color.color = 0;
+            self.customColorG.color.color = 0;
+            self.customColorB.color.color = 0;
+
+            self.click.button.press_count = 0;
+        }
+
+        static void process_colorR(ui& self)
+        {
+            self.customColorR.color.color++;
+            self.customColor.color.colorR++;
+        }
+
+        static void process_colorG(ui& self)
+        {
+            self.customColorG.color.color++;
+            self.customColor.color.colorG++;
+        }
+
+        static void process_colorB(ui& self)
+        {
+            self.customColorB.color.color++;
+            self.customColor.color.colorB++;
         }
 
         std::function<void(ui_to_processor)> send_message;
@@ -72,6 +115,30 @@ struct AnEffect::ui
     } customColor;
 
     struct {
+        halp_meta(name, "CustomColorR")
+        halp_meta(layout, halp::layouts::vbox)
+        halp_meta(background, halp::colors::mid)
+
+        halp::custom_actions_item<custom_colorR> color{.x = 0, .y = 0};
+    } customColorR;
+
+    struct {
+        halp_meta(name, "CustomColorG")
+        halp_meta(layout, halp::layouts::vbox)
+        halp_meta(background, halp::colors::mid)
+
+        halp::custom_actions_item<custom_colorG> color{.x = 0, .y = 0};
+    } customColorG;
+
+    struct {
+        halp_meta(name, "CustomColorB")
+        halp_meta(layout, halp::layouts::vbox)
+        halp_meta(background, halp::colors::mid)
+
+        halp::custom_actions_item<custom_colorB> color{.x = 0, .y = 0};
+    } customColorB;
+
+    struct {
         halp_meta(name, "Panel")
         halp_meta(layout, halp::layouts::vbox)
         halp_meta(width, 300)
@@ -85,5 +152,14 @@ struct AnEffect::ui
         halp::item<&ins::concentration> w3;
         halp::item<&ins::dstAmount> w4;
     } panel;
+
+    struct {
+        halp_meta(name, "Morpion")
+        halp_meta(layout, halp::layouts::vbox)
+        halp_meta(background, halp::colors::mid)
+
+        halp::custom_item<custom_morpion, &ins::level> widget{{.x = 500, .y = 920}};
+    } custom_morpion;
+
 };
 }

@@ -24,9 +24,9 @@ namespace Spat
 class AnEffect
 {
 public:
-  halp_meta(name, "Mosca-like (examples)")
+  halp_meta(name, "Test-examples")
   halp_meta(category, "Audio")
-  halp_meta(c_name, "mosca_like")
+  halp_meta(c_name, "test_examples")
   halp_meta(uuid, "0fb2b4f5-8811-472a-abad-905e1fa0e6db")
 
   struct custom_mosca
@@ -138,6 +138,89 @@ public:
       halp::xy_type<float> value{};
   };
 
+  struct custom_morpion
+  {
+      static constexpr double width() { return 300.; } // X
+      static constexpr double height() { return 300.; } // Y
+
+      void set_value(const auto& control, halp::xy_type<float> value)
+      {
+        this->value = avnd::map_control_to_01(control, value);
+      }
+
+      static auto value_to_control(auto& control, halp::xy_type<float> value)
+      {
+        return avnd::map_control_from_01(control, value);
+      }
+
+      void paint(avnd::painter auto ctx)
+      {
+          float m_x = value.x * width();
+          float m_y = value.y * height();
+          float m_r = 16.;
+
+          ctx.set_fill_color({114, 5, 35, 255});
+          ctx.begin_path();
+          ctx.draw_rect(0., 0., width(), height());
+          ctx.fill();
+
+          for(int x = 19; x < width(); x += 38)
+          {
+            for(int y = 19; y < height(); y += 38)
+            {
+                ctx.begin_path();
+                //ctx.set_stroke_color({255, 255, 255, 255});
+                ctx.set_fill_color({202, 127, 127, 255});
+                ctx.draw_circle(x, y, m_r);
+                ctx.fill();
+                //ctx.stroke();
+            }
+          }
+
+          for(int x = 19; x < width(); x += 38)
+          {
+            for(int y = 19; y < height(); y += 38)
+            {
+                float formula = sqrt(pow((m_x - x), 2) + pow((m_y - y), 2));
+                if(formula < m_r)
+                {
+                    ctx.begin_path();
+                    //ctx.set_stroke_color({255, 255, 255, 255});
+                    ctx.set_fill_color({255, 0, 0, 255});
+                    ctx.draw_circle(x, y, m_r);
+                    ctx.fill();
+                    //ctx.stroke();
+                }
+            }
+          }
+      }
+
+      bool mouse_press(double x, double y)
+      {
+          transaction.start();
+          mouse_move(x, y);
+          return true;
+      }
+
+      void mouse_move(double x, double y)
+      {
+          halp::xy_type<float> res;
+          res.x = std::clamp(x / width(), 0., 1.);
+
+          res.y = std::clamp(y / height(), 0., 1.);
+          transaction.update(res);
+      }
+
+      void mouse_release(double x, double y)
+      {
+          //mouse_move(x, y);
+          transaction.commit();
+      }
+
+      halp::transaction<halp::xy_type<float>> transaction;
+      halp::xy_type<float> value{};
+  };
+
   struct custom_button
   {
       static constexpr double width() { return 300.; }
@@ -171,10 +254,7 @@ public:
 
       void mouse_move(double x, double y)
       {
-      }
-
-      void mouse_release(double x, double y)
-      {
+          on_pressed();
       }
 
       int press_count{0};
@@ -188,10 +268,12 @@ public:
 
       void paint(avnd::painter auto ctx)
       {
-        uint8_t col = static_cast<uint8_t>(color);
+        uint8_t colR = static_cast<uint8_t>(colorR);
+        uint8_t colG = static_cast<uint8_t>(colorG);
+        uint8_t colB = static_cast<uint8_t>(colorB);
         ctx.set_stroke_color({200, 200, 200, 255});
         ctx.set_stroke_width(2.);
-        ctx.set_fill_color({col, col, col, 255});
+        ctx.set_fill_color({colR, colG, colB, 255});
         ctx.begin_path();
         ctx.draw_rounded_rect(0., 0., width(), height(), 5);
         ctx.fill();
@@ -215,8 +297,130 @@ public:
       {
       }
 
-      int color{0};
+      int colorR{0};
+      int colorG{0};
+      int colorB{0};
 
+      std::function<void()> on_pressed = [] { };
+  };
+
+  struct custom_colorR
+  {
+      static constexpr double width() { return 300.; }
+      static constexpr double height() { return 300.; }
+
+      void paint(avnd::painter auto ctx)
+      {
+        ctx.set_stroke_color({200, 200, 200, 255});
+        ctx.set_stroke_width(2.);
+        ctx.set_fill_color({255, 0, 0, 255});
+        ctx.begin_path();
+        ctx.draw_rounded_rect(0., 0., width(), height(), 5);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.set_fill_color({0, 0, 0, 255});
+        ctx.begin_path();
+        ctx.set_font("Ubuntu");
+        ctx.set_font_size(55);
+        ctx.draw_text(90., 175., fmt::format("{}", color % 255));
+        ctx.fill();
+
+        ctx.update();
+      }
+
+      bool mouse_press(double x, double y)
+      {
+        on_pressed();
+        return true;
+      }
+
+      void mouse_move(double x, double y)
+      {
+        on_pressed();
+      }
+
+      int color{0};
+      std::function<void()> on_pressed = [] { };
+  };
+
+  struct custom_colorG
+  {
+      static constexpr double width() { return 300.; }
+      static constexpr double height() { return 300.; }
+
+      void paint(avnd::painter auto ctx)
+      {
+        ctx.set_stroke_color({200, 200, 200, 255});
+        ctx.set_stroke_width(2.);
+        ctx.set_fill_color({0, 255, 0, 255});
+        ctx.begin_path();
+        ctx.draw_rounded_rect(0., 0., width(), height(), 5);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.set_fill_color({0, 0, 0, 255});
+        ctx.begin_path();
+        ctx.set_font("Ubuntu");
+        ctx.set_font_size(55);
+        ctx.draw_text(90., 175., fmt::format("{}", color % 255));
+        ctx.fill();
+
+        ctx.update();
+      }
+
+      bool mouse_press(double x, double y)
+      {
+        on_pressed();
+        return true;
+      }
+
+      void mouse_move(double x, double y)
+      {
+        on_pressed();
+      }
+
+      int color{0};
+      std::function<void()> on_pressed = [] { };
+  };
+
+  struct custom_colorB
+  {
+      static constexpr double width() { return 300.; }
+      static constexpr double height() { return 300.; }
+
+      void paint(avnd::painter auto ctx)
+      {
+        ctx.set_stroke_color({200, 200, 200, 255});
+        ctx.set_stroke_width(2.);
+        ctx.set_fill_color({0, 0, 255, 255});
+        ctx.begin_path();
+        ctx.draw_rounded_rect(0., 0., width(), height(), 5);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.set_fill_color({0, 0, 0, 255});
+        ctx.begin_path();
+        ctx.set_font("Ubuntu");
+        ctx.set_font_size(55);
+        ctx.draw_text(90., 175., fmt::format("{}", color % 255));
+        ctx.fill();
+
+        ctx.update();
+      }
+
+      bool mouse_press(double x, double y)
+      {
+        on_pressed();
+        return true;
+      }
+
+      void mouse_move(double x, double y)
+      {
+        on_pressed();
+      }
+
+      int color{0};
       std::function<void()> on_pressed = [] { };
   };
 
