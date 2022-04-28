@@ -17,14 +17,35 @@ struct Mosca::ui
   halp_meta(height, 300)
   halp_meta(font, "Inconsolata")
 
+  struct bus {
+      void init(ui& ui)
+      {
+          ui.mosca.widget.on_pressed = [&]
+          {
+              fprintf(stderr, "Sending message from UI thread !\n");
+              this->send_message(ui_to_processor{.utp = 1});
+              this->process_message(ui);
+          };
+      }
+
+      static void process_message(ui& self)
+      {
+          fprintf(stderr, "Got message in UI thread !\n");
+          //self.mosca.widget.press_count++;
+      }
+
+      std::function<void(ui_to_processor)> send_message;
+
+  };
+
   struct {
-      halp_meta(name, "Mosca")
+      halp_meta(name, "Mosca Action")
       halp_meta(layout, halp::layouts::vbox)
       halp_meta(background, halp::colors::mid)
       halp_meta(width, 300)
       halp_meta(height, 300)
 
-      halp::custom_item<custom_mosca, &ins::level> widget{{.x = 500, .y = 920}};
+      halp::custom_actions_item<custom_mosca> widget{.x = 0, .y = 0};
   } mosca;
 
   struct {

@@ -34,15 +34,7 @@ public:
       static constexpr double width() { return 300.; } // X
       static constexpr double height() { return 300.; } // Y
 
-      void set_value(const auto& control, halp::xy_type<float> value)
-      {
-        this->value = avnd::map_control_to_01(control, value);
-      }
-
-      static auto value_to_control(auto& control, halp::xy_type<float> value)
-      {
-        return avnd::map_control_from_01(control, value);
-      }
+      halp::xy_type<float> res;
 
       void paint(avnd::painter auto ctx)
       {
@@ -51,8 +43,8 @@ public:
           double c_r = 150;
           double c_r_bis = 4;
 
-          float m_x = value.x * width();
-          float m_y = value.y * height();
+          float m_x = res.x * width();
+          float m_y = res.y * height();
           float m_r = 15.;
 
           ctx.set_stroke_color({200, 200, 200, 255});
@@ -97,29 +89,32 @@ public:
 
       bool mouse_press(double x, double y)
       {
-          transaction.start();
           mouse_move(x, y);
           return true;
       }
 
       void mouse_move(double x, double y)
       {
-          halp::xy_type<float> res;
           res.x = std::clamp(x / width(), 0., 1.);
-
           res.y = std::clamp(y / height(), 0., 1.);
-          transaction.update(res);
       }
 
       void mouse_release(double x, double y)
       {
           mouse_move(x, y);
-          transaction.commit();
       }
 
-      halp::transaction<halp::xy_type<float>> transaction;
+      float result_res_x()
+      {
+          fprintf(stderr, "res.x = %f\n", res.x);
+          return 2.0;
+      }
+
       halp::xy_type<float> value{};
-  };
+
+      //int press_count{0};
+      std::function<void()> on_pressed = [] { };
+  } mosca;
 
   struct ins
   {
@@ -132,6 +127,26 @@ public:
   {
     halp::dynamic_audio_bus<"Output", double> audio;
   } outputs;
+
+  struct ui_to_processor
+  {
+      int utp;
+      float futp;
+  };
+
+  struct processor_to_ui
+  {
+      int ptu;
+      float fptu;
+  };
+
+  void process_message()
+  {
+      fprintf(stderr, "Got message in processing thread !\n");
+      send_message(processor_to_ui{.ptu = 1});
+  }
+
+  std::function<void(processor_to_ui)> send_message;
 
   using setup = halp::setup;
   void prepare(halp::setup info)
