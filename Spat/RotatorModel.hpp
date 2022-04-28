@@ -5,8 +5,8 @@
 #include <halp/meta.hpp>
 
 #include <iostream>
-#include <vector>
-#include <saf.h>
+#include "AmbisonicMethods.hpp"
+//#include <saf.h>
 
 namespace Spat{
 
@@ -47,26 +47,28 @@ public:
     halp::setup setup_info;
     void prepare(halp::setup info)
     {
-        //inFrame.resize(max_nsh*info.frames);
+        nSamples=info.frames;
+
+        inFrame.resize(max_nsh, std::vector<float>(nSamples));
+        tmpFrame.resize(max_nsh, std::vector<float>(nSamples));
+        M_rot.resize(max_nsh, std::vector<float>(max_nsh));
+        prevM_rot.resize(max_nsh, std::vector<float>(max_nsh));
+
+        fadeIn.resize(nSamples);
+        fadeOut.resize(nSamples);
+
+        //M_rot_tmp.resize(max_nsh * max_nsh);
     };
 
     void operator()(halp::tick tick);
 
-    void yawPitchRoll2Rzyx2
-    (
-        float yaw,
-        float pitch,
-        float roll,
-        int rollPitchYawFLAG,
-        float R[3][3]
-    );
-
 private:
     int order, nSH, nSamples;
     float yaw, pitch, roll;
-    //std::vector<std::vector<float>> inFrame{max_nsh, std::vector<float> (1,0.0f)};
-    //float ** M_rot;
-    float prevM_rot[max_nsh][max_nsh];
+    std::vector<std::vector<float>> inFrame{}, tmpFrame{}, M_rot{}, prevM_rot{};
+    std::vector<float> fadeIn{}, fadeOut{};
+
+    //std::vector<float> M_rot_tmp{};
 };
 }
 

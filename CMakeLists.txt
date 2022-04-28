@@ -28,6 +28,8 @@ add_library(
   Spat/RotatorUi.hpp
   Spat/Rotator.hpp
 
+  Spat/AmbisonicMethods.hpp
+  Spat/AmbisonicMethods.cpp
 
   score_addon_spat.hpp
   score_addon_spat.cpp
@@ -35,22 +37,10 @@ add_library(
 
 setup_score_plugin(score_addon_spat)
 
-target_include_directories(score_plugin_avnd
-    PUBLIC
-    "${3RDPARTY_FOLDER}/avendish/include"
-    /home/scrime/Documents/SAF/Spatial_Audio_Framework/framework/include
-    /home/scrime/Documents/SAF/Spatial_Audio_Framework/examples/include
-)
 
 target_link_libraries(
     score_addon_spat
     PUBLIC
     score_plugin_engine
     score_plugin_avnd
-    PRIVATE
-    /home/scrime/Documents/SAF/Spatial_Audio_Framework/build/framework/libsaf.a
-    /home/scrime/Documents/SAF/Spatial_Audio_Framework/build/examples/libsaf_example_rotator.a
-    -lopenblas
-    -llapack
-    -llapacke
 )
