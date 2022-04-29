@@ -31,12 +31,12 @@ public:
 
   struct custom_mosca
   {
-      static constexpr double width() { return 300.; } // X
-      static constexpr double height() { return 300.; } // Y
+      static constexpr double width() { return 300.; } // Axe X
+      static constexpr double height() { return 300.; } // Axe Y
 
       halp::xy_type<float> res;
 
-      void paint(avnd::painter auto ctx)
+      void paint(avnd::painter auto ctx)         
       {
           double c_x = width()/2;
           double c_y = height()/2;
@@ -97,6 +97,15 @@ public:
       {
           res.x = std::clamp(x / width(), 0., 1.);
           res.y = std::clamp(y / height(), 0., 1.);
+
+          ui_to_processor{.valx = 17.0};
+
+          /* Doesn't work but it's the idea */
+          //ui_to_pro.valx = std::clamp(x / width(), 0., 1.);
+          //send_message(processor_to_ui{.valx = 1.0});
+
+
+          //(stderr, "directement = %f\n", res.x);
       }
 
       void mouse_release(double x, double y)
@@ -106,8 +115,7 @@ public:
 
       float result_res_x()
       {
-          fprintf(stderr, "res.x = %f\n", res.x);
-          return 2.0;
+          return res.x;
       }
 
       halp::xy_type<float> value{};
@@ -132,7 +140,8 @@ public:
   {
       int utp;
       float futp;
-  };
+      float valx;
+  } ui_to_pro;
 
   struct processor_to_ui
   {

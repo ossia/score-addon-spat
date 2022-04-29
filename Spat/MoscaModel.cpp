@@ -15,7 +15,8 @@ void Mosca::operator()(halp::tick t)
       float test = mosca.result_res_x();
 
       out[j] = test * in[j];
-      fprintf(stderr, "Test = %f\n", test);
+
+      fprintf(stderr, "Test = %f\n", ui_to_pro.valx);
       //out[j] = in[j];
       //out[j] = inputs.level * in[j];
     }
