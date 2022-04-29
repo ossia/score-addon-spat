@@ -24,7 +24,7 @@ float getP
     int a,
     int b,
     float R_1[3][3],
-    float* R_lm1
+    std::vector<float> R_lm1
 );
 
 /* Ivanic, J., Ruedenberg, K. (1998). Rotation Matrices for Real Spherical Harmonics. Direct Determination
@@ -36,7 +36,7 @@ float getU
     int m,
     int n,
     float R_1[3][3],
-    float* R_lm1
+    std::vector<float> R_lm1
 );
 
 /* Ivanic, J., Ruedenberg, K. (1998). Rotation Matrices for Real Spherical Harmonics. Direct Determination
@@ -48,7 +48,7 @@ float getV
     int m,
     int n,
     float R_1[3][3],
-    float* R_lm1
+    std::vector<float> R_lm1
 );
 
 /* Ivanic, J., Ruedenberg, K. (1998). Rotation Matrices for Real Spherical Harmonics. Direct Determination
@@ -60,13 +60,14 @@ float getW
     int m,
     int n,
     float R_1[3][3],
-    float* R_lm1
+    std::vector<float> R_lm1
 );
 
-void getSHrotMtxReal
+std::vector<float> getSHrotMtxReal
 (
     float Rxyz[3][3],
     //std::vector<float> RotMtx,
-    float* RotMtx/*(L+1)^2 x (L+1)^2 */,
-    int L
+    //float* RotMtx/*(L+1)^2 x (L+1)^2 */,
+    int L,
+    int size
 );

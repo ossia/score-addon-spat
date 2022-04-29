@@ -68,7 +68,7 @@ float getP
     int a,
     int b,
     float R_1[3][3],
-    float* R_lm1
+    std::vector<float> R_lm1
 )
 {
     float ret, ri1, rim1, ri0;
@@ -98,7 +98,7 @@ float getU
     int m,
     int n,
     float R_1[3][3],
-    float* R_lm1
+    std::vector<float> R_lm1
 )
 {
     return getP(M, 0, l, m, n, R_1, R_lm1);
@@ -113,7 +113,7 @@ float getV
     int m,
     int n,
     float R_1[3][3],
-    float* R_lm1
+    std::vector<float> R_lm1
 )
 {
     int d;
@@ -151,7 +151,7 @@ float getW
     int m,
     int n,
     float R_1[3][3],
-    float* R_lm1
+    std::vector<float> R_lm1
 )
 {
     float ret, p0, p1;
@@ -172,21 +172,23 @@ float getW
     return ret;
 }
 
-void getSHrotMtxReal
+std::vector<float> getSHrotMtxReal
 (
     float Rxyz[3][3],
-    float* RotMtx/*(L+1)^2 x (L+1)^2 */,
-    //std::vector<float> RotMtx,
-    int L
+    //float* RotMtx/*(L+1)^2 x (L+1)^2 */,
+    int L,
+    int size
 )
 {
     int M=(L+1)*(L+1);
     int d, bandIdx, denom;
     float u, v, w;
-    float R_1[3][3], R_lm1[M], R_l[M];
+    float R_1[3][3];//, R_lm1[M], R_l[M];
+    std::vector<float> R_lm1(M), R_l(M);
 
-    memset(RotMtx, 0, M*M*sizeof(float));
-    //std::fill(RotMtx.begin(), RotMtx.end(), 0);
+    //memset(RotMtx, 0, M*M*sizeof(float));
+    std::vector<float> RotMtx(size);
+    std::fill(RotMtx.begin(), RotMtx.end(), 0);
 
     /* zeroth-band (l=0) is invariant to rotation */
     RotMtx[0] = 1;
@@ -211,9 +213,8 @@ void getSHrotMtxReal
 
     /* compute rotation matrix of each subsequent band recursively */
     bandIdx = 4;
+    std::fill(R_l.begin(), R_l.end(), 0);
     for(int l = 2; l<=L; l++){
-        for(int i=0; i<2*l+1; i++)
-            memset(R_l + i*M, 0, (2*l+1) * sizeof(float));
         for(int m=-l; m<=l; m++){
             for(int n=-l; n<=l; n++){
                 /* compute u,v,w terms of Eq.8.1 (Table I) */
@@ -239,7 +240,10 @@ void getSHrotMtxReal
             for(int j=0; j<2*l+1; j++)
                 RotMtx[(bandIdx + i)*M + (bandIdx + j)] = R_l[i*M+j];
         for(int i=0; i<2*l+1; i++)
-            memcpy(R_lm1+i*M, R_l + i*M, (2*l+1) * sizeof(float));
+            std::copy(R_lm1.begin(), R_lm1.end(), R_l.begin());
+
         bandIdx += 2*l+1;
     }
+
+    return RotMtx;
 }

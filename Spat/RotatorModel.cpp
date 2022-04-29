@@ -26,7 +26,7 @@ void Rotator::operator()(halp::tick t)
     float** out = outputs.audio.samples;
 
     float Rxyz[3][3];
-    float M_rot_tmp[max_nsh * max_nsh];
+    std::vector<float> M_rot_tmp(max_nsh*max_nsh);
 
     for (int i = 0; i < nSamples; i++)
         for (int j = 0; j < nSH; j++)
@@ -36,8 +36,7 @@ void Rotator::operator()(halp::tick t)
     //  std::copy_n(in[0], nSamples, inFrame[j]);
 
     yawPitchRoll2Rzyx(yaw, pitch, roll, 0, Rxyz);
-    //getSHrotMtxReal(Rxyz, (float*)M_rot_tmp, order);
-    getSHrotMtxReal(Rxyz, M_rot_tmp, order);
+    M_rot_tmp = getSHrotMtxReal(Rxyz, order, max_nsh*max_nsh);
 
     bool sameRot = true;
 

@@ -56,8 +56,6 @@ public:
 
         fadeIn.resize(nSamples);
         fadeOut.resize(nSamples);
-
-        //M_rot_tmp.resize(max_nsh * max_nsh);
     };
 
     void operator()(halp::tick tick);
@@ -67,8 +65,6 @@ private:
     float yaw, pitch, roll;
     std::vector<std::vector<float>> inFrame{}, tmpFrame{}, M_rot{}, prevM_rot{};
     std::vector<float> fadeIn{}, fadeOut{};
-
-    //std::vector<float> M_rot_tmp{};
 };
 }
 
