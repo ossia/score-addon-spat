@@ -2,6 +2,7 @@
 
 namespace Spat
 {
+
 void Mosca::operator()(halp::tick t)
 {
   // Process the input buffer
@@ -16,9 +17,7 @@ void Mosca::operator()(halp::tick t)
 
       out[j] = test * in[j];
 
-      fprintf(stderr, "Test = %f\n", ui_to_pro.valx);
-      //out[j] = in[j];
-      //out[j] = inputs.level * in[j];
+      fprintf(stderr, "MoscaModel.cpp, x = %f \n", m_local_data.valx);
     }
   }
 }

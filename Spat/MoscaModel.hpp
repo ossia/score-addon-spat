@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <avnd/concepts/processor.hpp>
 #include <avnd/concepts/painter.hpp>
@@ -28,6 +28,7 @@ public:
   halp_meta(category, "Audio")
   halp_meta(c_name, "mosca_like")
   halp_meta(uuid, "96ab8e9d-9b83-428c-b3fa-7f82b00261dd")
+
 
   struct custom_mosca
   {
@@ -98,14 +99,9 @@ public:
           res.x = std::clamp(x / width(), 0., 1.);
           res.y = std::clamp(y / height(), 0., 1.);
 
-          ui_to_processor{.valx = 17.0};
+          //process_message(processor_to_ui{.ptu = 1});
 
-          /* Doesn't work but it's the idea */
-          //ui_to_pro.valx = std::clamp(x / width(), 0., 1.);
-          //send_message(processor_to_ui{.valx = 1.0});
-
-
-          //(stderr, "directement = %f\n", res.x);
+          //fprintf(stderr, "UTP mouse_move : %f \n", 2.0);
       }
 
       void mouse_release(double x, double y)
@@ -113,14 +109,13 @@ public:
           mouse_move(x, y);
       }
 
-      float result_res_x()
+      float result_res_x() 
       {
-          return res.x;
+          return 3.;
       }
 
       halp::xy_type<float> value{};
 
-      //int press_count{0};
       std::function<void()> on_pressed = [] { };
   } mosca;
 
@@ -141,7 +136,7 @@ public:
       int utp;
       float futp;
       float valx;
-  } ui_to_pro;
+  };
 
   struct processor_to_ui
   {
@@ -149,18 +144,18 @@ public:
       float fptu;
   };
 
-  void process_message()
+  /*void process_message()
   {
       fprintf(stderr, "Got message in processing thread !\n");
       send_message(processor_to_ui{.ptu = 1});
-  }
+  }*/
 
   std::function<void(processor_to_ui)> send_message;
 
-  using setup = halp::setup;
-  void prepare(halp::setup info)
-  {
-    // Initialization, this method will be called with buffer size, etc.
+  static ui_to_processor m_local_data;
+
+  static void process_message(const ui_to_processor& m) {
+     m_local_data = m;
   }
 
   using tick = halp::tick;
@@ -168,6 +163,8 @@ public:
   void operator()(halp::tick t);
 
   struct ui;
-};
 
+private :
+  //ui_to_processor u_t_p;
+};
 }
