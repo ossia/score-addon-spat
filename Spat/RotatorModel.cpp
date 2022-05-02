@@ -28,6 +28,9 @@ void Rotator::operator()(halp::tick t)
     float Rxyz[3][3];
     std::vector<float> M_rot_tmp(max_nsh*max_nsh);
 
+    //if(FuMA)
+    //    convertToACN
+
     for (int i = 0; i < nSamples; i++)
         for (int j = 0; j < nSH; j++)
             inFrame[j][i] = in[0][i];
@@ -79,6 +82,11 @@ void Rotator::operator()(halp::tick t)
             prevM_rot[i][j] = M_rot[i][j];
       }
     }
+
+    //if(FuMA)
+    //  convertToFuMA
+    //convertFuMAToACN(out, order, nSamples);
+    //std::cout << inFrame[0][0] << std::endl << std::endl << std::endl ;
 
     for (int i = nSH; i < inputs.audio.channels; i++)
       for (int j = 0; j < nSamples; j++)

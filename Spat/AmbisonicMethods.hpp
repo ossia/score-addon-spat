@@ -4,6 +4,10 @@
 #include <string.h>
 #include <vector>
 #include <algorithm>
+#include <iostream>
+
+static constexpr int max_FuMA_order = 3;
+static constexpr int max_FuMA_nsh = ((max_FuMA_order+1)*(max_FuMA_order+1));
 
 void yawPitchRoll2Rzyx
 (
@@ -66,8 +70,8 @@ float getW
 std::vector<float> getSHrotMtxReal
 (
     float Rxyz[3][3],
-    //std::vector<float> RotMtx,
-    //float* RotMtx/*(L+1)^2 x (L+1)^2 */,
     int L,
     int size
 );
+
+void convertFuMAToACN(float** in, int order, int nSamples);
