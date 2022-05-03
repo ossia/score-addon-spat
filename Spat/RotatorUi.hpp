@@ -15,6 +15,7 @@ struct Rotator::ui
 
   halp::label title{"Rotator (with Spherical Harmonics / Ambisonics)"};
   halp::item<&ins::order> order;
+  halp::item<&ins::conv> conv;
   halp::item<&ins::yaw> yaw;
   halp::item<&ins::pitch> pitch;
   halp::item<&ins::roll> roll;

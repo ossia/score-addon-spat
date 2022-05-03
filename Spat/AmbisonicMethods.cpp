@@ -183,16 +183,16 @@ std::vector<float> getSHrotMtxReal
     int d, bandIdx, denom;
     float u, v, w;
     float R_1[3][3];//, R_lm1[M], R_l[M];
-    std::vector<float> R_lm1(M), R_l(M);
+    std::vector<float> R_lm1(M*M), R_l(M*M);
 
     //memset(RotMtx, 0, M*M*sizeof(float));
     std::vector<float> RotMtx(size);
     std::fill(RotMtx.begin(), RotMtx.end(), 0);
 
-    /* zeroth-band (l=0) is invariant to rotation */
+    // zeroth-band (l=0) is invariant to rotation
     RotMtx[0] = 1;
 
-    /* the first band (l=1) is directly related to the rotation matrix */
+    // the first band (l=1) is directly related to the rotation matrix
     R_1[0][0] = Rxyz[1][1];
     R_1[0][1] = Rxyz[1][2];
     R_1[0][2] = Rxyz[1][0];
@@ -210,20 +210,20 @@ std::vector<float> getSHrotMtxReal
             RotMtx[i*M+j] = R_1[i-1][j-1];
     }
 
-    /* compute rotation matrix of each subsequent band recursively */
+    // compute rotation matrix of each subsequent band recursively
     bandIdx = 4;
     std::fill(R_l.begin(), R_l.end(), 0);
     for(int l = 2; l<=L; l++){
         for(int m=-l; m<=l; m++){
             for(int n=-l; n<=l; n++){
-                /* compute u,v,w terms of Eq.8.1 (Table I) */
-                d = m == 0 ? 1 : 0; /* the delta function d_m0 */
+                // compute u,v,w terms of Eq.8.1 (Table I)
+                d = m == 0 ? 1 : 0; // the delta function d_m0
                 denom = abs(n) == l ? (2*l)*(2*l-1) : (l*l-n*n);
                 u = sqrtf( (float)((l*l-m*m)) /  (float)denom);
                 v = sqrtf( (float)((1+d)*(l+abs(m)-1)*(l+abs(m))) /  (float)denom) * (float)(1-2*d)*0.5f;
                 w = sqrtf( (float)((l-abs(m)-1)*(l-abs(m))) / (float)denom) * (float)(1-d)*(-0.5f);
 
-                /* computes Eq.8.1 */
+                // computes Eq.8.1
                 if (u!=0)
                     u = u* getU(M,l,m,n,R_1,R_lm1);
                 if (v!=0)
@@ -247,7 +247,8 @@ std::vector<float> getSHrotMtxReal
     return RotMtx;
 }
 
-void convertFuMAToACN(float** in, int order, int nSamples)
+
+void convertACNtoFUMA(float** in, int order, int nSamples)
 {
     if(order <= 0)
         return ;
@@ -262,7 +263,55 @@ void convertFuMAToACN(float** in, int order, int nSamples)
         {
             ACNsig[i][j] = in[i][j];
             FuMAsig[i][j] = in[i][j];
-            in[i][j] = 0.0f;
+            //in[i][j] = 0.0f;
+        }
+
+    FuMAsig[1].swap(ACNsig[3]);
+    FuMAsig[1].swap(ACNsig[2]);
+
+    int doneChannels = 4;
+    int prevNbChannels = 3;
+
+    while(doneChannels < std::min(nSH, max_FuMA_nsh))
+    {
+        int nbChannels = prevNbChannels+2;
+        int middleIdx = doneChannels + (nbChannels-1)/2;
+
+        std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), std::back_inserter(FuMAsig[middleIdx]));
+        ++doneChannels;
+
+        for(int i=1 ; i<(nbChannels-1)/2 ; i++)
+        {
+            std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), std::back_inserter(FuMAsig[middleIdx+i]));
+            std::copy(ACNsig[doneChannels+1].begin(), ACNsig[doneChannels+1].end(), std::back_inserter(FuMAsig[middleIdx-i]));
+            doneChannels += 2;
+        }
+
+        prevNbChannels+= nbChannels;
+    }
+
+    for(int i=0 ; i<std::min(nSH, max_FuMA_nsh) ; i++)
+        for(int j=0 ; j<nSamples ; j++)
+            in[i][j] = FuMAsig[i][j];
+}
+
+
+void convertFUMAtoACN(float** in, int order, int nSamples)
+{
+    if(order <= 0)
+        return ;
+
+    int nSH = (order+1)*(order+1);
+
+    std::vector<std::vector<float>> ACNsig(nSH, std::vector<float>(nSamples));
+    std::vector<std::vector<float>> FuMAsig(nSH, std::vector<float>(nSamples));
+
+    for(int i=0 ; i<nSH ; i++)
+        for(int j=0 ; j<nSamples ; j++)
+        {
+            ACNsig[i][j] = in[i][j];
+            FuMAsig[i][j] = in[i][j];
+            //in[i][j] = 0.0f;
         }
 
     ACNsig[1].swap(ACNsig[3]);
@@ -312,6 +361,7 @@ void convertFuMAToACN(float** in, int order, int nSamples)
         doneChannels += 2;
     }*/
 }
+
 
 /*
 std::vector<std::vector<float>> convertFuMAToACN(std::vector<std::vector<float>> in, int order, int nSamples)

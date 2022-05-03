@@ -9,6 +9,7 @@ void Rotator::operator()(halp::tick t)
     if (inputs.audio.channels <= 0)
       return;
 
+    FuMA = !inputs.conv;
     order = inputs.order;
     nSH = (order + 1) * (order + 1);
 
@@ -16,11 +17,11 @@ void Rotator::operator()(halp::tick t)
     pitch = inputs.pitch * M_PI / 180.0;
     roll = inputs.roll * M_PI / 180.0;
 
-    /*while(nSH > inputs.audio.channels)
-        {
-            order -= 1;
-            nSH = (order+1)*(order+1);
-        }*/
+    //while(nSH > inputs.audio.channels)
+    //    {
+    //        order -= 1;
+    //        nSH = (order+1)*(order+1);
+    //    }
 
     float** in = inputs.audio.samples;
     float** out = outputs.audio.samples;
@@ -83,10 +84,8 @@ void Rotator::operator()(halp::tick t)
       }
     }
 
-    //if(FuMA)
-    //  convertToFuMA
-    //convertFuMAToACN(out, order, nSamples);
-    //std::cout << inFrame[0][0] << std::endl << std::endl << std::endl ;
+    if(FuMA)
+        convertACNtoFUMA(out, order, nSamples);
 
     for (int i = nSH; i < inputs.audio.channels; i++)
       for (int j = 0; j < nSamples; j++)

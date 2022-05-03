@@ -74,4 +74,5 @@ std::vector<float> getSHrotMtxReal
     int size
 );
 
-void convertFuMAToACN(float** in, int order, int nSamples);
+void convertACNtoFUMA(float** in, int order, int nSamples);
+void convertFUMAtoACN(float** in, int order, int nSamples);

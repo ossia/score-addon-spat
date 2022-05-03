@@ -27,6 +27,8 @@ public:
     struct ins
     {
         halp::dynamic_audio_bus<"Input", float> audio;
+        halp::hslider_i32<"Channel order convention (FuMA / ACN)", halp::range{.min = 0, .max = 1, .init = 0}>
+            conv;
         halp::hslider_i32<"Order", halp::range{.min = 0, .max = max_order, .init = 0}>
             order;
         halp::knob_f32<"Yaw", halp::range{.min = -180.0, .max = 180.0, .init = 0}>
@@ -61,7 +63,7 @@ public:
     void operator()(halp::tick tick);
 
 private:
-    int order, nSH, nSamples;
+    int FuMA, order, nSH, nSamples;
     float yaw, pitch, roll;
     std::vector<std::vector<float>> inFrame{}, tmpFrame{}, M_rot{}, prevM_rot{};
     std::vector<float> fadeIn{}, fadeOut{};
