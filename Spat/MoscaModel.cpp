@@ -5,20 +5,18 @@ namespace Spat
 
 void Mosca::operator()(halp::tick t)
 {
-  // Process the input buffer
-  for (int i = 0; i < inputs.audio.channels; i++)
-  {
-    auto* in = inputs.audio[i];
-    auto* out = outputs.audio[i];
+    auto volume = inputs.volume;
+
+    auto* l_in = inputs.audio[0];
+    auto* r_in = inputs.audio[1];
+
+    auto* l_out = outputs.audio[0];
+    auto* r_out = outputs.audio[1];
 
     for (int j = 0; j < t.frames; j++)
     {
-      float test = mosca.result_res_x();
-
-      out[j] = test * in[j];
-
-      fprintf(stderr, "MoscaModel.cpp, x = %f \n", m_local_data.valx);
+        l_out[j] = volume * l_in[j] * (1 - m_local_data.pos_xy.x);
+        r_out[j] = volume * r_in[j] * (m_local_data.pos_xy.x);
     }
-  }
 }
 }

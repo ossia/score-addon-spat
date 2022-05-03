@@ -20,12 +20,11 @@ struct Mosca::ui
   struct bus {
       void init(ui& ui)
       {
-          ui.mosca.widget.on_pressed = [&]
-          {
-              fprintf(stderr, "Sending message from UI thread !\n");
-              this->send_message(ui_to_processor{.utp = 1});
-              this->process_message(ui);
-          };
+        ui.mosca.widget.on_moved = [&] (halp::xy_type<float> pos)
+        {
+            fprintf(stderr, "Sending message from UI thread !\n");
+            this->send_message(ui_to_processor{.pos_xy = pos});
+        };
       }
 
       static void process_message(ui& self)
@@ -54,7 +53,7 @@ struct Mosca::ui
       halp_meta(width, 300)
       halp_meta(height, 300)
 
-      halp::item<&ins::level> level;
+      halp::item<&ins::volume> volume;
   } option;
 };
 }

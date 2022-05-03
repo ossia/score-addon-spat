@@ -29,13 +29,28 @@ public:
   halp_meta(c_name, "mosca_like")
   halp_meta(uuid, "96ab8e9d-9b83-428c-b3fa-7f82b00261dd")
 
+  struct ui_to_processor
+  {
+      int utp;
+      float futp;
+      halp::xy_type<float> pos_xy;
+
+  };
+
+  struct processor_to_ui
+  {
+      int ptu;
+      float fptu;
+  };
+
+  ui_to_processor m_local_data;
 
   struct custom_mosca
   {
       static constexpr double width() { return 300.; } // Axe X
       static constexpr double height() { return 300.; } // Axe Y
 
-      halp::xy_type<float> res;
+      halp::xy_type<float> pos;
 
       void paint(avnd::painter auto ctx)         
       {
@@ -44,8 +59,8 @@ public:
           double c_r = 150;
           double c_r_bis = 4;
 
-          float m_x = res.x * width();
-          float m_y = res.y * height();
+          float m_x = pos.x * width();
+          float m_y = pos.y * height();
           float m_r = 15.;
 
           ctx.set_stroke_color({200, 200, 200, 255});
@@ -91,17 +106,14 @@ public:
       bool mouse_press(double x, double y)
       {
           mouse_move(x, y);
+          on_moved(pos);
           return true;
       }
 
       void mouse_move(double x, double y)
       {
-          res.x = std::clamp(x / width(), 0., 1.);
-          res.y = std::clamp(y / height(), 0., 1.);
-
-          //process_message(processor_to_ui{.ptu = 1});
-
-          //fprintf(stderr, "UTP mouse_move : %f \n", 2.0);
+          pos.x = std::clamp(x / width(), 0., 1.);
+          pos.y = std::clamp(y / height(), 0., 1.);
       }
 
       void mouse_release(double x, double y)
@@ -109,21 +121,17 @@ public:
           mouse_move(x, y);
       }
 
-      float result_res_x() 
-      {
-          return 3.;
-      }
-
       halp::xy_type<float> value{};
 
       std::function<void()> on_pressed = [] { };
+      std::function<void(halp::xy_type<float>)> on_moved = [] (auto) {};
   } mosca;
 
   struct ins
   {
-    halp::dynamic_audio_bus<"Input", double> audio;
+    halp::fixed_audio_bus<"Input", double, 2> audio;
 
-    halp::hslider_f32<"Level", halp::range{.min = -10, .max = 10, .init = 0}> level;
+    halp::hslider_f32<"Volume", halp::range{.min = 0., .max = 3., .init = 1.}> volume;
   } inputs;
 
   struct outs
@@ -131,30 +139,7 @@ public:
     halp::dynamic_audio_bus<"Output", double> audio;
   } outputs;
 
-  struct ui_to_processor
-  {
-      int utp;
-      float futp;
-      float valx;
-  };
-
-  struct processor_to_ui
-  {
-      int ptu;
-      float fptu;
-  };
-
-  /*void process_message()
-  {
-      fprintf(stderr, "Got message in processing thread !\n");
-      send_message(processor_to_ui{.ptu = 1});
-  }*/
-
-  std::function<void(processor_to_ui)> send_message;
-
-  static ui_to_processor m_local_data;
-
-  static void process_message(const ui_to_processor& m) {
+  void process_message(const ui_to_processor& m) {
      m_local_data = m;
   }
 
@@ -163,8 +148,5 @@ public:
   void operator()(halp::tick t);
 
   struct ui;
-
-private :
-  //ui_to_processor u_t_p;
 };
 }
