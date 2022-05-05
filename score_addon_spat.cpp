@@ -7,7 +7,9 @@
 #include <Spat/AmbiToBinaural.hpp>
 
 #include <Spat/AnEffectUi.hpp>
-#include <Spat/Mosca.hpp>
+
+#include <Spat/Spatatouille.hpp>
+
 
 #include <Avnd/Factories.hpp>
 #include <score/plugins/FactorySetup.hpp>
@@ -30,7 +32,7 @@ score_addon_spat::factories(
           , Spat::StereoPanning
           , Spat::Rotator
           , Spat::AmbiToBinaural
-          , Spat::Mosca
+          , Spat::Spatatouille
           >(ctx, key);
 }
 

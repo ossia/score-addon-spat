@@ -14,12 +14,12 @@
 namespace Spat
 {
 
-class Mosca
+class Spatatouille
 {
 public:
-  halp_meta(name, "Mosca-like")
+  halp_meta(name, "Spatatouille")
   halp_meta(category, "Audio")
-  halp_meta(c_name, "mosca_like")
+  halp_meta(c_name, "spatatouille")
   halp_meta(uuid, "96ab8e9d-9b83-428c-b3fa-7f82b00261dd")
 
   struct ui_to_processor
@@ -41,7 +41,7 @@ public:
   {
     halp::dynamic_audio_bus<"Output", double> audio;
 
-    halp::hbargraph_f32<"Output", halp::range{.min = -1., .max = 1., .init = 0.}> output;
+    halp::hbargraph_f32<"Left/Right balance output", halp::range{.min = -1., .max = 1., .init = 0.}> output;
   } outputs;
 
   void process_message(const ui_to_processor& m) {

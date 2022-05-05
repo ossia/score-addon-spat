@@ -36,10 +36,11 @@ add_library(
   Spat/AmbisonicMethods.hpp
   Spat/AmbisonicMethods.cpp
 
-  Spat/Mosca.hpp
-  Spat/MoscaModel.cpp
-  Spat/MoscaUi.hpp
-  Spat/Mosca.hpp
+  Spat/Spatatouille.hpp
+  Spat/SpatatouilleModel.cpp
+  Spat/SpatatouilleUi.hpp
+  Spat/WidgetSpatatouille.hpp
+  Spat/Spatatouille.hpp
 
   score_addon_spat.hpp
   score_addon_spat.cpp

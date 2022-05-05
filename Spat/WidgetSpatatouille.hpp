@@ -1,12 +1,15 @@
 #pragma once
 
-#include <Spat/MoscaModel.hpp>
+#include <Spat/SpatatouilleModel.hpp>
 
 namespace Spat
 {
-struct Mosca::paint
+
+using namespace std;
+
+struct Spatatouille::paint
 {
-    struct custom_mosca
+    struct custom_spatatouille
     {
         static constexpr double width() { return 300.; } // Axe X
         static constexpr double height() { return 300.; } // Axe Y
@@ -76,6 +79,7 @@ struct Mosca::paint
         {
             pos.x = std::clamp(x / width(), 0., 1.);
             pos.y = std::clamp(y / height(), 0., 1.);
+            on_moved(pos);
         }
 
         void mouse_release(double x, double y)
@@ -84,6 +88,6 @@ struct Mosca::paint
             on_moved(pos);
         }
 
-    } mosca;
+    };
 };
 }

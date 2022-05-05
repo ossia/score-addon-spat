@@ -1,9 +1,9 @@
-#include "Mosca.hpp"
+#include "Spatatouille.hpp"
 
 namespace Spat
 {
 
-void Mosca::operator()(halp::tick t)
+void Spatatouille::operator()(halp::tick t)
 {
     auto volume = inputs.volume;
 
