@@ -13,10 +13,39 @@ add_library(
   Spat/AnEffectUi.hpp
   Spat/AnEffect.hpp
 
+  Spat/StereoToMonoModel.hpp
+  Spat/StereoToMonoModel.cpp
+  Spat/StereoToMonoUi.hpp
+  Spat/StereoToMono.hpp
+
+  Spat/StereoPanningModel.hpp
+  Spat/StereoPanningModel.cpp
+  Spat/StereoPanningUi.hpp
+  Spat/StereoPanning.hpp
+
+  Spat/RotatorModel.hpp
+  Spat/RotatorModel.cpp
+  Spat/RotatorUi.hpp
+  Spat/Rotator.hpp
+
+  Spat/AmbiToBinauralModel.hpp
+  Spat/AmbiToBinauralModel.cpp
+  Spat/AmbiToBinauralUi.hpp
+  Spat/AmbiToBinaural.hpp
+
+  Spat/AmbisonicMethods.hpp
+  Spat/AmbisonicMethods.cpp
+
   score_addon_spat.hpp
   score_addon_spat.cpp
 )
 
 setup_score_plugin(score_addon_spat)
 
-target_link_libraries(score_addon_spat PUBLIC score_plugin_engine score_plugin_avnd)
+
+target_link_libraries(
+    score_addon_spat
+    PUBLIC
+    score_plugin_engine
+    score_plugin_avnd
+)
