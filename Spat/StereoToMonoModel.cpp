@@ -1,4 +1,4 @@
-#include "StereoToMonoModel.hpp"
+#include <Spat/StereoToMonoModel.hpp>
 
 namespace Spat{
 void StereoToMono::operator()(halp::tick t)

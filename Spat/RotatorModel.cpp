@@ -1,4 +1,4 @@
-#include "RotatorModel.hpp"
+#include <Spat/RotatorModel.hpp>
 
 namespace Spat{
 
@@ -17,11 +17,11 @@ void Rotator::operator()(halp::tick t)
     pitch = inputs.pitch * deg_to_rad;
     roll = inputs.roll * deg_to_rad;
 
-    while(nSH > outputs.audio.channels)
+    /*while(nSH > outputs.audio.channels)
     {
         order -= 1;
         nSH = (order+1)*(order+1);
-    }
+    }*/
 
     float** in = inputs.audio.samples;
     float** out = outputs.audio.samples;
@@ -37,6 +37,7 @@ void Rotator::operator()(halp::tick t)
 
     bool sameRot = true;
 
+    //calculate rotation matrix (rotator process)
     for (int i = 0; i < nSH; i++)
       for (int j = 0; j < nSH; j++)
       {
@@ -45,6 +46,7 @@ void Rotator::operator()(halp::tick t)
           sameRot = false;
       }
 
+    //apply rotation (rotator process)
     for (int i = 0; i < nSH; i++)
       for (int j = 0; j < nSamples; j++)
       {

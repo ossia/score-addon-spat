@@ -1,4 +1,4 @@
-#include "AmbisonicMethods.hpp"
+#include <Spat/AmbisonicMethods.hpp>
 
 using namespace std;
 
@@ -135,26 +135,20 @@ void getSHrotMtxReal
     int M =(L+1)*(L+1);
     int d, bandIdx, denom;
     float u, v, w;
-    float R_1[3][3];
     float* R_lm1 = (float*) alloca(sizeof(float) * M * M);
     float* R_l = (float*) alloca(sizeof(float) * M * M);
 
     //vector<float> RotMtx(size);
-    fill(RotMtx.begin(), RotMtx.end(), 0);
+    std::ranges::fill(RotMtx, 0);
 
     // zeroth-band (l=0) is invariant to rotation
     RotMtx[0] = 1;
 
     // the first band (l=1) is directly related to the rotation matrix
-    R_1[0][0] = Rxyz[1][1];
-    R_1[0][1] = Rxyz[1][2];
-    R_1[0][2] = Rxyz[1][0];
-    R_1[1][0] = Rxyz[2][1];
-    R_1[1][1] = Rxyz[2][2];
-    R_1[1][2] = Rxyz[2][0];
-    R_1[2][0] = Rxyz[0][1];
-    R_1[2][1] = Rxyz[0][2];
-    R_1[2][2] = Rxyz[0][0];
+    float R_1[3][3] = {  { Rxyz[1][1],  Rxyz[1][2], Rxyz[1][0] },
+                         { Rxyz[2][1],  Rxyz[2][2], Rxyz[2][0] },
+                         { Rxyz[0][1],  Rxyz[0][2], Rxyz[0][0] } };
+
     for (int i=1; i<4; i++){
         R_lm1[(i-1)*M+0] = R_1[i-1][0];
         R_lm1[(i-1)*M+1] = R_1[i-1][1];
@@ -165,8 +159,8 @@ void getSHrotMtxReal
 
     // compute rotation matrix of each subsequent band recursively
     bandIdx = 4;
-    fill(R_l, R_l+M*M, 0);
-    //fill(R_l.begin(), R_l.end(), 0);
+    std::fill(R_l, R_l+M*M, 0);
+
     for(int l = 2; l<=L; l++){
         for(int m=-l; m<=l; m++){
             for(int n=-l; n<=l; n++){
@@ -193,7 +187,7 @@ void getSHrotMtxReal
             for(int j=0; j<2*l+1; j++)
                 RotMtx[(bandIdx + i)*M + (bandIdx + j)] = R_l[i*M+j];
         for(int i=0; i<2*l+1; i++)
-            copy_n(R_lm1, M*M, R_l);
+            std::copy_n(R_lm1, M*M, R_l);
 
         bandIdx += 2*l+1;
     }
@@ -229,13 +223,13 @@ void convertACNtoFUMA(float** in, int order, int nSamples)
         int nbChannels = prevNbChannels+2;
         int middleIdx = doneChannels + (nbChannels-1)/2;
 
-        copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), back_inserter(FuMAsig[middleIdx]));
+        std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), back_inserter(FuMAsig[middleIdx]));
         ++doneChannels;
 
         for(int i=1 ; i<(nbChannels-1)/2 ; i++)
         {
-            copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), back_inserter(FuMAsig[middleIdx+i]));
-            copy(ACNsig[doneChannels+1].begin(), ACNsig[doneChannels+1].end(), back_inserter(FuMAsig[middleIdx-i]));
+            std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), back_inserter(FuMAsig[middleIdx+i]));
+            std::copy(ACNsig[doneChannels+1].begin(), ACNsig[doneChannels+1].end(), back_inserter(FuMAsig[middleIdx-i]));
             doneChannels += 2;
         }
 
@@ -277,13 +271,13 @@ void convertFUMAtoACN(float** in, int order, int nSamples)
         int nbChannels = prevNbChannels+2;
         int middleIdx = doneChannels + (nbChannels-1)/2;
 
-        copy(FuMAsig[middleIdx].begin(), FuMAsig[middleIdx].end(), back_inserter(ACNsig[doneChannels]));
+        std::copy(FuMAsig[middleIdx].begin(), FuMAsig[middleIdx].end(), back_inserter(ACNsig[doneChannels]));
         ++doneChannels;
 
         for(int i=1 ; i<(nbChannels-1)/2 ; i++)
         {
-            copy(FuMAsig[middleIdx+i].begin(), FuMAsig[middleIdx+i].end(), back_inserter(ACNsig[doneChannels]));
-            copy(FuMAsig[middleIdx-i].begin(), FuMAsig[middleIdx-i].end(), back_inserter(ACNsig[doneChannels+1]));
+            std::copy(FuMAsig[middleIdx+i].begin(), FuMAsig[middleIdx+i].end(), back_inserter(ACNsig[doneChannels]));
+            std::copy(FuMAsig[middleIdx-i].begin(), FuMAsig[middleIdx-i].end(), back_inserter(ACNsig[doneChannels+1]));
 
             doneChannels += 2;
         }

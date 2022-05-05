@@ -5,8 +5,7 @@
 #include <halp/meta.hpp>
 
 #include <iostream>
-#include "AmbisonicMethods.hpp"
-//#include <saf.h>
+#include <Spat/AmbisonicMethods.hpp>
 
 namespace Spat{
 

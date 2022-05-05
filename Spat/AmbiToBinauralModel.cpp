@@ -1,4 +1,4 @@
-#include "AmbiToBinauralModel.hpp"
+#include <Spat/AmbiToBinauralModel.hpp>
 
 namespace Spat
 {

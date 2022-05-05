@@ -1,4 +1,4 @@
-#include "AnEffect.hpp"
+#include <Spat/AnEffect.hpp>
 
 namespace Spat
 {

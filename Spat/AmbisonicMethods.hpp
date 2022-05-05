@@ -1,8 +1,6 @@
 #pragma once
 
 #include <cmath>
-//#include <string.h>
-//#include <vector>
 #include <algorithm>
 #include <iostream>
 #include <span>

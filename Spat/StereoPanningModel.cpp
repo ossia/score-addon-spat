@@ -1,4 +1,4 @@
-#include "StereoPanningModel.hpp"
+#include <Spat/StereoPanningModel.hpp>
 
 namespace Spat{
 void StereoPanning::operator()(halp::tick t)
