@@ -1,5 +1,7 @@
 #include "AmbisonicMethods.hpp"
 
+using namespace std;
+
 void yawPitchRoll2Rzyx
 (
     float yaw,
@@ -9,37 +11,19 @@ void yawPitchRoll2Rzyx
     float R[3][3]
 )
 {
-    float R1[3][3], R2[3][3], R3[3][3], Rtmp[3][3];
+    float R1[3][3] = {  { cos(yaw),  sin(yaw), 0.f },
+                        { sin(yaw),  cos(yaw), 0.f },
+                        { 0.f,       0.f,      1.f } };
 
-    R1[0][0] = cosf(yaw);
-    R1[0][1] = sinf(yaw);
-    R1[0][2] = 0.0f;
-    R1[1][0] = -sinf(yaw);
-    R1[1][1] = cosf(yaw);
-    R1[1][2] = 0.0f;
-    R1[2][0] = 0.0f;
-    R1[2][1] = 0.0f;
-    R1[2][2] = 1.0f;
+    float R2[3][3] = {  { cos(pitch), 0.f, -sin(pitch) },
+                        { 0.f,        1.f,         0.f },
+                        { sin(pitch), 0.f,  cos(pitch) } };
 
-    R2[0][0] = cosf(pitch);
-    R2[0][1] = 0.0f;
-    R2[0][2] = -sinf(pitch);
-    R2[1][0] = 0.0f;
-    R2[1][1] = 1.0f;
-    R2[1][2] = 0.0f;
-    R2[2][0] = sinf(pitch);
-    R2[2][1] = 0.0f;
-    R2[2][2] = cosf(pitch);
+    float R3[3][3] = {  { 1.f,        0.f,       0.f },
+                        { 0.f,  cos(roll), sin(roll) },
+                        { 0.f, -sin(roll), cos(roll) } };
 
-    R3[0][0] = 1.0f;
-    R3[0][1] = 0.0f;
-    R3[0][2] = 0.0f;
-    R3[1][0] = 0.0f;
-    R3[1][1] = cosf(roll);
-    R3[1][2] = sinf(roll);
-    R3[2][0] = 0.0f;
-    R3[2][1] = -sinf(roll);
-    R3[2][2] = cosf(roll);
+    float Rtmp[3][3];
 
     for (int i = 0; i < 3; i++)
       for (int j = 0; j < 3; j++)
@@ -60,16 +44,7 @@ void yawPitchRoll2Rzyx
 
 /* Ivanic, J., Ruedenberg, K. (1998). Rotation Matrices for Real Spherical Harmonics. Direct Determination
  * by Recursion Page: Additions and Corrections. Journal of Physical Chemistry A, 102(45), 9099?9100. */
-float getP
-(
-    int M,
-    int i,
-    int l,
-    int a,
-    int b,
-    float R_1[3][3],
-    std::vector<float> R_lm1
-)
+float getP (int M, int i, int l, int a, int b, float R_1[3][3], float* R_lm1)
 {
     float ret, ri1, rim1, ri0;
 
@@ -91,30 +66,14 @@ float getP
 
 /* Ivanic, J., Ruedenberg, K. (1998). Rotation Matrices for Real Spherical Harmonics. Direct Determination
  * by Recursion Page: Additions and Corrections. Journal of Physical Chemistry A, 102(45), 9099?9100. */
-float getU
-(
-    int M,
-    int l,
-    int m,
-    int n,
-    float R_1[3][3],
-    std::vector<float> R_lm1
-)
+float getU(int M, int l, int m, int n, float R_1[3][3], float* R_lm1)
 {
     return getP(M, 0, l, m, n, R_1, R_lm1);
 }
 
 /* Ivanic, J., Ruedenberg, K. (1998). Rotation Matrices for Real Spherical Harmonics. Direct Determination
  * by Recursion Page: Additions and Corrections. Journal of Physical Chemistry A, 102(45), 9099?9100. */
-float getV
-(
-    int M,
-    int l,
-    int m,
-    int n,
-    float R_1[3][3],
-    std::vector<float> R_lm1
-)
+float getV(int M, int l, int m, int n, float R_1[3][3], float* R_lm1)
 {
     int d;
     float ret, p0, p1;
@@ -129,13 +88,13 @@ float getV
             d = m == 1 ? 1 : 0;
             p0 = getP(M, 1, l, m - 1, n, R_1, R_lm1);
             p1 = getP(M, -1, l, -m + 1, n, R_1, R_lm1);
-            ret = p0*sqrtf(1.0f + d) - p1*(1.0f - d);
+            ret = p0*sqrt(1.0f + d) - p1*(1.0f - d);
         }
         else {
             d = m == -1 ? 1 : 0;
             p0 = getP(M, 1, l, m + 1, n, R_1, R_lm1);
             p1 = getP(M, -1, l, -m - 1, n, R_1, R_lm1);
-            ret = p0*(1.0f - (float)d) + p1*sqrtf(1.0f + (float)d);
+            ret = p0*(1.0f - (float)d) + p1*sqrt(1.0f + (float)d);
         }
     }
 
@@ -144,15 +103,7 @@ float getV
 
 /* Ivanic, J., Ruedenberg, K. (1998). Rotation Matrices for Real Spherical Harmonics. Direct Determination
  * by Recursion Page: Additions and Corrections. Journal of Physical Chemistry A, 102(45), 9099?9100. */
-float getW
-(
-    int M,
-    int l,
-    int m,
-    int n,
-    float R_1[3][3],
-    std::vector<float> R_lm1
-)
+float getW (int M, int l, int m, int n, float R_1[3][3], float* R_lm1)
 {
     float ret, p0, p1;
     ret = 0.0f;
@@ -172,22 +123,24 @@ float getW
     return ret;
 }
 
-std::vector<float> getSHrotMtxReal
+//vector<float> getSHrotMtxReal
+void getSHrotMtxReal
 (
     float Rxyz[3][3],
     int L,
+    vector<float>& RotMtx,
     int size
 )
 {
-    int M=(L+1)*(L+1);
+    int M =(L+1)*(L+1);
     int d, bandIdx, denom;
     float u, v, w;
-    float R_1[3][3];//, R_lm1[M], R_l[M];
-    std::vector<float> R_lm1(M*M), R_l(M*M);
+    float R_1[3][3];
+    float* R_lm1 = (float*) alloca(sizeof(float) * M * M);
+    float* R_l = (float*) alloca(sizeof(float) * M * M);
 
-    //memset(RotMtx, 0, M*M*sizeof(float));
-    std::vector<float> RotMtx(size);
-    std::fill(RotMtx.begin(), RotMtx.end(), 0);
+    //vector<float> RotMtx(size);
+    fill(RotMtx.begin(), RotMtx.end(), 0);
 
     // zeroth-band (l=0) is invariant to rotation
     RotMtx[0] = 1;
@@ -212,16 +165,17 @@ std::vector<float> getSHrotMtxReal
 
     // compute rotation matrix of each subsequent band recursively
     bandIdx = 4;
-    std::fill(R_l.begin(), R_l.end(), 0);
+    fill(R_l, R_l+M*M, 0);
+    //fill(R_l.begin(), R_l.end(), 0);
     for(int l = 2; l<=L; l++){
         for(int m=-l; m<=l; m++){
             for(int n=-l; n<=l; n++){
                 // compute u,v,w terms of Eq.8.1 (Table I)
                 d = m == 0 ? 1 : 0; // the delta function d_m0
                 denom = abs(n) == l ? (2*l)*(2*l-1) : (l*l-n*n);
-                u = sqrtf( (float)((l*l-m*m)) /  (float)denom);
-                v = sqrtf( (float)((1+d)*(l+abs(m)-1)*(l+abs(m))) /  (float)denom) * (float)(1-2*d)*0.5f;
-                w = sqrtf( (float)((l-abs(m)-1)*(l-abs(m))) / (float)denom) * (float)(1-d)*(-0.5f);
+                u = sqrt( (float)((l*l-m*m)) /  (float)denom);
+                v = sqrt( (float)((1+d)*(l+abs(m)-1)*(l+abs(m))) /  (float)denom) * (float)(1-2*d)*0.5f;
+                w = sqrt( (float)((l-abs(m)-1)*(l-abs(m))) / (float)denom) * (float)(1-d)*(-0.5f);
 
                 // computes Eq.8.1
                 if (u!=0)
@@ -239,12 +193,10 @@ std::vector<float> getSHrotMtxReal
             for(int j=0; j<2*l+1; j++)
                 RotMtx[(bandIdx + i)*M + (bandIdx + j)] = R_l[i*M+j];
         for(int i=0; i<2*l+1; i++)
-            std::copy(R_lm1.begin(), R_lm1.end(), R_l.begin());
+            copy_n(R_lm1, M*M, R_l);
 
         bandIdx += 2*l+1;
     }
-
-    return RotMtx;
 }
 
 
@@ -255,8 +207,8 @@ void convertACNtoFUMA(float** in, int order, int nSamples)
 
     int nSH = (order+1)*(order+1);
 
-    std::vector<std::vector<float>> ACNsig(nSH, std::vector<float>(nSamples));
-    std::vector<std::vector<float>> FuMAsig(nSH, std::vector<float>(nSamples));
+    vector<vector<float>> ACNsig(nSH, vector<float>(nSamples));
+    vector<vector<float>> FuMAsig(nSH, vector<float>(nSamples));
 
     for(int i=0 ; i<nSH ; i++)
         for(int j=0 ; j<nSamples ; j++)
@@ -272,25 +224,25 @@ void convertACNtoFUMA(float** in, int order, int nSamples)
     int doneChannels = 4;
     int prevNbChannels = 3;
 
-    while(doneChannels < std::min(nSH, max_FuMA_nsh))
+    while(doneChannels < min(nSH, max_FuMA_nsh))
     {
         int nbChannels = prevNbChannels+2;
         int middleIdx = doneChannels + (nbChannels-1)/2;
 
-        std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), std::back_inserter(FuMAsig[middleIdx]));
+        copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), back_inserter(FuMAsig[middleIdx]));
         ++doneChannels;
 
         for(int i=1 ; i<(nbChannels-1)/2 ; i++)
         {
-            std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), std::back_inserter(FuMAsig[middleIdx+i]));
-            std::copy(ACNsig[doneChannels+1].begin(), ACNsig[doneChannels+1].end(), std::back_inserter(FuMAsig[middleIdx-i]));
+            copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), back_inserter(FuMAsig[middleIdx+i]));
+            copy(ACNsig[doneChannels+1].begin(), ACNsig[doneChannels+1].end(), back_inserter(FuMAsig[middleIdx-i]));
             doneChannels += 2;
         }
 
         prevNbChannels+= nbChannels;
     }
 
-    for(int i=0 ; i<std::min(nSH, max_FuMA_nsh) ; i++)
+    for(int i=0 ; i<min(nSH, max_FuMA_nsh) ; i++)
         for(int j=0 ; j<nSamples ; j++)
             in[i][j] = FuMAsig[i][j];
 }
@@ -303,8 +255,8 @@ void convertFUMAtoACN(float** in, int order, int nSamples)
 
     int nSH = (order+1)*(order+1);
 
-    std::vector<std::vector<float>> ACNsig(nSH, std::vector<float>(nSamples));
-    std::vector<std::vector<float>> FuMAsig(nSH, std::vector<float>(nSamples));
+    vector<vector<float>> ACNsig(nSH, vector<float>(nSamples));
+    vector<vector<float>> FuMAsig(nSH, vector<float>(nSamples));
 
     for(int i=0 ; i<nSH ; i++)
         for(int j=0 ; j<nSamples ; j++)
@@ -317,93 +269,32 @@ void convertFUMAtoACN(float** in, int order, int nSamples)
     ACNsig[1].swap(ACNsig[3]);
     ACNsig[2].swap(ACNsig[3]);
 
-    /*for(int i=0 ; i<nSamples ; i++)
-    {
-        float Y = in[1][i], Z = in[2][i], X = in[3][i];
-        in[1][i] = X;
-        in[2][i] = Y;
-        in[3][i] = Z;
-    }*/
-
     int doneChannels = 4;
     int prevNbChannels = 3;
 
-    while(doneChannels < std::min(nSH, max_FuMA_nsh))
+    while(doneChannels < min(nSH, max_FuMA_nsh))
     {
         int nbChannels = prevNbChannels+2;
         int middleIdx = doneChannels + (nbChannels-1)/2;
 
-        std::copy(FuMAsig[middleIdx].begin(), FuMAsig[middleIdx].end(), std::back_inserter(ACNsig[doneChannels]));
-        //ACNsig[doneChannels] = in[middleIdx];
+        copy(FuMAsig[middleIdx].begin(), FuMAsig[middleIdx].end(), back_inserter(ACNsig[doneChannels]));
         ++doneChannels;
 
         for(int i=1 ; i<(nbChannels-1)/2 ; i++)
         {
-            std::copy(FuMAsig[middleIdx+i].begin(), FuMAsig[middleIdx+i].end(), std::back_inserter(ACNsig[doneChannels]));
-            std::copy(FuMAsig[middleIdx-i].begin(), FuMAsig[middleIdx-i].end(), std::back_inserter(ACNsig[doneChannels+1]));
-            //ACNsig[doneChannels] = in[middleIdx+i];
-            //ACNsig[doneChannels+1] = in[middleIdx-i];
+            copy(FuMAsig[middleIdx+i].begin(), FuMAsig[middleIdx+i].end(), back_inserter(ACNsig[doneChannels]));
+            copy(FuMAsig[middleIdx-i].begin(), FuMAsig[middleIdx-i].end(), back_inserter(ACNsig[doneChannels+1]));
+
             doneChannels += 2;
         }
 
         prevNbChannels+= nbChannels;
     }
 
-    for(int i=0 ; i<std::min(nSH, max_FuMA_nsh) ; i++)
+    for(int i=0 ; i < min(nSH, max_FuMA_nsh) ; i++)
         for(int j=0 ; j<nSamples ; j++)
             in[i][j] = ACNsig[i][j];
-
-    /*
-    for(int i=0 ; i<(nbChannels-1)/2 ; i++)
-    {
-        FuMAsig[middleIdx+i] = in[doneChannels];
-        FuMAsig[middleIdx-i] = in[doneChannels+1];
-        doneChannels += 2;
-    }*/
 }
-
-
-/*
-std::vector<std::vector<float>> convertFuMAToACN(std::vector<std::vector<float>> in, int order, int nSamples)
-{
-    if(order <= 0)
-        return in;
-
-    int nSH = (order+1)*(order+1);
-    std::vector<std::vector<float>> ACNsig;
-    std::copy(in.begin(), in.end(), std::back_inserter(ACNsig));
-
-    ACNsig[1].swap(ACNsig[3]);
-    ACNsig[2].swap(ACNsig[3]);
-
-    int doneChannels = 4;
-    int prevNbChannels = 3;
-
-    while(doneChannels < std::min(nSH, max_FuMA_nsh))
-    {
-        int nbChannels = prevNbChannels+2;
-        int middleIdx = doneChannels + (nbChannels-1)/2;
-
-        std::copy(in[middleIdx].begin(), in[middleIdx].end(), std::back_inserter(ACNsig[doneChannels]));
-        //ACNsig[doneChannels] = in[middleIdx];
-        ++doneChannels;
-
-        for(int i=1 ; i<(nbChannels-1)/2 ; i++)
-        {
-            std::copy(in[middleIdx+i].begin(), in[middleIdx+i].end(), std::back_inserter(ACNsig[doneChannels]));
-            std::copy(in[middleIdx-i].begin(), in[middleIdx-i].end(), std::back_inserter(ACNsig[doneChannels+1]));
-            //ACNsig[doneChannels] = in[middleIdx+i];
-            //ACNsig[doneChannels+1] = in[middleIdx-i];
-            doneChannels += 2;
-        }
-
-        prevNbChannels+= nbChannels;
-    }
-
-    return ACNsig;
-}
-
-*/
 
 
 

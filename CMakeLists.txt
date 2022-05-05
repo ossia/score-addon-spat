@@ -28,6 +28,11 @@ add_library(
   Spat/RotatorUi.hpp
   Spat/Rotator.hpp
 
+  Spat/AmbiToBinauralModel.hpp
+  Spat/AmbiToBinauralModel.cpp
+  Spat/AmbiToBinauralUi.hpp
+  Spat/AmbiToBinaural.hpp
+
   Spat/AmbisonicMethods.hpp
   Spat/AmbisonicMethods.cpp
 

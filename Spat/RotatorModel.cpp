@@ -6,41 +6,34 @@ namespace Spat{
 
 void Rotator::operator()(halp::tick t)
 {
-    if (inputs.audio.channels <= 0)
+    if (inputs.audio.channels <= 0 || nSamples == 0)
       return;
 
     FuMA = !inputs.conv;
     order = inputs.order;
     nSH = (order + 1) * (order + 1);
 
-    yaw = inputs.yaw * M_PI / 180.0;
-    pitch = inputs.pitch * M_PI / 180.0;
-    roll = inputs.roll * M_PI / 180.0;
+    yaw = inputs.yaw * deg_to_rad;
+    pitch = inputs.pitch * deg_to_rad;
+    roll = inputs.roll * deg_to_rad;
 
-    //while(nSH > inputs.audio.channels)
-    //    {
-    //        order -= 1;
-    //        nSH = (order+1)*(order+1);
-    //    }
+    while(nSH > outputs.audio.channels)
+    {
+        order -= 1;
+        nSH = (order+1)*(order+1);
+    }
 
     float** in = inputs.audio.samples;
     float** out = outputs.audio.samples;
 
     float Rxyz[3][3];
-    std::vector<float> M_rot_tmp(max_nsh*max_nsh);
-
-    //if(FuMA)
-    //    convertToACN
 
     for (int i = 0; i < nSamples; i++)
         for (int j = 0; j < nSH; j++)
             inFrame[j][i] = in[0][i];
 
-    //for (int j = 0; j < nSH; j++)
-    //  std::copy_n(in[0], nSamples, inFrame[j]);
-
     yawPitchRoll2Rzyx(yaw, pitch, roll, 0, Rxyz);
-    M_rot_tmp = getSHrotMtxReal(Rxyz, order, max_nsh*max_nsh);
+    getSHrotMtxReal(Rxyz, order, M_rot_tmp, max_nsh*max_nsh);
 
     bool sameRot = true;
 
@@ -60,12 +53,14 @@ void Rotator::operator()(halp::tick t)
           out[i][j] += M_rot[i][k] * inFrame[k][j];
       }
 
+    const float inv_nSamples = 1.f / nSamples;
+
     if (!sameRot)
     {
       //fade with linear interpolation
       for (int i = 0; i < nSamples; i++)
       {
-        fadeIn[i] = (float)(i + 1) * 1.0f / (float)nSamples;
+        fadeIn[i] = (float)(i + 1) * inv_nSamples;
         fadeOut[i] = 1.0f - fadeIn[i];
       }
 

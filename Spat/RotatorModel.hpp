@@ -14,6 +14,7 @@ class Rotator
 {
     static constexpr int max_order = 7;
     static constexpr int max_nsh = ((max_order+1)*(max_order+1));
+    static constexpr float deg_to_rad = 2. * M_PI / 360.;
 
 public:
     halp_meta(name, "Rotator")
@@ -55,6 +56,7 @@ public:
         tmpFrame.resize(max_nsh, std::vector<float>(nSamples));
         M_rot.resize(max_nsh, std::vector<float>(max_nsh));
         prevM_rot.resize(max_nsh, std::vector<float>(max_nsh));
+        M_rot_tmp.resize(max_nsh*max_nsh);
 
         fadeIn.resize(nSamples);
         fadeOut.resize(nSamples);
@@ -66,7 +68,8 @@ private:
     int FuMA, order, nSH, nSamples;
     float yaw, pitch, roll;
     std::vector<std::vector<float>> inFrame{}, tmpFrame{}, M_rot{}, prevM_rot{};
-    std::vector<float> fadeIn{}, fadeOut{};
+    std::vector<float> fadeIn{}, fadeOut{}, M_rot_tmp{};
+
 };
 }
 
