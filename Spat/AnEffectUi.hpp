@@ -1,5 +1,6 @@
 #pragma once
 #include <Spat/AnEffectModel.hpp>
+#include <Spat/WidgetMorpion.hpp>
 #include <halp/layout.hpp>
 
 namespace Spat
@@ -158,7 +159,7 @@ struct AnEffect::ui
         halp_meta(layout, halp::layouts::vbox)
         halp_meta(background, halp::colors::mid)
 
-        halp::custom_item<custom_morpion, &ins::level> widget{{.x = 500, .y = 920}};
+        halp::custom_item<AnEffect::paint::custom_morpion, &ins::level> widget{{.x = 500, .y = 920}};
     } custom_morpion;
 
 };

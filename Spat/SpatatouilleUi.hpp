@@ -38,7 +38,7 @@ struct Spatatouille::ui
       halp_meta(width, 300)
       halp_meta(height, 300)
 
-      halp::custom_actions_item<Spatatouille::paint::custom_spatatouille> widget{.x = 0, .y = 0};
+      halp::custom_actions_item<Spatatouille::circle_ui::custom_spatatouille> widget{.x = 0, .y = 0};
   } mosca;
 
   struct {

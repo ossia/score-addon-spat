@@ -12,6 +12,7 @@ add_library(
   Spat/AnEffectModel.cpp
   Spat/AnEffectUi.hpp
   Spat/AnEffect.hpp
+  Spat/WidgetMorpion.hpp
 
   Spat/StereoToMonoModel.hpp
   Spat/StereoToMonoModel.cpp

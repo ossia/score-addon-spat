@@ -7,7 +7,7 @@ namespace Spat
 
 using namespace std;
 
-struct Spatatouille::paint
+struct Spatatouille::circle_ui
 {
     struct custom_spatatouille
     {

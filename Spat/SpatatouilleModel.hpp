@@ -54,6 +54,6 @@ public:
 
   struct ui;
 
-  struct paint;
+  struct circle_ui;
 };
 }
