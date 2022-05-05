@@ -1,13 +1,11 @@
 #include "score_addon_spat.hpp"
-#include <Spat/AnEffect.hpp>
 
 #include <Spat/StereoToMono.hpp>
 #include <Spat/StereoPanning.hpp>
 #include <Spat/Rotator.hpp>
 #include <Spat/AmbiToBinaural.hpp>
 
-#include <Spat/AnEffectUi.hpp>
-
+#include <Spat/Example.hpp>
 #include <Spat/Spatatouille.hpp>
 
 
@@ -27,11 +25,11 @@ score_addon_spat::factories(
     const score::InterfaceKey& key) const
 {
   return Avnd::instantiate_fx<
-          Spat::AnEffect
-          , Spat::StereoToMono
+            Spat::StereoToMono
           , Spat::StereoPanning
           , Spat::Rotator
           , Spat::AmbiToBinaural
+          , Spat::Example
           , Spat::Spatatouille
           >(ctx, key);
 }

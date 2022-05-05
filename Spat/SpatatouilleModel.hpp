@@ -54,6 +54,8 @@ public:
 
   struct ui;
 
-  struct circle_ui;
+  struct circle_paint;
+
+  struct morpion_paint;
 };
 }

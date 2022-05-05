@@ -1,11 +1,11 @@
 #pragma once
-#include <Spat/AnEffectModel.hpp>
+#include <Spat/ExampleModel.hpp>
 #include <Spat/WidgetMorpion.hpp>
 #include <halp/layout.hpp>
 
 namespace Spat
 {
-struct AnEffect::ui
+struct Example::ui
 {
     halp_meta(name, "Main")
     halp_meta(layout, halp::layouts::grid)
@@ -100,14 +100,6 @@ struct AnEffect::ui
     } click;
 
     struct {
-        halp_meta(name, "Mosca")
-        halp_meta(layout, halp::layouts::vbox)
-        halp_meta(background, halp::colors::mid)
-
-        halp::custom_item<custom_mosca, &ins::level> widget{{.x = 500, .y = 920}};
-    } mosca;
-
-    struct {
         halp_meta(name, "CustomColor")
         halp_meta(layout, halp::layouts::vbox)
         halp_meta(background, halp::colors::mid)
@@ -159,7 +151,7 @@ struct AnEffect::ui
         halp_meta(layout, halp::layouts::vbox)
         halp_meta(background, halp::colors::mid)
 
-        halp::custom_item<AnEffect::paint::custom_morpion, &ins::level> widget{{.x = 500, .y = 920}};
+        halp::custom_item<Spatatouille::morpion_paint::custom_morpion, &ins::level> widget{{.x = 500, .y = 920}};
     } custom_morpion;
 
 };

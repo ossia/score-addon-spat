@@ -8,10 +8,10 @@ project(score_addon_spat LANGUAGES CXX)
 
 add_library(
   score_addon_spat
-  Spat/AnEffectModel.hpp
-  Spat/AnEffectModel.cpp
-  Spat/AnEffectUi.hpp
-  Spat/AnEffect.hpp
+  Spat/ExampleModel.hpp
+  Spat/ExampleModel.cpp
+  Spat/ExampleUi.hpp
+  Spat/Example.hpp
   Spat/WidgetMorpion.hpp
 
   Spat/StereoToMonoModel.hpp

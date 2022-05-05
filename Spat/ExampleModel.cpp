@@ -1,8 +1,8 @@
-#include <Spat/AnEffect.hpp>
+#include <Spat/Example.hpp>
 
 namespace Spat
 {
-void AnEffect::operator()(halp::tick t)
+void Example::operator()(halp::tick t)
 {
   // Process the input buffer
   for (int i = 0; i < inputs.audio.channels; i++)

@@ -7,7 +7,7 @@ namespace Spat
 
 using namespace std;
 
-struct AnEffect::paint
+struct Spatatouille::morpion_paint
 {
     struct custom_morpion
     {
