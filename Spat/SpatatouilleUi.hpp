@@ -20,7 +20,7 @@ struct Spatatouille::ui
   struct bus {
       void init(ui& ui)
       {
-        ui.mosca.widget.on_moved = [&] (halp::xy_type<float> pos)
+        ui.spatatouille.widget.on_moved = [&] (halp::xy_type<float> pos)
         {
             this->send_message(ui_to_processor{.pos_xy = pos});
         };
@@ -38,8 +38,8 @@ struct Spatatouille::ui
       halp_meta(width, 300)
       halp_meta(height, 300)
 
-      halp::custom_actions_item<Spatatouille::circle_paint::custom_spatatouille> widget{.x = 0, .y = 0};
-  } mosca;
+      halp::custom_actions_item<Spatatouille::custom_spatatouille> widget{.x = 0, .y = 0};
+  } spatatouille;
 
   struct {
       halp_meta(name, "Option")

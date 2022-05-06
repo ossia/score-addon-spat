@@ -54,8 +54,6 @@ public:
 
   struct ui;
 
-  struct circle_paint;
-
-  struct morpion_paint;
+  struct custom_spatatouille;
 };
 }

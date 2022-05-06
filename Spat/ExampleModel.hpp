@@ -294,9 +294,7 @@ public:
   // UI is defined in another file to keep things clear.
   struct ui;
 
-  struct paint;
-
-  struct test;
+  struct custom_matrix;
 
   private:
   // Here we have some state which depends on the host configuration (number of channels, etc).

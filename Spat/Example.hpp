@@ -2,4 +2,4 @@
 
 #include <Spat/ExampleModel.hpp>
 #include <Spat/ExampleUi.hpp>
-#include <Spat/WidgetMorpion.hpp>
+#include <Spat/WidgetMatrix.hpp>
