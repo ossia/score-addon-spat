@@ -24,9 +24,9 @@ namespace Spat
 class Example
 {
 public:
-  halp_meta(name, "Test-examples")
+  halp_meta(name, "Examples")
   halp_meta(category, "Audio")
-  halp_meta(c_name, "test_examples")
+  halp_meta(c_name, "examples")
   halp_meta(uuid, "0fb2b4f5-8811-472a-abad-905e1fa0e6db")
 
   struct custom_button

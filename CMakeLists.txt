@@ -12,7 +12,6 @@ add_library(
   Spat/ExampleModel.cpp
   Spat/ExampleUi.hpp
   Spat/Example.hpp
-  Spat/WidgetMorpion.hpp
 
   Spat/StereoToMonoModel.hpp
   Spat/StereoToMonoModel.cpp
@@ -40,8 +39,10 @@ add_library(
   Spat/Spatatouille.hpp
   Spat/SpatatouilleModel.cpp
   Spat/SpatatouilleUi.hpp
-  Spat/WidgetSpatatouille.hpp
   Spat/Spatatouille.hpp
+
+  Spat/WidgetSpatatouille.hpp
+  Spat/WidgetMatrix.hpp
 
   score_addon_spat.hpp
   score_addon_spat.cpp

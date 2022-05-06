@@ -8,7 +8,6 @@
 #include <Spat/Example.hpp>
 #include <Spat/Spatatouille.hpp>
 
-
 #include <Avnd/Factories.hpp>
 #include <score/plugins/FactorySetup.hpp>
 #include <score_plugin_engine.hpp>
@@ -24,13 +23,13 @@ score_addon_spat::factories(
     const score::ApplicationContext& ctx,
     const score::InterfaceKey& key) const
 {
-  return Avnd::instantiate_fx<
-            Spat::StereoToMono
+  return Avnd::instantiate_fx<   
+            Spat::Spatatouille
+          , Spat::StereoToMono
           , Spat::StereoPanning
           , Spat::Rotator
           , Spat::AmbiToBinaural
           , Spat::Example
-          , Spat::Spatatouille
           >(ctx, key);
 }
 
