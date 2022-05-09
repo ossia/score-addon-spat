@@ -24,6 +24,11 @@ struct Spatatouille::ui
         {
             this->send_message(ui_to_processor{.pos_xy = pos});
         };
+
+        ui.spatatouille.widget.on_pressed = [&]
+        {
+            fprintf(stderr, "Test");
+        };
       }
 
       static void process_message(ui& self){}

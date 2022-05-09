@@ -15,6 +15,7 @@ struct Spatatouille::custom_spatatouille
     halp::xy_type<float> pos;
 
     std::function<void(halp::xy_type<float>)> on_moved = [] (auto) {};
+    std::function<void()> on_pressed = [] { };
 
     void paint(avnd::painter auto ctx)
     {
@@ -36,21 +37,27 @@ struct Spatatouille::custom_spatatouille
         ctx.stroke();
 
         ctx.begin_path();
-        ctx.set_stroke_color({255, 255, 255, 255});
         ctx.set_fill_color({255, 255, 255, 255});
         ctx.draw_circle(c_x, c_y, c_r);
         ctx.fill();
-        ctx.stroke();
 
         ctx.begin_path();
-        ctx.set_stroke_color({255, 255, 255, 255});
+        ctx.set_fill_color({150, 150, 150, 10});
+        ctx.draw_circle(c_x, c_y, c_r/2+1);
+        ctx.fill();
+
+        ctx.begin_path();
+        ctx.set_fill_color({255, 255, 255, 255});
+        ctx.draw_circle(c_x, c_y, c_r/2-1);
+        ctx.fill();
+
+        ctx.begin_path();
         ctx.set_fill_color({0, 0, 0, 255});
         ctx.draw_circle(c_x, c_y, c_r_bis);
         ctx.fill();
-        ctx.stroke();
 
         float formula = sqrt(pow((m_x - c_x), 2) + pow((m_y - c_y), 2));
-        if(formula + (m_r - 5) < c_r){
+        if(formula < c_r){
             ctx.begin_path();
             ctx.set_fill_color({90, 90, 90, 255});
             ctx.draw_circle(m_x, m_y, m_r);
@@ -84,6 +91,11 @@ struct Spatatouille::custom_spatatouille
     {
         mouse_move(x, y);
         on_moved(pos);
+    }
+
+    void key_press()
+    {
+        on_pressed();
     }
 };
 }
