@@ -1,6 +1,226 @@
+/* Most of these methods are modified versions of Leo McCormack's SAF library : https://github.com/leomccormack/Spatial_Audio_Framework *
+* Copyright 2020-2021 Leo McCormack
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
+* copyright notice and this permission notice appear in all copies.
+*/
+
 #include <Spat/AmbisonicMethods.hpp>
 
 using namespace std;
+
+void unnorm_legendreP
+(
+    int n,
+        float cos,
+    //vector<float> x,
+    //int lenX,
+    vector<float>& y
+)
+{
+    float s, norm, scale;
+    /*
+    vector<float> P((n+3)*lenX);
+    vector<float> s_n(lenX);
+    vector<float> tc(lenX);
+*/
+    vector<float> P(n+3);
+    float s_n, tc;
+
+    vector<float> sqrt_n(2*n+1);
+
+    if(n==0){
+        /*for(int i=0; i<lenX; i++)
+            y[i] = 1.0;*/
+        y[0] = 1.0f;
+        return;
+    }
+
+    /* init */
+    /*for(int i=0; i<lenX; i++){
+        s = sqrt(1.0-pow(x[i],2.0)) + 2.23e-20;
+        s_n[i] = pow(-s, n);
+        tc[i] = -2.0 * x[i]/s;
+    }*/
+
+    s = sqrt(1.0-pow(cos,2.0)) + 2.23e-20;
+    s_n = pow(-s, n);
+    tc = -2.0 * cos/s;
+
+    for(int i=0; i<2*n+1; i++)
+        sqrt_n[i] = sqrt(i);
+    norm = 1.0;
+    for(int i=1; i<=n; i++)
+        norm *= 1.0 - 1.0/(2.0*i);
+
+    /* Starting values for downwards recursion */
+    /*for(int i=0; i<lenX; i++){
+        P[(n)*lenX+i] = sqrt(norm)*s_n[i];
+        P[(n-1)*lenX+i] = P[(n)*lenX+i] * tc[i] * n/sqrt_n[2*n];
+    }*/
+
+    P[n] = sqrt(norm)*s_n;
+    P[n-1] = P[n] * tc * n/sqrt_n[2*n];
+
+    /* 3-step downwards recursion to m == 0 */
+    for(int m=n-2; m>=0; m--)
+        P[m] = (P[m+1]*tc*(m+1.0) - P[m+2] * sqrt_n[n+m+2] * sqrt_n[n-m-1])/(sqrt_n[n+m+1]*sqrt_n[n-m]);
+        /*
+        for(int i=0; i<lenX; i++)
+          P[(m)*lenX+i] = (P[(m+1)*lenX+i]*tc[i]*(m+1.0) - P[(m+2)*lenX+i] * sqrt_n[n+m+2] * sqrt_n[n-m-1])/(sqrt_n[n+m+1]*sqrt_n[n-m]);
+        */
+
+    /* keep up to the last 3 elements in P */
+    for(int i=0; i<n+1; i++)
+        y[i] = P[i];
+        //for(int j=0 ; i<lenX ; j++)
+        //    y[i*j] = P[i*j];
+
+    /* Account for polarity when x == -/+1 for first value of P */
+    /*
+     for(int i=0; i<lenX; i++)
+        if(sqrt(1.0-pow(x[i],2.0))==0)
+            y[i] = pow(x[i],n);
+*/
+    if(sqrt(1.0-pow(cos,2.0))==0)
+        y[0] = pow(cos,n);
+
+    /* scale each row by: sqrt((n+m)!/(n-m)!) */
+    for(int m=1; m<n; m++){
+        scale = 1.0;
+        for(int i=n-m+1; i<n+m+1; i++)
+            scale*=sqrt_n[i];
+        /*for(int i=0; i<lenX; i++)
+            y[m*lenX+i] *= scale;*/
+        y[m] *= scale;
+    }
+
+    scale = 1.0;
+    for(int i=1; i<2*n+1; i++)
+        scale*=sqrt_n[i];
+    /*for(int i=0; i<lenX; i++)
+        y[n*lenX+i] *= scale;*/
+    y[n] *= scale;
+}
+
+float factorial(int n)
+{
+    int result=1;
+    for(int i=1 ; i<=n ; i++)
+        result *= i;
+
+    return result;
+}
+
+void getSHreal
+(
+    int order,
+        float azimuth, float inclination,
+    //vector<float> dirs_rad,
+    //int nDirs,
+    vector<float>& Y
+)
+{
+    int dir, j, n, m, idx_Y;
+    vector<float> Lnm(/*(*/2*order+1/*)*nDirs*/);
+    vector<float> CosSin(2*order+1);
+    vector<float> p_nm(/*(*/order+1/*)*nDirs*/);
+    //vector<float> cos_incl(nDirs);
+    vector<float> norm_real(2*order+1);
+
+    //if(nDirs<1)
+    //    return;
+
+    float cos_incl = cos(inclination);
+    /*for (dir = 0; dir<nDirs; dir++)
+        cos_incl[dir] = cos(dirs_rad[dir*2+1]);*/
+
+    idx_Y = 0;
+    for(n=0; n<=order; n++){
+        /* vector of unnormalised associated Legendre functions of current order */
+        unnorm_legendreP(n, cos_incl,/* nDirs,*/ p_nm); /* includes Condon-Shortley phase term */
+
+        /*for(dir=0; dir<nDirs; dir++){
+            *cancel the Condon-Shortley phase from the definition of the Legendre functions to result in signless real SH
+            if (n != 0)
+                for(m=-n, j=0; m<=n; m++, j++)
+                    Lnm[j*nDirs+dir] = pow(-1.0, abs(m)) * p_nm[abs(m)*nDirs+dir];
+            else
+                Lnm[dir] = p_nm[dir];
+        }*/
+
+        if (n != 0)
+            for(m=-n, j=0; m<=n; m++, j++)
+                Lnm[j+dir] = pow(-1.0, abs(m)) * p_nm[abs(m)+dir];
+        else
+            Lnm[dir] = p_nm[dir];
+
+        /* normalisation */
+        for(m=-n, j=0; m<=n; m++, j++)
+            norm_real[j] = sqrt( (2.0*n+1.0) * factorial(n-abs(m)) / (4.0*M_PI*factorial(n+abs(m))) );
+
+        /* norm_real * Lnm_real .* CosSin; */
+        /*for(dir=0; dir<nDirs; dir++){
+            for(m=-n, j=0; m<=n; m++, j++){
+                if(j<n)
+                    Y[(j+idx_Y)*nDirs+dir] = (norm_real[j] * Lnm[j*nDirs+dir] * sqrt(2.0)*sin((n-j)*dirs_rad[dir*2]));
+                else if(j==n)
+                    Y[(j+idx_Y)*nDirs+dir] = (norm_real[j] * Lnm[j*nDirs+dir]);
+                else // (j>n)
+                    Y[(j+idx_Y)*nDirs+dir] = (norm_real[j] * Lnm[j*nDirs+dir] * sqrt(2.0)*cos((abs(m))*dirs_rad[dir*2]));
+            }
+        }*/
+
+        for(m=-n, j=0; m<=n; m++, j++){
+            if(j<n)
+                Y[(j+idx_Y)+dir] = (norm_real[j] * Lnm[j+dir] * sqrt(2.0)*sin((n-j)*azimuth));
+            else if(j==n)
+                Y[(j+idx_Y)+dir] = (norm_real[j] * Lnm[j+dir]);
+            else /* (j>n) */
+                Y[(j+idx_Y)+dir] = (norm_real[j] * Lnm[j+dir] * sqrt(2.0)*cos((abs(m))*azimuth));
+        }
+
+        /* increment */
+        idx_Y = idx_Y + (2*n+1);
+    }
+}
+
+void getRSH
+(
+    int N,
+        float azi, float elev,
+    //vector<float> dirs_deg,
+    //int nDirs,
+    vector<float>& Y
+)
+{
+    int i, nSH;
+    float scale;
+    //vector<float> dirs_rad(nDirs*2);
+
+    //if(nDirs<1)
+    //    return;
+
+    nSH = (N+1)*(N+1);
+    scale = sqrtf(4.0f*M_PI);
+
+    /* convert [azi, elev] in degrees, to [azi, inclination] in radians */
+    float azimuth = azi*M_PI/180.0f;
+    float inclination = M_PI/2.0f - elev*M_PI/180.0f;
+    /*
+    for(i=0; i<nDirs; i++){
+        dirs_rad[i*2+0] = dirs_deg[i*2+0] * M_PI/180.0f;
+        dirs_rad[i*2+1] = M_PI/2.0f - (dirs_deg[i*2+1] * M_PI/180.0f);
+    }*/
+
+    /* get real-valued spherical harmonics */
+    getSHreal(N, azimuth, inclination,/*dirs_rad, nDirs,*/ Y);
+
+    /* remove sqrt(4*pi) term */
+   for(int i=0 ; i<nSH /* nDirs*/ ; i++)
+       Y[i] *= scale;
+}
 
 void yawPitchRoll2Rzyx
 (

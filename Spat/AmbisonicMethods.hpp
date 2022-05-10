@@ -1,3 +1,11 @@
+/* Most of these methods are modified versions of Leo McCormack's SAF library : https://github.com/leomccormack/Spatial_Audio_Framework *
+* Copyright 2020-2021 Leo McCormack
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
+* copyright notice and this permission notice appear in all copies.
+*/
+
 #pragma once
 
 #include <cmath>
@@ -7,6 +15,10 @@
 
 static constexpr int max_FuMA_order = 3;
 static constexpr int max_FuMA_nsh = ((max_FuMA_order+1)*(max_FuMA_order+1));
+
+void unnorm_legendreP (int n, float cos /*std::vector<float> x, int lenX*/, std::vector<float>& y);
+void getSHreal (int order, float azimuth, float inclination /*std::vector<float> dirs_rad, int nDirs*/, std::vector<float>& Y);
+void getRSH (int N, float azi, float elev /*std::vector<float> dirs_deg, int nDirs*/, std::vector<float>& Y);
 
 void yawPitchRoll2Rzyx
 (
