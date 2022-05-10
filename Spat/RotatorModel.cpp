@@ -28,21 +28,19 @@ void Rotator::operator()(halp::tick t)
 
     float Rxyz[3][3];
 
-    /*for (int i = 0; i < nSamples; i++)
-        for (int j = 0; j < nSH; j++)
-            inFrame[j][i] = in[0][i];*/
-
+    // convert input signal into RSH
+    // TODO: move it in another box + make azimuth and elevation changeable by hand
     float azi = 90.0f;
     float elev = 0.0f;
     std::vector<float> y(nSH);
     std::fill(y.begin(), y.end(), 0.0f);
 
-    //getRSH(order, azi, elev, y);
+    getRSH(order, azi, elev, y);
 
     for (int i = 0; i < nSH; i++)
         for (int j = 0; j < nSamples; j++)
             inFrame[i][j] = y[i] * in[0][j];
-
+    // -------------------
 
     yawPitchRoll2Rzyx(yaw, pitch, roll, 0, Rxyz);
     getSHrotMtxReal(Rxyz, order, M_rot_tmp, max_nsh*max_nsh);
