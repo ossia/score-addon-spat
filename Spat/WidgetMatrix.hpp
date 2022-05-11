@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Spat/SpatatouilleModel.hpp>
+#include <Spat/ExampleModel.hpp>
 
 namespace Spat
 {

@@ -13,6 +13,8 @@ struct Spatatouille::custom_spatatouille
     static constexpr double height() { return 300.; } // Axe Y
 
     halp::xy_type<float> pos;
+    int num = 0;
+    int num_current = 0;
 
     std::function<void(halp::xy_type<float>)> on_moved = [] (auto) {};
     std::function<void()> on_pressed = [] { };
@@ -73,10 +75,21 @@ struct Spatatouille::custom_spatatouille
         }
     }
 
-    bool mouse_press(double x, double y)
+    bool mouse_press(double x, double y, auto button)
     {
         mouse_move(x, y);
         on_moved(pos);
+
+        fprintf(stderr, "button = %i\n", button);
+
+        if (button == 1){
+            num = button;
+            fprintf(stderr, "Left \n");
+        }else if (button == 2){
+            num = button;
+            fprintf(stderr, "Right \n");
+        }
+
         return true;
     }
 
@@ -84,6 +97,7 @@ struct Spatatouille::custom_spatatouille
     {
         pos.x = std::clamp(x / width(), 0., 1.);
         pos.y = std::clamp(y / height(), 0., 1.);
+
         on_moved(pos);
     }
 
@@ -91,11 +105,6 @@ struct Spatatouille::custom_spatatouille
     {
         mouse_move(x, y);
         on_moved(pos);
-    }
-
-    void key_press()
-    {
-        on_pressed();
     }
 };
 }

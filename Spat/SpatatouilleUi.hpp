@@ -12,7 +12,6 @@ struct Spatatouille::ui
   halp_meta(name, "Main")
   halp_meta(layout, halp::layouts::grid)
   halp_meta(columns, 3)
-  halp_meta(background, "background.svg")
   halp_meta(width, 600)
   halp_meta(height, 300)
   halp_meta(font, "Inconsolata")
@@ -27,7 +26,7 @@ struct Spatatouille::ui
 
         ui.spatatouille.widget.on_pressed = [&]
         {
-            fprintf(stderr, "Test");
+            fprintf(stderr, "On pressed \n");
         };
       }
 

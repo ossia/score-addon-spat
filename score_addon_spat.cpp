@@ -25,11 +25,11 @@ score_addon_spat::factories(
 {
   return Avnd::instantiate_fx<   
             Spat::Spatatouille
-          , Spat::StereoToMono
-          , Spat::StereoPanning
-          , Spat::Rotator
-          , Spat::AmbiToBinaural
-          , Spat::Example
+//          , Spat::StereoToMono
+//          , Spat::StereoPanning
+//          , Spat::Rotator
+//          , Spat::AmbiToBinaural
+//          , Spat::Example
           >(ctx, key);
 }
 
