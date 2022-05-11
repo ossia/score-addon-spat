@@ -4,6 +4,7 @@
 #include <Spat/StereoPanning.hpp>
 #include <Spat/Rotator.hpp>
 #include <Spat/AmbiToBinaural.hpp>
+#include <Spat/MonoToAmbi.hpp>
 
 #include <Avnd/Factories.hpp>
 #include <score/plugins/FactorySetup.hpp>
@@ -25,7 +26,8 @@ score_addon_spat::factories(
           , Spat::StereoToMono
           , Spat::StereoPanning
           , Spat::Rotator
-          , Spat::AmbiToBinaural>(ctx, key);
+          , Spat::AmbiToBinaural
+          , Spat::MonoToAmbi>(ctx, key);
 }
 
 std::vector<score::PluginKey> score_addon_spat::required() const

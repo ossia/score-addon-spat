@@ -1,4 +1,4 @@
-/* Most of these methods are modified versions of Leo McCormack's SAF library : https://github.com/leomccormack/Spatial_Audio_Framework *
+/* Most of these methods are modified versions of Leo McCormack's SAF library : https://github.com/leomccormack/Spatial_Audio_Framework
 * Copyright 2020-2021 Leo McCormack
 *
 * Permission to use, copy, modify, and/or distribute this software for any
@@ -54,5 +54,6 @@ void getSHrotMtxReal
     int size
 );
 
-void convertACNtoFUMA(float** in, int order, int nSamples);
-void convertFUMAtoACN(float** in, int order, int nSamples);
+void convertACNtoFUMA(std::vector<std::vector<float>>& in, int order, int nSamples);
+//void convertFUMAtoACN(float** in, int order, int nSamples);
+void convertFUMAtoACN(std::vector<std::vector<float>>& in, int order, int nSamples);

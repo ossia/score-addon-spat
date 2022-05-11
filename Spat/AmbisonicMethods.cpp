@@ -1,4 +1,4 @@
-/* Most of these methods are modified versions of Leo McCormack's SAF library : https://github.com/leomccormack/Spatial_Audio_Framework *
+/* Most of these methods are modified versions of Leo McCormack's SAF library : https://github.com/leomccormack/Spatial_Audio_Framework
 * Copyright 2020-2021 Leo McCormack
 *
 * Permission to use, copy, modify, and/or distribute this software for any
@@ -344,7 +344,7 @@ void getSHrotMtxReal
 }
 
 
-void convertACNtoFUMA(float** in, int order, int nSamples)
+/*void convertACNtoFUMA(float** in, int order, int nSamples)
 {
     if(order <= 0)
         return ;
@@ -362,8 +362,8 @@ void convertACNtoFUMA(float** in, int order, int nSamples)
             //in[i][j] = 0.0f;
         }
 
-    FuMAsig[1].swap(ACNsig[3]);
-    FuMAsig[1].swap(ACNsig[2]);
+    FuMAsig[1].swap(FuMAsig[3]);
+    FuMAsig[1].swap(FuMAsig[2]);
 
     int doneChannels = 4;
     int prevNbChannels = 3;
@@ -373,13 +373,60 @@ void convertACNtoFUMA(float** in, int order, int nSamples)
         int nbChannels = prevNbChannels+2;
         int middleIdx = doneChannels + (nbChannels-1)/2;
 
-        std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), back_inserter(FuMAsig[middleIdx]));
+        std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), std::back_inserter(FuMAsig[middleIdx]));
         ++doneChannels;
 
         for(int i=1 ; i<(nbChannels-1)/2 ; i++)
         {
-            std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), back_inserter(FuMAsig[middleIdx+i]));
-            std::copy(ACNsig[doneChannels+1].begin(), ACNsig[doneChannels+1].end(), back_inserter(FuMAsig[middleIdx-i]));
+            std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), std::back_inserter(FuMAsig[middleIdx+i]));
+            std::copy(ACNsig[doneChannels+1].begin(), ACNsig[doneChannels+1].end(), std::back_inserter(FuMAsig[middleIdx-i]));
+            doneChannels += 2;
+        }
+
+        prevNbChannels+= nbChannels;
+    }
+
+    for(int i=0 ; i<min(nSH, max_FuMA_nsh) ; i++)
+        for(int j=0 ; j<nSamples ; j++)
+            in[i][j] = FuMAsig[i][j];
+}*/
+
+void convertACNtoFUMA(vector<vector<float>>& in, int order, int nSamples)
+{
+    if(order <= 0)
+        return ;
+
+    int nSH = (order+1)*(order+1);
+
+    vector<vector<float>> ACNsig(nSH, vector<float>(nSamples));
+    vector<vector<float>> FuMAsig(nSH, vector<float>(nSamples));
+
+    for(int i=0 ; i<nSH ; i++)
+        for(int j=0 ; j<nSamples ; j++)
+        {
+            ACNsig[i][j] = in[i][j];
+            FuMAsig[i][j] = in[i][j];
+            //in[i][j] = 0.0f;
+        }
+
+    FuMAsig[1].swap(FuMAsig[3]);
+    FuMAsig[1].swap(FuMAsig[2]);
+
+    int doneChannels = 4;
+    int prevNbChannels = 3;
+
+    while(doneChannels < min(nSH, max_FuMA_nsh))
+    {
+        int nbChannels = prevNbChannels+2;
+        int middleIdx = doneChannels + (nbChannels-1)/2;
+
+        std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), std::back_inserter(FuMAsig[middleIdx]));
+        ++doneChannels;
+
+        for(int i=1 ; i<(nbChannels-1)/2 ; i++)
+        {
+            std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), std::back_inserter(FuMAsig[middleIdx+i]));
+            std::copy(ACNsig[doneChannels+1].begin(), ACNsig[doneChannels+1].end(), std::back_inserter(FuMAsig[middleIdx-i]));
             doneChannels += 2;
         }
 
@@ -392,6 +439,8 @@ void convertACNtoFUMA(float** in, int order, int nSamples)
 }
 
 
+
+/*
 void convertFUMAtoACN(float** in, int order, int nSamples)
 {
     if(order <= 0)
@@ -410,26 +459,84 @@ void convertFUMAtoACN(float** in, int order, int nSamples)
             //in[i][j] = 0.0f;
         }
 
+    ACNsig[1].swap(ACNsig[2]);
     ACNsig[1].swap(ACNsig[3]);
-    ACNsig[2].swap(ACNsig[3]);
+
+    std::cout<<"test1"<<std::endl;
+
+    int doneChannels = 4;
+    int prevNbChannels = 3;
+
+    while(doneChannels < min(nSH, max_FuMA_nsh))
+    {    std::cout<<"test2"<<std::endl;
+
+        int nbChannels = prevNbChannels+2;
+        int middleIdx = doneChannels + (nbChannels-1)/2;
+
+        std::copy(FuMAsig[middleIdx].begin(), FuMAsig[middleIdx].end(), std::back_inserter(ACNsig[doneChannels]));
+        ++doneChannels;
+        std::cout<<"test3"<<std::endl;
+
+        for(int i=1 ; i<(nbChannels-1)/2 ; i++)
+        {
+            std::copy(FuMAsig[middleIdx+i].begin(), FuMAsig[middleIdx+i].end(), std::back_inserter(ACNsig[doneChannels]));
+            std::copy(FuMAsig[middleIdx-i].begin(), FuMAsig[middleIdx-i].end(), std::back_inserter(ACNsig[doneChannels+1]));
+
+            doneChannels += 2;
+            std::cout<<i<<" "<<doneChannels<<std::endl;
+        }
+
+        prevNbChannels+= nbChannels;
+    }
+
+    std::cout<<"test4"<<std::endl;
+
+    for(int i=0 ; i < min(nSH, max_FuMA_nsh) ; i++)
+        for(int j=0 ; j<nSamples ; j++)
+            in[i][j] = ACNsig[i][j];
+}
+*/
+
+void convertFUMAtoACN(vector<vector<float>>& in, int order, int nSamples)
+{
+    if(order <= 0)
+        return ;
+
+    int nSH = (order+1)*(order+1);
+
+    vector<vector<float>> ACNsig(nSH, vector<float>(nSamples));
+    vector<vector<float>> FuMAsig(nSH, vector<float>(nSamples));
+
+    for(int i=0 ; i<nSH ; i++)
+        for(int j=0 ; j<nSamples ; j++)
+        {
+            ACNsig[i][j] = in[i][j];
+            FuMAsig[i][j] = in[i][j];
+            //in[i][j] = 0.0f;
+        }
+
+    ACNsig[1].swap(ACNsig[2]);
+    ACNsig[1].swap(ACNsig[3]);
 
     int doneChannels = 4;
     int prevNbChannels = 3;
 
     while(doneChannels < min(nSH, max_FuMA_nsh))
     {
+
         int nbChannels = prevNbChannels+2;
         int middleIdx = doneChannels + (nbChannels-1)/2;
 
-        std::copy(FuMAsig[middleIdx].begin(), FuMAsig[middleIdx].end(), back_inserter(ACNsig[doneChannels]));
+        std::copy(FuMAsig[middleIdx].begin(), FuMAsig[middleIdx].end(), std::back_inserter(ACNsig[doneChannels]));
         ++doneChannels;
 
         for(int i=1 ; i<(nbChannels-1)/2 ; i++)
         {
-            std::copy(FuMAsig[middleIdx+i].begin(), FuMAsig[middleIdx+i].end(), back_inserter(ACNsig[doneChannels]));
-            std::copy(FuMAsig[middleIdx-i].begin(), FuMAsig[middleIdx-i].end(), back_inserter(ACNsig[doneChannels+1]));
+            std::copy(FuMAsig[middleIdx+i].begin(), FuMAsig[middleIdx+i].end(), std::back_inserter(ACNsig[doneChannels]));
+            std::copy(FuMAsig[middleIdx-i].begin(), FuMAsig[middleIdx-i].end(), std::back_inserter(ACNsig[doneChannels+1]));
 
             doneChannels += 2;
+            std::cout<<i<<" "<<doneChannels<<std::endl;
         }
 
         prevNbChannels+= nbChannels;
@@ -439,8 +546,6 @@ void convertFUMAtoACN(float** in, int order, int nSamples)
         for(int j=0 ; j<nSamples ; j++)
             in[i][j] = ACNsig[i][j];
 }
-
-
 
 
 
