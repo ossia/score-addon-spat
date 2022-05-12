@@ -1,6 +1,7 @@
 #pragma once
 #include <Spat/SpatatouilleModel.hpp>
 #include <Spat/WidgetSpatatouille.hpp>
+#include <Spat/WidgetAudioSpat.hpp>
 
 namespace Spat
 {
@@ -12,7 +13,7 @@ struct Spatatouille::ui
   halp_meta(name, "Main")
   halp_meta(layout, halp::layouts::grid)
   halp_meta(columns, 3)
-  halp_meta(width, 600)
+  halp_meta(width, 900)
   halp_meta(height, 300)
   halp_meta(font, "Inconsolata")
 
@@ -27,6 +28,10 @@ struct Spatatouille::ui
         ui.spatatouille.widget.on_pressed = [&]
         {
             fprintf(stderr, "On pressed \n");
+        };
+        ui.spatatouille.widget.source = [&] (int src)
+        {
+            this->send_message(ui_to_processor{.source = src});
         };
       }
 
@@ -46,6 +51,16 @@ struct Spatatouille::ui
   } spatatouille;
 
   struct {
+      halp_meta(name, "Audio")
+      halp_meta(layout, halp::layouts::vbox)
+      halp_meta(background, halp::colors::mid)
+      halp_meta(width, 300)
+      halp_meta(height, 300)
+
+      halp::custom_actions_item<Spatatouille::custom_audio> widget{.x = 0, .y = 0};
+  } audio;
+
+  struct {
       halp_meta(name, "Option")
       halp_meta(layout, halp::layouts::vbox)
       halp_meta(width, 300)
@@ -55,6 +70,7 @@ struct Spatatouille::ui
       halp::item<&ins::z> z;
 
       halp::item<&outs::output> output;
+      halp::item<&outs::source> source;
   } option;
 };
 }

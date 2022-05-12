@@ -25,6 +25,7 @@ public:
   struct ui_to_processor
   {
       halp::xy_type<float> pos_xy;
+      int source;
   };
 
   ui_to_processor m_local_data{.pos_xy = {.x = 0.5, .y = 1.}};
@@ -42,6 +43,7 @@ public:
     halp::dynamic_audio_bus<"Output", double> audio;
 
     halp::hbargraph_f32<"Left/Right balance output", halp::range{.min = -1., .max = 1., .init = 0.}> output;
+    halp::hbargraph_i32<"Source", halp::range{.min = 1, .max = 3, .init = 1}> source;
   } outputs;
 
   void process_message(const ui_to_processor& m) {
@@ -55,5 +57,7 @@ public:
   struct ui;
 
   struct custom_spatatouille;
+
+  struct custom_audio;
 };
 }
