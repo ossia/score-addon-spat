@@ -39,24 +39,61 @@ struct Spatatouille::custom_audio
         ctx.draw_rect(0., 0., width(), height());
         ctx.fill();
         ctx.stroke();
-        ctx.close_path();
 
         ctx.begin_path();
-        ctx.set_fill_color({255, 255, 255, 255});
-        ctx.draw_circle(c_x, c_y, c_r);
-        ctx.fill();
-        ctx.close_path();
-
-        ctx.begin_path();
+        ctx.set_stroke_color({255, 255, 255, 255});
         ctx.set_stroke_width(2.);
-//        ctx.set_fill_color({255, 0, 0, 255});
-        ctx.set_stroke_color({255, 0, 0, 255});
-        ctx.move_to(0.,0.);
-        ctx.line_to(50.,50.);
-//        ctx.fill();
-        ctx.stroke();
-        ctx.close_path();
+        for(int i = 10; i<= 150; i+=10){
 
+            ctx.draw_circle(150, 150, i);
+
+        }
+        ctx.stroke();
+
+
+
+        ctx.set_stroke_width(8.);
+        int ellipse = 0;
+        for(int i = 5; i<= 145; i+=10){
+            if (ellipse == 0){
+                ctx.begin_path();
+                ctx.set_stroke_color({255, 0, 0, 70});
+            }
+            else if (ellipse == 3){
+                ctx.begin_path();
+                ctx.set_stroke_color({255, 105, 0, 255});
+            }
+            else if (ellipse == 6){
+                ctx.begin_path();
+                ctx.set_stroke_color({255, 210, 0, 255});
+            }
+            else if (ellipse == 9){
+                ctx.begin_path();
+                ctx.set_stroke_color({100, 220, 0, 255});
+            }
+            else if (ellipse == 12){
+                ctx.begin_path();
+                ctx.set_stroke_color({0, 120, 0, 255});
+            }
+            if(!(i % 10 == 0) && ellipse >= 0){ //2nd condition only for testing
+                ctx.draw_circle(150, 150, i);
+
+                ctx.stroke();
+
+            }
+            ellipse++;
+
+        }
+
+        ctx.set_stroke_color({255, 255, 255, 255});
+        ctx.set_stroke_width(2.);
+        ctx.begin_path();
+        ctx.draw_line(0, 150, 300, 150);
+        ctx.draw_line(150, 0, 150, 300);
+        ctx.draw_line(44, 256, 256, 44);
+        ctx.draw_line(44, 44, 256, 256);
+
+        ctx.stroke();
 
         float formula_1 = sqrt(pow((m_x - c_x), 2) + pow((m_y - c_y), 2));
 
