@@ -420,17 +420,22 @@ void convertACNtoFUMA(vector<vector<float>>& in, int order, int nSamples)
         int nbChannels = prevNbChannels+2;
         int middleIdx = doneChannels + (nbChannels-1)/2;
 
+        //std::cout<<middleIdx<<" "<<doneChannels<<" "<<nbChannels<<" "<<prevNbChannels<<std::endl;
+        //std::cout<<doneChannels<<" "<<middleIdx<<std::endl;
         std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), std::back_inserter(FuMAsig[middleIdx]));
         ++doneChannels;
 
-        for(int i=1 ; i<(nbChannels-1)/2 ; i++)
+        for(int i=1 ; i<=(nbChannels-1)/2 ; i++)
         {
+            //std::cout<<doneChannels<<" "<<middleIdx+i<<std::endl;
+            //std::cout<<doneChannels+1<<" "<<middleIdx-i<<std::endl;
+
             std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), std::back_inserter(FuMAsig[middleIdx+i]));
             std::copy(ACNsig[doneChannels+1].begin(), ACNsig[doneChannels+1].end(), std::back_inserter(FuMAsig[middleIdx-i]));
             doneChannels += 2;
         }
 
-        prevNbChannels+= nbChannels;
+        prevNbChannels= nbChannels;
     }
 
     for(int i=0 ; i<min(nSH, max_FuMA_nsh) ; i++)
@@ -530,7 +535,7 @@ void convertFUMAtoACN(vector<vector<float>>& in, int order, int nSamples)
         std::copy(FuMAsig[middleIdx].begin(), FuMAsig[middleIdx].end(), std::back_inserter(ACNsig[doneChannels]));
         ++doneChannels;
 
-        for(int i=1 ; i<(nbChannels-1)/2 ; i++)
+        for(int i=1 ; i<=(nbChannels-1)/2 ; i++)
         {
             std::copy(FuMAsig[middleIdx+i].begin(), FuMAsig[middleIdx+i].end(), std::back_inserter(ACNsig[doneChannels]));
             std::copy(FuMAsig[middleIdx-i].begin(), FuMAsig[middleIdx-i].end(), std::back_inserter(ACNsig[doneChannels+1]));

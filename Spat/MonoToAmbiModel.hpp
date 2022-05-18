@@ -39,7 +39,8 @@ public:
 
     struct
     {
-        halp::dynamic_audio_bus<"Output", float> audio;
+        halp::fixed_audio_bus<"Output", float, 19> audio;
+        //halp::dynamic_audio_bus<"Output", float> audio;
     } outputs;
 
     struct ui;

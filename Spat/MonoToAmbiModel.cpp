@@ -11,11 +11,12 @@ void MonoToAmbi::operator()(halp::tick t)
     order = inputs.order;
     nSH = (order + 1) * (order + 1);
 
-    /*while(nSH > outputs.audio.channels)
+    while(nSH > outputs.audio.channels())
     {
         order -= 1;
         nSH = (order+1)*(order+1);
-    }*/
+        std::cout<<"order -= 1 : order = "<<order<<" ; nSH = "<<nSH<<std::endl;
+    }
 
     float** in = inputs.audio.samples;
     float** out = outputs.audio.samples;
@@ -40,7 +41,7 @@ void MonoToAmbi::operator()(halp::tick t)
     for (int i = 0; i < nSH; i++)
         std::copy(outVec[i].begin(), outVec[i].end(), out[i]);
 
-    for (int i = nSH; i < outputs.audio.channels; i++)
+    for (int i = nSH; i < outputs.audio.channels(); i++)
       for (int j = 0; j < nSamples; j++)
         out[i][j] = 0.0f;
 }
