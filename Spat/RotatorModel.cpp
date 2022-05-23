@@ -9,6 +9,8 @@ void Rotator::operator()(halp::tick t)
     if (inputs.audio.channels <= 0 || nSamples == 0 || outputs.audio.channels <=0)
       return;
 
+    //std::cout<<inputs.audio.channels<<std::endl;
+
     FuMA = !inputs.conv;
     order = inputs.order;
     nSH = (order + 1) * (order + 1);
@@ -17,11 +19,11 @@ void Rotator::operator()(halp::tick t)
     pitch = inputs.pitch * deg_to_rad;
     roll = inputs.roll * deg_to_rad;
 
-    /*while(nSH > outputs.audio.channels)
+    while(nSH > outputs.audio.channels)
     {
         order -= 1;
         nSH = (order+1)*(order+1);
-    }*/
+    }
 
     float** in = inputs.audio.samples;
     float** out = outputs.audio.samples;    
@@ -39,20 +41,6 @@ void Rotator::operator()(halp::tick t)
     }
 
     float Rxyz[3][3];
-
-    // convert input signal into RSH
-    // TODO: move it in another box + make azimuth and elevation changeable by hand
-    /*azi = inputs.azi;
-    elev = inputs.elev;
-    std::vector<float> y(nSH);
-    std::fill(y.begin(), y.end(), 0.0f);
-
-    getRSH(order, azi, elev, y);
-
-    for (int i = 0; i < nSH; i++)
-        for (int j = 0; j < nSamples; j++)
-            inFrame[i][j] = y[i] * in[0][j];*/
-    // -------------------
 
     for (int i = 0; i < nSH; i++)
         for (int j = 0; j < nSamples; j++)

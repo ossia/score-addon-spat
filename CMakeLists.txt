@@ -41,6 +41,9 @@ add_library(
   Spat/AmbisonicMethods.hpp
   Spat/AmbisonicMethods.cpp
 
+  Spat/Test.hpp
+  Spat/TestInputs.hpp
+
   score_addon_spat.hpp
   score_addon_spat.cpp
 )

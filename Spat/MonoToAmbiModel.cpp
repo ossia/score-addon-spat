@@ -15,7 +15,7 @@ void MonoToAmbi::operator()(halp::tick t)
     {
         order -= 1;
         nSH = (order+1)*(order+1);
-        std::cout<<"order -= 1 : order = "<<order<<" ; nSH = "<<nSH<<std::endl;
+        //std::cout<<"order -= 1 : order = "<<order<<" ; nSH = "<<nSH<<std::endl;
     }
 
     float** in = inputs.audio.samples;
