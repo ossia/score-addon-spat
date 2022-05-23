@@ -2,6 +2,8 @@
 #include <Spat/SpatatouilleModel.hpp>
 #include <Spat/WidgetSpatatouille.hpp>
 #include <Spat/WidgetAudioSpat.hpp>
+#include <Spat/WidgetSpectSpat.hpp>
+#include <Spat/WidgetDomeSpat.hpp>
 
 namespace Spat
 {
@@ -14,7 +16,7 @@ struct Spatatouille::ui
   halp_meta(layout, halp::layouts::grid)
   halp_meta(columns, 3)
   halp_meta(width, 900)
-  halp_meta(height, 300)
+  halp_meta(height, 600)
   halp_meta(font, "Inconsolata")
 
   struct bus {
@@ -72,5 +74,25 @@ struct Spatatouille::ui
       halp::item<&outs::output> output;
       halp::item<&outs::source> source;
   } option;
+
+  struct {
+      halp_meta(name, "Dome")
+      halp_meta(layout, halp::layouts::vbox)
+      halp_meta(background, halp::colors::mid)
+      halp_meta(width, 300)
+      halp_meta(height, 300)
+
+      halp::custom_actions_item<Spatatouille::custom_dome> widget{.x = 0, .y = 0};
+  } dome;
+
+  struct {
+      halp_meta(name, "Spect")
+      halp_meta(layout, halp::layouts::vbox)
+      halp_meta(background, halp::colors::mid)
+      halp_meta(width, 300)
+      halp_meta(height, 300)
+
+      halp::custom_actions_item<Spatatouille::custom_spect> widget{.x = 0, .y = 0};
+  } spect;
 };
 }

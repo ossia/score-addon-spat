@@ -28,6 +28,11 @@ public:
       int source;
   };
 
+  struct processor_to_ui
+  {
+      float volume;
+  };
+
   ui_to_processor m_local_data{.pos_xy = {.x = 0.5, .y = 1.}};
 
   struct ins
@@ -59,5 +64,9 @@ public:
   struct custom_spatatouille;
 
   struct custom_audio;
+
+  struct custom_spect;
+
+  struct custom_dome;
 };
 }

@@ -42,7 +42,10 @@ add_library(
   Spat/Spatatouille.hpp
 
   Spat/WidgetSpatatouille.hpp
+  Spat/WidgetAudioSpat.hpp
   Spat/WidgetMatrix.hpp
+  Spat/WidgetSpectSpat.hpp
+  Spat/WidgetDomeSpat.hpp
 
   score_addon_spat.hpp
   score_addon_spat.cpp

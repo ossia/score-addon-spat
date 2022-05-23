@@ -1,18 +1,19 @@
 #pragma once
 
 #include <Spat/SpatatouilleModel.hpp>
+#include <cmath>
 
 namespace Spat
 {
 
 using namespace std;
 
-struct Spatatouille::custom_spatatouille
+struct Spatatouille::custom_dome
 {
     static constexpr double width() { return 300.; } // Axe X
     static constexpr double height() { return 300.; } // Axe Y
 
-    halp::xy_type<float> pos, pos_1, pos_2, pos_3;
+    halp::xy_type<float> pos, pos_1, pos_2;
     int num = 0;
     int num_current = 1;
 
@@ -27,15 +28,6 @@ struct Spatatouille::custom_spatatouille
         double c_r = 150;
         double c_r_bis = 4;
 
-        float m_x_1 = pos_1.x * width();
-        float m_y_1 = pos_1.y * height();
-
-        float m_x_2 = pos_2.x * width();
-        float m_y_2 = pos_2.y * height();
-
-        float m_x_3 = pos_3.x * width();
-        float m_y_3 = pos_3.y * height();
-
         float m_r = 15.;
 
         ctx.set_fill_color({120, 120, 120, 255});
@@ -44,7 +36,7 @@ struct Spatatouille::custom_spatatouille
         ctx.fill();
 
         ctx.begin_path();
-        ctx.set_fill_color({255, 255, 255, 255});
+        ctx.set_fill_color({235, 235, 235, 255});
         ctx.draw_circle(c_x, c_y, c_r);
         ctx.fill();
 
@@ -59,51 +51,38 @@ struct Spatatouille::custom_spatatouille
         ctx.draw_circle(c_x, c_y, c_r_bis);
         ctx.fill();
 
-        float formula_1 = sqrt(pow((m_x_1 - c_x), 2) + pow((m_y_1 - c_y), 2));
-        if(formula_1 < c_r){
-            ctx.begin_path();
-            ctx.set_fill_color({90, 90, 90, 255});
-            ctx.draw_circle(m_x_1, m_y_1, m_r);
-            ctx.fill();
-            ctx.close_path();
+        ctx.begin_path();
+        ctx.set_stroke_color({0, 202, 169, 255});
 
-            ctx.begin_path();
-            ctx.set_fill_color({255, 255, 255, 255});
-            ctx.set_font("Ubuntu");
-            ctx.set_font_size(15);
-            ctx.draw_text(m_x_1-6, m_y_1+7, "1");
-            ctx.fill();
-        }
-        float formula_2 = sqrt(pow((m_x_2 - c_x), 2) + pow((m_y_2 - c_y), 2));
-        if(formula_2 < c_r){
-            ctx.begin_path();
-            ctx.set_fill_color({90, 90, 90, 255});
-            ctx.draw_circle(m_x_2, m_y_2, m_r);
-            ctx.fill();
-            ctx.close_path();
 
-            ctx.begin_path();
-            ctx.set_fill_color({255, 255, 255, 255});
-            ctx.set_font("Ubuntu");
-            ctx.set_font_size(15);
-            ctx.draw_text(m_x_2-6, m_y_2+7, "2");
-            ctx.fill();
-        }
-        float formula_3 = sqrt(pow((m_x_3 - c_x), 2) + pow((m_y_3 - c_y), 2));
-        if(formula_3 < c_r){
-            ctx.begin_path();
-            ctx.set_fill_color({90, 90, 90, 255});
-            ctx.draw_circle(m_x_3, m_y_3, m_r);
-            ctx.fill();
-            ctx.close_path();
+        double max = 1 * M_PI;
+        double theta_1 = atan(pos.y/pos.x)*2 * M_PI;
 
-            ctx.begin_path();
-            ctx.set_fill_color({255, 255, 255, 255});
-            ctx.set_font("Ubuntu");
-            ctx.set_font_size(15);
-            ctx.draw_text(m_x_3-6, m_y_3+7, "3");
-            ctx.fill();
+        halp::xy_type<double> p0 = {cos(theta_1)+150, sin(theta_1)+150};
+        halp::xy_type<double> p1 = {150, 150};
+        halp::xy_type<double> p2 = {cos(1)+150, sin(0)+150};
+
+
+        /*Test*/
+        double alpha = atan2(p0.y - p1.y, p0.x - p1.x);
+        double beta = atan2(p2.y - p1.y, p2.x - p1.x);
+        double angle = (beta - alpha);
+
+
+
+        for(double i = theta_1; i< max+theta_1; i+=0.01){
+            double amp = rand()%50+100;
+            halp::xy_type<double> p1;
+            p1.x = amp * cos(i)+150;
+            p1.y = amp * sin(i)+150;
+
+            ctx.draw_line (p0.x, p0.y, p1.x, p1.y);
+
+            p0.x = p1.x;
+            p0.y = p1.y;
+            ctx.stroke();
         }
+
     }
 
     bool mouse_press(double x, double y, auto button)
@@ -117,14 +96,11 @@ struct Spatatouille::custom_spatatouille
 
             fprintf(stderr, "Num current = %i \n", num_current);
             if(num == 0){
-                if(num_current == 3){
+                if(num_current == 2){
                     num_current = 1;
                     source(num_current);
                 }else if(num_current == 1){
                     num_current = 2;
-                    source(num_current);
-                }else if(num_current == 2){
-                    num_current = 3;
                     source(num_current);
                 }
                 num = 1;
@@ -147,9 +123,6 @@ struct Spatatouille::custom_spatatouille
         }else if (num_current == 2){
             pos_2.x = pos.x;
             pos_2.y = pos.y;
-        }else if(num_current == 3){
-            pos_3.x = pos.x;
-            pos_3.y = pos.y;
         }
 
         on_moved(pos);
