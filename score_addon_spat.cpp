@@ -1,12 +1,9 @@
 #include "score_addon_spat.hpp"
-#include <Spat/AnEffect.hpp>
 #include <Spat/StereoToMono.hpp>
 #include <Spat/StereoPanning.hpp>
 #include <Spat/Rotator.hpp>
 #include <Spat/AmbiToBinaural.hpp>
 #include <Spat/MonoToAmbi.hpp>
-#include <Spat/Test.hpp>
-#include <Spat/TestInputs.hpp>
 
 #include <Avnd/Factories.hpp>
 #include <score/plugins/FactorySetup.hpp>
@@ -24,14 +21,12 @@ score_addon_spat::factories(
     const score::InterfaceKey& key) const
 {
   return Avnd::instantiate_fx<
-          Spat::AnEffect
-          , Spat::StereoToMono
+            Spat::StereoToMono
           , Spat::StereoPanning
           , Spat::Rotator
           , Spat::AmbiToBinaural
           , Spat::MonoToAmbi
-          , Spat::Test
-          , Spat::TestInputs>(ctx, key);
+            >(ctx, key);
 }
 
 std::vector<score::PluginKey> score_addon_spat::required() const

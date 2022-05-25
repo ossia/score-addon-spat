@@ -8,10 +8,6 @@ project(score_addon_spat LANGUAGES CXX)
 
 add_library(
   score_addon_spat
-  Spat/AnEffectModel.hpp
-  Spat/AnEffectModel.cpp
-  Spat/AnEffectUi.hpp
-  Spat/AnEffect.hpp
 
   Spat/StereoToMonoModel.hpp
   Spat/StereoToMonoModel.cpp
@@ -40,9 +36,6 @@ add_library(
 
   Spat/AmbisonicMethods.hpp
   Spat/AmbisonicMethods.cpp
-
-  Spat/Test.hpp
-  Spat/TestInputs.hpp
 
   score_addon_spat.hpp
   score_addon_spat.cpp
