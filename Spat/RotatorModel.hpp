@@ -13,7 +13,7 @@ class Rotator
 {
     static constexpr int max_order = 7;
     static constexpr int max_nsh = ((max_order+1)*(max_order+1));
-    static constexpr float deg_to_rad = 2. * M_PI / 360.;
+    //static constexpr float deg_to_rad = 2. * M_PI / 360.;
 
 public:
     halp_meta(name, "Rotator")
@@ -26,8 +26,9 @@ public:
 
     struct ins
     {
-        halp::dynamic_audio_bus<"Input", float> audio;
-        halp::hslider_i32<"Channel order convention (FuMA / ACN)", halp::range{.min = 0, .max = 1, .init = 0}>
+        halp::dynamic_audio_bus<"Input", float>
+            audio;
+        halp::toggle_t<"Convert to FuMA (ACN by default)", halp::toggle_setup{false}>
             conv;
         halp::hslider_i32<"Order", halp::range{.min = 0, .max = max_order, .init = 0}>
             order;

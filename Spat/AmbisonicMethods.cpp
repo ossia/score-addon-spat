@@ -8,20 +8,20 @@
 
 #include <Spat/AmbisonicMethods.hpp>
 
-using namespace std;
-
 void unnorm_legendreP
 (
     int n,
     float cos,
-    vector<float>& y
+    std::vector<float>& y
 )
 {
-    float s, norm, scale;
-    vector<float> P(n+3);
-    float s_n, tc;
+    using namespace std;
 
-    vector<float> sqrt_n(2*n+1);
+    float s=0, norm=0, scale=0;
+    float* P = (float*) alloca(sizeof(float)*(n+3));
+    float s_n=0.f, tc=0.f;
+
+    float* sqrt_n = (float*) alloca(sizeof(float)*(2*n+1));
 
     if(n==0)
     {
@@ -70,9 +70,9 @@ void unnorm_legendreP
     y[n] *= scale;
 }
 
-float factorial(int n)
+int64_t factorial(int n)
 {
-    int result=1;
+    int64_t result=1;
     for(int i=1 ; i<=n ; i++)
         result *= i;
 
@@ -84,35 +84,35 @@ void getSHreal
     int order,
     float azimuth,
     float inclination,
-    vector<float>& Y
+    std::vector<float>& Y
 )
 {
-    int dir, j, n, m, idx_Y;
-    vector<float> Lnm(2*order+1);
-    vector<float> CosSin(2*order+1);
+    using namespace std;
+
+    float* Lnm = (float*) alloca(sizeof(float)*(2*order+1));
+    float* norm_real = (float*) alloca(sizeof(float)*(2*order+1));
     vector<float> p_nm(order+1);
-    vector<float> norm_real(2*order+1);
 
     float cos_incl = cos(inclination);
 
-    idx_Y = 0;
-    for(n=0; n<=order; n++){
+    int idx_Y = 0;
+    for(int n=0; n<=order; n++){
         // vector of unnormalised associated Legendre functions of current order
         unnorm_legendreP(n, cos_incl, p_nm); // includes Condon-Shortley phase term
 
         //cancel the Condon-Shortley phase from the definition of the Legendre functions to result in signless real SH
         if (n != 0)
-            for(m=-n, j=0; m<=n; m++, j++)
+            for(int m=-n, j=0; m<=n; m++, j++)
                 Lnm[j] = pow(-1.0, abs(m)) * p_nm[abs(m)];
         else
             Lnm[0] = p_nm[0];
 
         // normalisation
-        for(m=-n, j=0; m<=n; m++, j++)
+        for(int m=-n, j=0; m<=n; m++, j++)
             norm_real[j] = sqrt( (2.0*n+1.0) * factorial(n-abs(m)) / (4.0*M_PI*factorial(n+abs(m))) );
 
         // norm_real * Lnm_real .* CosSin;
-        for(m=-n, j=0; m<=n; m++, j++){
+        for(int m=-n, j=0; m<=n; m++, j++){
             if(j<n)
                 Y[j+idx_Y] = (norm_real[j] * Lnm[j] * sqrt(2.0)*sin((n-j)*azimuth));
             else if(j==n)
@@ -131,18 +131,20 @@ void getRSH
     int N,
     float azi,
     float elev,
-    vector<float>& Y
+    std::vector<float>& Y
 )
 {
+    using namespace std;
+
     int i, nSH;
     float scale;
 
     nSH = (N+1)*(N+1);
-    scale = sqrtf(4.0f*M_PI);
+    scale = sqrt(4.0f*M_PI);
 
     // convert [azi, elev] in degrees, to [azi, inclination] in radians
-    float azimuth = azi*M_PI/180.0f;
-    float inclination = M_PI/2.0f - elev*M_PI/180.0f;
+    const float azimuth = azi*deg_to_rad;
+    const float inclination = M_PI/2.0f - elev*deg_to_rad;
 
     // get real-valued spherical harmonics
     getSHreal(N, azimuth, inclination, Y);
@@ -161,6 +163,8 @@ void yawPitchRoll2Rzyx
     float R[3][3]
 )
 {
+    using namespace std;
+
     float R1[3][3] = {  { cos(yaw),  sin(yaw), 0.f },
                         { sin(yaw),  cos(yaw), 0.f },
                         { 0.f,       0.f,      1.f } };
@@ -225,6 +229,8 @@ float getU(int M, int l, int m, int n, float R_1[3][3], float* R_lm1)
  * by Recursion Page: Additions and Corrections. Journal of Physical Chemistry A, 102(45), 9099?9100. */
 float getV(int M, int l, int m, int n, float R_1[3][3], float* R_lm1)
 {
+    using namespace std;
+
     int d;
     float ret, p0, p1;
 
@@ -277,10 +283,12 @@ void getSHrotMtxReal
 (
     float Rxyz[3][3],
     int L,
-    vector<float>& RotMtx,
+    std::vector<float>& RotMtx,
     int size
 )
 {
+    using namespace std;
+
     int M =(L+1)*(L+1);
     int d, bandIdx, denom;
     float u, v, w;
@@ -343,8 +351,10 @@ void getSHrotMtxReal
 }
 
 
-void convertACNtoFUMA(vector<vector<float>>& in, int order, int nSamples)
+void convertACNtoFUMA(std::vector<std::vector<float>>& in, int order, int nSamples)
 {
+    using namespace std;
+
     if(order <= 0)
         return ;
 
@@ -391,8 +401,10 @@ void convertACNtoFUMA(vector<vector<float>>& in, int order, int nSamples)
 }
 
 
-void convertFUMAtoACN(vector<vector<float>>& in, int order, int nSamples)
+void convertFUMAtoACN(std::vector<std::vector<float>>& in, int order, int nSamples)
 {
+    using namespace std;
+
     if(order <= 0)
         return ;
 
@@ -430,7 +442,6 @@ void convertFUMAtoACN(vector<vector<float>>& in, int order, int nSamples)
             std::copy(FuMAsig[middleIdx-i].begin(), FuMAsig[middleIdx-i].end(), std::back_inserter(ACNsig[doneChannels+1]));
 
             doneChannels += 2;
-            //std::cout<<i<<" "<<doneChannels<<std::endl;
         }
 
         prevNbChannels+= nbChannels;

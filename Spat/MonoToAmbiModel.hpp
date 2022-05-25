@@ -26,8 +26,9 @@ public:
 
     struct ins
     {
-        halp::dynamic_audio_bus<"Input", float> audio;
-        halp::hslider_i32<"Channel order convention (FuMA / ACN)", halp::range{.min = 0, .max = 1, .init = 0}>
+        halp::dynamic_audio_bus<"Input", float>
+            audio;
+        halp::toggle_t<"Convert to FuMA (ACN by default)", halp::toggle_setup{false}>
             conv;
         halp::knob_f32<"Azimuth", halp::range{.min = -180.0, .max = 180.0, .init = 0}>
             azi;
@@ -39,8 +40,7 @@ public:
 
     struct
     {
-        halp::fixed_audio_bus<"Output", float, 19> audio;
-        //halp::dynamic_audio_bus<"Output", float> audio;
+        halp::dynamic_audio_bus<"Output", float> audio;
     } outputs;
 
     struct ui;

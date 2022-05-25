@@ -15,6 +15,7 @@
 
 static constexpr int max_FuMA_order = 3;
 static constexpr int max_FuMA_nsh = ((max_FuMA_order+1)*(max_FuMA_order+1));
+static constexpr float deg_to_rad = M_PI / 180.f;
 
 void unnorm_legendreP (int n, float cos, std::vector<float>& y);
 void getSHreal (int order, float azimuth, float inclination, std::vector<float>& Y);

@@ -9,9 +9,7 @@ void Rotator::operator()(halp::tick t)
     if (inputs.audio.channels <= 0 || nSamples == 0 || outputs.audio.channels <=0)
       return;
 
-    //std::cout<<inputs.audio.channels<<std::endl;
-
-    FuMA = !inputs.conv;
+    FuMA = inputs.conv;
     order = inputs.order;
     nSH = (order + 1) * (order + 1);
 
