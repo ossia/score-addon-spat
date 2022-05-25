@@ -430,7 +430,7 @@ void convertFUMAtoACN(vector<vector<float>>& in, int order, int nSamples)
             std::copy(FuMAsig[middleIdx-i].begin(), FuMAsig[middleIdx-i].end(), std::back_inserter(ACNsig[doneChannels+1]));
 
             doneChannels += 2;
-            std::cout<<i<<" "<<doneChannels<<std::endl;
+            //std::cout<<i<<" "<<doneChannels<<std::endl;
         }
 
         prevNbChannels+= nbChannels;
