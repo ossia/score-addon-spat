@@ -6,8 +6,10 @@ namespace Spat{
 
 void Rotator::operator()(halp::tick t)
 {
-    if (inputs.audio.channels <= 0 || nSamples == 0)
+    if (inputs.audio.channels <= 0 || nSamples == 0 || outputs.audio.channels <=0)
       return;
+
+    //std::cout<<inputs.audio.channels<<std::endl;
 
     FuMA = !inputs.conv;
     order = inputs.order;
@@ -17,20 +19,35 @@ void Rotator::operator()(halp::tick t)
     pitch = inputs.pitch * deg_to_rad;
     roll = inputs.roll * deg_to_rad;
 
-    /*while(nSH > outputs.audio.channels)
+    while(nSH > outputs.audio.channels)
     {
         order -= 1;
         nSH = (order+1)*(order+1);
-    }*/
+    }
 
     float** in = inputs.audio.samples;
-    float** out = outputs.audio.samples;
+    float** out = outputs.audio.samples;    
+
+    if(order == 0)
+    {
+        for (int j = 0; j < nSamples; j++)
+            out[0][j] = in[0][j];
+
+        for (int i = 1; i < outputs.audio.channels; i++)
+          for (int j = 0; j < nSamples; j++)
+            out[i][j] = 0.0f;
+
+        return;
+    }
 
     float Rxyz[3][3];
 
-    for (int i = 0; i < nSamples; i++)
-        for (int j = 0; j < nSH; j++)
-            inFrame[j][i] = in[0][i];
+    for (int i = 0; i < nSH; i++)
+        for (int j = 0; j < nSamples; j++)
+            inFrame[i][j] = in[i][j];
+
+    if(FuMA)
+        convertFUMAtoACN(inFrame, order, nSamples);
 
     yawPitchRoll2Rzyx(yaw, pitch, roll, 0, Rxyz);
     getSHrotMtxReal(Rxyz, order, M_rot_tmp, max_nsh*max_nsh);
@@ -50,9 +67,9 @@ void Rotator::operator()(halp::tick t)
     for (int i = 0; i < nSH; i++)
       for (int j = 0; j < nSamples; j++)
       {
-        out[i][j] = 0.0f;
+        outVec[i][j] = 0.0f;
         for (int k = 0; k < nSH; k++)
-          out[i][j] += M_rot[i][k] * inFrame[k][j];
+          outVec[i][j] += M_rot[i][k] * inFrame[k][j];
       }
 
     const float inv_nSamples = 1.f / nSamples;
@@ -73,7 +90,7 @@ void Rotator::operator()(halp::tick t)
           tmpFrame[i][j] = 0.0f;
           for (int k = 0; k < nSH; k++)
             tmpFrame[i][j] += prevM_rot[i][k] * inFrame[k][j];
-          out[i][j] = out[i][j] * fadeIn[j] + tmpFrame[i][j] * fadeOut[j];
+          outVec[i][j] = outVec[i][j] * fadeIn[j] + tmpFrame[i][j] * fadeOut[j];
         }
 
         for (int j=0 ; j<nSH ; j++)
@@ -82,9 +99,12 @@ void Rotator::operator()(halp::tick t)
     }
 
     if(FuMA)
-        convertACNtoFUMA(out, order, nSamples);
+        convertACNtoFUMA(outVec, order, nSamples);
 
-    for (int i = nSH; i < inputs.audio.channels; i++)
+    for (int i = 0; i < nSH; i++)
+        std::copy(outVec[i].begin(), outVec[i].end(), out[i]);
+
+    for (int i = nSH; i < outputs.audio.channels; i++)
       for (int j = 0; j < nSamples; j++)
         out[i][j] = 0.0f;
 }

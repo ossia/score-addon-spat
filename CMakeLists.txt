@@ -33,8 +33,16 @@ add_library(
   Spat/AmbiToBinauralUi.hpp
   Spat/AmbiToBinaural.hpp
 
+  Spat/MonoToAmbiModel.hpp
+  Spat/MonoToAmbiModel.cpp
+  Spat/MonoToAmbiUi.hpp
+  Spat/MonoToAmbi.hpp
+
   Spat/AmbisonicMethods.hpp
   Spat/AmbisonicMethods.cpp
+
+  Spat/Test.hpp
+  Spat/TestInputs.hpp
 
   score_addon_spat.hpp
   score_addon_spat.cpp

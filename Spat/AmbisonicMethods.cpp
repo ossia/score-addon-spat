@@ -1,6 +1,156 @@
+/* Most of these methods are modified versions of Leo McCormack's SAF library : https://github.com/leomccormack/Spatial_Audio_Framework
+* Copyright 2020-2021 Leo McCormack
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
+* copyright notice and this permission notice appear in all copies.
+*/
+
 #include <Spat/AmbisonicMethods.hpp>
 
 using namespace std;
+
+void unnorm_legendreP
+(
+    int n,
+    float cos,
+    vector<float>& y
+)
+{
+    float s, norm, scale;
+    vector<float> P(n+3);
+    float s_n, tc;
+
+    vector<float> sqrt_n(2*n+1);
+
+    if(n==0)
+    {
+        y[0] = 1.0f;
+        return;
+    }
+
+    // init
+    s = sqrt(1.0-pow(cos,2.0)) + 2.23e-20;
+    s_n = pow(-s, n);
+    tc = -2.0 * cos/s;
+
+    for(int i=0; i<2*n+1; i++)
+        sqrt_n[i] = sqrt(i);
+    norm = 1.0;
+    for(int i=1; i<=n; i++)
+        norm *= 1.0 - 1.0/(2.0*i);
+
+    // Starting values for downwards recursion
+    P[n] = sqrt(norm)*s_n;
+    P[n-1] = P[n] * tc * n/sqrt_n[2*n];
+
+    // 3-step downwards recursion to m == 0
+    for(int m=n-2; m>=0; m--)
+        P[m] = (P[m+1]*tc*(m+1.0) - P[m+2] * sqrt_n[n+m+2] * sqrt_n[n-m-1])/(sqrt_n[n+m+1]*sqrt_n[n-m]);
+
+    // keep up to the last 3 elements in P
+    for(int i=0; i<n+1; i++)
+        y[i] = P[i];
+
+    // Account for polarity when x == -/+1 for first value of P
+    if(sqrt(1.0-pow(cos,2.0))==0)
+        y[0] = pow(cos,n);
+
+    // scale each row by: sqrt((n+m)!/(n-m)!)
+    for(int m=1; m<n; m++){
+        scale = 1.0;
+        for(int i=n-m+1; i<n+m+1; i++)
+            scale*=sqrt_n[i];
+        y[m] *= scale;
+    }
+
+    scale = 1.0;
+    for(int i=1; i<2*n+1; i++)
+        scale*=sqrt_n[i];
+    y[n] *= scale;
+}
+
+float factorial(int n)
+{
+    int result=1;
+    for(int i=1 ; i<=n ; i++)
+        result *= i;
+
+    return result;
+}
+
+void getSHreal
+(
+    int order,
+    float azimuth,
+    float inclination,
+    vector<float>& Y
+)
+{
+    int dir, j, n, m, idx_Y;
+    vector<float> Lnm(2*order+1);
+    vector<float> CosSin(2*order+1);
+    vector<float> p_nm(order+1);
+    vector<float> norm_real(2*order+1);
+
+    float cos_incl = cos(inclination);
+
+    idx_Y = 0;
+    for(n=0; n<=order; n++){
+        // vector of unnormalised associated Legendre functions of current order
+        unnorm_legendreP(n, cos_incl, p_nm); // includes Condon-Shortley phase term
+
+        //cancel the Condon-Shortley phase from the definition of the Legendre functions to result in signless real SH
+        if (n != 0)
+            for(m=-n, j=0; m<=n; m++, j++)
+                Lnm[j] = pow(-1.0, abs(m)) * p_nm[abs(m)];
+        else
+            Lnm[0] = p_nm[0];
+
+        // normalisation
+        for(m=-n, j=0; m<=n; m++, j++)
+            norm_real[j] = sqrt( (2.0*n+1.0) * factorial(n-abs(m)) / (4.0*M_PI*factorial(n+abs(m))) );
+
+        // norm_real * Lnm_real .* CosSin;
+        for(m=-n, j=0; m<=n; m++, j++){
+            if(j<n)
+                Y[j+idx_Y] = (norm_real[j] * Lnm[j] * sqrt(2.0)*sin((n-j)*azimuth));
+            else if(j==n)
+                Y[j+idx_Y] = (norm_real[j] * Lnm[j]);
+            else /* (j>n) */
+                Y[j+idx_Y] = (norm_real[j] * Lnm[j] * sqrt(2.0)*cos((abs(m))*azimuth));
+        }
+
+        // increment
+        idx_Y = idx_Y + (2*n+1);
+    }
+}
+
+void getRSH
+(
+    int N,
+    float azi,
+    float elev,
+    vector<float>& Y
+)
+{
+    int i, nSH;
+    float scale;
+
+    nSH = (N+1)*(N+1);
+    scale = sqrtf(4.0f*M_PI);
+
+    // convert [azi, elev] in degrees, to [azi, inclination] in radians
+    float azimuth = azi*M_PI/180.0f;
+    float inclination = M_PI/2.0f - elev*M_PI/180.0f;
+
+    // get real-valued spherical harmonics
+    getSHreal(N, azimuth, inclination, Y);
+
+    // remove sqrt(4*pi) term
+   for(int i=0 ; i<nSH ; i++)
+       Y[i] *= scale;
+}
 
 void yawPitchRoll2Rzyx
 (
@@ -123,7 +273,6 @@ float getW (int M, int l, int m, int n, float R_1[3][3], float* R_lm1)
     return ret;
 }
 
-//vector<float> getSHrotMtxReal
 void getSHrotMtxReal
 (
     float Rxyz[3][3],
@@ -194,7 +343,7 @@ void getSHrotMtxReal
 }
 
 
-void convertACNtoFUMA(float** in, int order, int nSamples)
+void convertACNtoFUMA(vector<vector<float>>& in, int order, int nSamples)
 {
     if(order <= 0)
         return ;
@@ -212,8 +361,8 @@ void convertACNtoFUMA(float** in, int order, int nSamples)
             //in[i][j] = 0.0f;
         }
 
-    FuMAsig[1].swap(ACNsig[3]);
-    FuMAsig[1].swap(ACNsig[2]);
+    FuMAsig[1].swap(FuMAsig[3]);
+    FuMAsig[1].swap(FuMAsig[2]);
 
     int doneChannels = 4;
     int prevNbChannels = 3;
@@ -223,17 +372,17 @@ void convertACNtoFUMA(float** in, int order, int nSamples)
         int nbChannels = prevNbChannels+2;
         int middleIdx = doneChannels + (nbChannels-1)/2;
 
-        std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), back_inserter(FuMAsig[middleIdx]));
+        std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), std::back_inserter(FuMAsig[middleIdx]));
         ++doneChannels;
 
-        for(int i=1 ; i<(nbChannels-1)/2 ; i++)
+        for(int i=1 ; i<=(nbChannels-1)/2 ; i++)
         {
-            std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), back_inserter(FuMAsig[middleIdx+i]));
-            std::copy(ACNsig[doneChannels+1].begin(), ACNsig[doneChannels+1].end(), back_inserter(FuMAsig[middleIdx-i]));
+            std::copy(ACNsig[doneChannels].begin(), ACNsig[doneChannels].end(), std::back_inserter(FuMAsig[middleIdx+i]));
+            std::copy(ACNsig[doneChannels+1].begin(), ACNsig[doneChannels+1].end(), std::back_inserter(FuMAsig[middleIdx-i]));
             doneChannels += 2;
         }
 
-        prevNbChannels+= nbChannels;
+        prevNbChannels= nbChannels;
     }
 
     for(int i=0 ; i<min(nSH, max_FuMA_nsh) ; i++)
@@ -242,7 +391,7 @@ void convertACNtoFUMA(float** in, int order, int nSamples)
 }
 
 
-void convertFUMAtoACN(float** in, int order, int nSamples)
+void convertFUMAtoACN(vector<vector<float>>& in, int order, int nSamples)
 {
     if(order <= 0)
         return ;
@@ -260,26 +409,28 @@ void convertFUMAtoACN(float** in, int order, int nSamples)
             //in[i][j] = 0.0f;
         }
 
+    ACNsig[1].swap(ACNsig[2]);
     ACNsig[1].swap(ACNsig[3]);
-    ACNsig[2].swap(ACNsig[3]);
 
     int doneChannels = 4;
     int prevNbChannels = 3;
 
     while(doneChannels < min(nSH, max_FuMA_nsh))
     {
+
         int nbChannels = prevNbChannels+2;
         int middleIdx = doneChannels + (nbChannels-1)/2;
 
-        std::copy(FuMAsig[middleIdx].begin(), FuMAsig[middleIdx].end(), back_inserter(ACNsig[doneChannels]));
+        std::copy(FuMAsig[middleIdx].begin(), FuMAsig[middleIdx].end(), std::back_inserter(ACNsig[doneChannels]));
         ++doneChannels;
 
-        for(int i=1 ; i<(nbChannels-1)/2 ; i++)
+        for(int i=1 ; i<=(nbChannels-1)/2 ; i++)
         {
-            std::copy(FuMAsig[middleIdx+i].begin(), FuMAsig[middleIdx+i].end(), back_inserter(ACNsig[doneChannels]));
-            std::copy(FuMAsig[middleIdx-i].begin(), FuMAsig[middleIdx-i].end(), back_inserter(ACNsig[doneChannels+1]));
+            std::copy(FuMAsig[middleIdx+i].begin(), FuMAsig[middleIdx+i].end(), std::back_inserter(ACNsig[doneChannels]));
+            std::copy(FuMAsig[middleIdx-i].begin(), FuMAsig[middleIdx-i].end(), std::back_inserter(ACNsig[doneChannels+1]));
 
             doneChannels += 2;
+            //std::cout<<i<<" "<<doneChannels<<std::endl;
         }
 
         prevNbChannels+= nbChannels;
@@ -289,8 +440,6 @@ void convertFUMAtoACN(float** in, int order, int nSamples)
         for(int j=0 ; j<nSamples ; j++)
             in[i][j] = ACNsig[i][j];
 }
-
-
 
 
 
