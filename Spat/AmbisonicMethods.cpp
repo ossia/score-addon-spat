@@ -17,10 +17,7 @@ void unnorm_legendreP
 {
     using namespace std;
 
-    float s=0, norm=0, scale=0;
     float* P = (float*) alloca(sizeof(float)*(n+3));
-    float s_n=0.f, tc=0.f;
-
     float* sqrt_n = (float*) alloca(sizeof(float)*(2*n+1));
 
     if(n==0)
@@ -30,13 +27,13 @@ void unnorm_legendreP
     }
 
     // init
-    s = sqrt(1.0-pow(cos,2.0)) + 2.23e-20;
-    s_n = pow(-s, n);
-    tc = -2.0 * cos/s;
+    float s = sqrt(1.0-pow(cos,2.0)) + 2.23e-20;
+    float s_n = pow(-s, n);
+    float tc = -2.0 * cos/s;
 
     for(int i=0; i<2*n+1; i++)
         sqrt_n[i] = sqrt(i);
-    norm = 1.0;
+    float norm = 1.0;
     for(int i=1; i<=n; i++)
         norm *= 1.0 - 1.0/(2.0*i);
 
@@ -58,13 +55,13 @@ void unnorm_legendreP
 
     // scale each row by: sqrt((n+m)!/(n-m)!)
     for(int m=1; m<n; m++){
-        scale = 1.0;
+        float scale = 1.0;
         for(int i=n-m+1; i<n+m+1; i++)
             scale*=sqrt_n[i];
         y[m] *= scale;
     }
 
-    scale = 1.0;
+    float scale = 1.0;
     for(int i=1; i<2*n+1; i++)
         scale*=sqrt_n[i];
     y[n] *= scale;
@@ -136,11 +133,8 @@ void getRSH
 {
     using namespace std;
 
-    int i, nSH;
-    float scale;
-
-    nSH = (N+1)*(N+1);
-    scale = sqrt(4.0f*M_PI);
+    int nSH = (N+1)*(N+1);
+    float scale = sqrt(4.0f*M_PI);
 
     // convert [azi, elev] in degrees, to [azi, inclination] in radians
     const float azimuth = azi*deg_to_rad;
@@ -200,11 +194,11 @@ void yawPitchRoll2Rzyx
  * by Recursion Page: Additions and Corrections. Journal of Physical Chemistry A, 102(45), 9099?9100. */
 float getP (int M, int i, int l, int a, int b, float R_1[3][3], float* R_lm1)
 {
-    float ret, ri1, rim1, ri0;
+    float ret = 0.f;
 
-    ri1 = R_1[i+1][2];
-    rim1 = R_1[i+1][0];
-    ri0 = R_1[i+1][1];
+    float ri1 = R_1[i+1][2];
+    float rim1 = R_1[i+1][0];
+    float ri0 = R_1[i+1][1];
 
     if (b == -l)
         ret = ri1 * R_lm1[(a+l-1)*M+0] + rim1 * R_lm1[(a+l-1)*M+(2*l-2)];
@@ -231,8 +225,8 @@ float getV(int M, int l, int m, int n, float R_1[3][3], float* R_lm1)
 {
     using namespace std;
 
-    int d;
-    float ret, p0, p1;
+    int d = 0;
+    float ret = 0.f, p0 = 0.f, p1 = 0.f;
 
     if (m == 0) {
         p0 = getP(M, 1, l, 1, n, R_1, R_lm1);
@@ -261,8 +255,7 @@ float getV(int M, int l, int m, int n, float R_1[3][3], float* R_lm1)
  * by Recursion Page: Additions and Corrections. Journal of Physical Chemistry A, 102(45), 9099?9100. */
 float getW (int M, int l, int m, int n, float R_1[3][3], float* R_lm1)
 {
-    float ret, p0, p1;
-    ret = 0.0f;
+    float ret = 0.f, p0 = 0.f, p1 = 0.f;
 
     if (m != 0) {
         if (m>0) {
@@ -290,8 +283,6 @@ void getSHrotMtxReal
     using namespace std;
 
     int M =(L+1)*(L+1);
-    int d, bandIdx, denom;
-    float u, v, w;
     float* R_lm1 = (float*) alloca(sizeof(float) * M * M);
     float* R_l = (float*) alloca(sizeof(float) * M * M);
 
@@ -315,18 +306,19 @@ void getSHrotMtxReal
     }
 
     // compute rotation matrix of each subsequent band recursively
-    bandIdx = 4;
+    int bandIdx = 4;
     std::fill(R_l, R_l+M*M, 0);
 
     for(int l = 2; l<=L; l++){
         for(int m=-l; m<=l; m++){
             for(int n=-l; n<=l; n++){
                 // compute u,v,w terms of Eq.8.1 (Table I)
-                d = m == 0 ? 1 : 0; // the delta function d_m0
-                denom = abs(n) == l ? (2*l)*(2*l-1) : (l*l-n*n);
-                u = sqrt( (float)((l*l-m*m)) /  (float)denom);
-                v = sqrt( (float)((1+d)*(l+abs(m)-1)*(l+abs(m))) /  (float)denom) * (float)(1-2*d)*0.5f;
-                w = sqrt( (float)((l-abs(m)-1)*(l-abs(m))) / (float)denom) * (float)(1-d)*(-0.5f);
+                int d = m == 0 ? 1 : 0; // the delta function d_m0
+                int denom = abs(n) == l ? (2*l)*(2*l-1) : (l*l-n*n);
+
+                float u = sqrt( (float)((l*l-m*m)) /  (float)denom);
+                float v = sqrt( (float)((1+d)*(l+abs(m)-1)*(l+abs(m))) /  (float)denom) * (float)(1-2*d)*0.5f;
+                float w = sqrt( (float)((l-abs(m)-1)*(l-abs(m))) / (float)denom) * (float)(1-d)*(-0.5f);
 
                 // computes Eq.8.1
                 if (u!=0)
