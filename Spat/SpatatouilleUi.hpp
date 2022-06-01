@@ -4,6 +4,9 @@
 #include <Spat/WidgetAudioSpat.hpp>
 #include <Spat/WidgetSpectSpat.hpp>
 #include <Spat/WidgetDomeSpat.hpp>
+#include <Spat/WidgetMatrix.hpp>
+
+#include <Spat/WidgetIndex.hpp>
 
 namespace Spat
 {
@@ -27,10 +30,6 @@ struct Spatatouille::ui
             this->send_message(ui_to_processor{.pos_xy = pos});
         };
 
-        ui.spatatouille.widget.on_pressed = [&]
-        {
-            fprintf(stderr, "On pressed \n");
-        };
         ui.spatatouille.widget.source = [&] (int src)
         {
             this->send_message(ui_to_processor{.source = src});
@@ -49,7 +48,7 @@ struct Spatatouille::ui
       halp_meta(width, 300)
       halp_meta(height, 300)
 
-      halp::custom_actions_item<Spatatouille::custom_spatatouille> widget{.x = 0, .y = 0};
+      halp::custom_actions_item<WidgetIndex::custom_spatatouille> widget{.x = 0, .y = 0};
   } spatatouille;
 
   struct {
@@ -59,7 +58,7 @@ struct Spatatouille::ui
       halp_meta(width, 300)
       halp_meta(height, 300)
 
-      halp::custom_actions_item<Spatatouille::custom_audio> widget{.x = 0, .y = 0};
+      halp::custom_actions_item<WidgetIndex::custom_audio> widget{.x = 0, .y = 0};
   } audio;
 
   struct {
@@ -82,7 +81,7 @@ struct Spatatouille::ui
       halp_meta(width, 300)
       halp_meta(height, 300)
 
-      halp::custom_actions_item<Spatatouille::custom_dome> widget{.x = 0, .y = 0};
+      halp::custom_actions_item<WidgetIndex::custom_dome> widget{.x = 0, .y = 0};
   } dome;
 
   struct {
@@ -92,7 +91,17 @@ struct Spatatouille::ui
       halp_meta(width, 300)
       halp_meta(height, 300)
 
-      halp::custom_actions_item<Spatatouille::custom_spect> widget{.x = 0, .y = 0};
+      halp::custom_actions_item<WidgetIndex::custom_spect> widget{.x = 0, .y = 0};
   } spect;
+
+  struct {
+      halp_meta(name, "Matrix")
+      halp_meta(layout, halp::layouts::vbox)
+      halp_meta(background, halp::colors::mid)
+      halp_meta(width, 300)
+      halp_meta(height, 300)
+
+      halp::custom_actions_item<WidgetIndex::custom_matrix> widget{.x = 0, .y = 0};
+  } matrix;
 };
 }

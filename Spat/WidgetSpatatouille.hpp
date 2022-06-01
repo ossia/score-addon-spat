@@ -1,13 +1,13 @@
 #pragma once
 
-#include <Spat/SpatatouilleModel.hpp>
+#include <Spat/WidgetIndex.hpp>
 
 namespace Spat
 {
 
 using namespace std;
 
-struct Spatatouille::custom_spatatouille
+struct WidgetIndex::custom_spatatouille
 {
     static constexpr double width() { return 300.; } // Axe X
     static constexpr double height() { return 300.; } // Axe Y
@@ -18,7 +18,6 @@ struct Spatatouille::custom_spatatouille
 
     std::function<void(halp::xy_type<float>)> on_moved = [] (auto) {};
     std::function<void(int)> source = [] (auto) {};
-    std::function<void()> on_pressed = [] { };
 
     void paint(avnd::painter auto ctx)
     {
@@ -36,29 +35,36 @@ struct Spatatouille::custom_spatatouille
         float m_x_3 = pos_3.x * width();
         float m_y_3 = pos_3.y * height();
 
-        float m_r = 15.;
+        float m_r = 15.;  
 
+        ctx.update();
+
+        /* Background */
         ctx.set_fill_color({120, 120, 120, 255});
         ctx.begin_path();
         ctx.draw_rect(0., 0., width(), height());
         ctx.fill();
 
+        /* Circle background */
         ctx.begin_path();
         ctx.set_fill_color({255, 255, 255, 255});
         ctx.draw_circle(c_x, c_y, c_r);
         ctx.fill();
 
+        /* Ring */
         ctx.begin_path();
         ctx.set_stroke_color({150, 150, 150, 10});
         ctx.set_stroke_width(2.5);
         ctx.draw_circle(c_x, c_y, c_r/2);
         ctx.stroke();
 
+        /* Center */
         ctx.begin_path();
         ctx.set_fill_color({0, 0, 0, 255});
         ctx.draw_circle(c_x, c_y, c_r_bis);
         ctx.fill();
 
+        /* 1st source */
         float formula_1 = sqrt(pow((m_x_1 - c_x), 2) + pow((m_y_1 - c_y), 2));
         if(formula_1 < c_r){
             ctx.begin_path();
@@ -74,6 +80,9 @@ struct Spatatouille::custom_spatatouille
             ctx.draw_text(m_x_1-6, m_y_1+7, "1");
             ctx.fill();
         }
+        ctx.update();
+
+        /* 2nd source */
         float formula_2 = sqrt(pow((m_x_2 - c_x), 2) + pow((m_y_2 - c_y), 2));
         if(formula_2 < c_r){
             ctx.begin_path();
@@ -89,6 +98,9 @@ struct Spatatouille::custom_spatatouille
             ctx.draw_text(m_x_2-6, m_y_2+7, "2");
             ctx.fill();
         }
+        ctx.update();
+
+        /* 3rd source */
         float formula_3 = sqrt(pow((m_x_3 - c_x), 2) + pow((m_y_3 - c_y), 2));
         if(formula_3 < c_r){
             ctx.begin_path();
@@ -104,6 +116,7 @@ struct Spatatouille::custom_spatatouille
             ctx.draw_text(m_x_3-6, m_y_3+7, "3");
             ctx.fill();
         }
+        ctx.update();
     }
 
     bool mouse_press(double x, double y, auto button)

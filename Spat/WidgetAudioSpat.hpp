@@ -1,13 +1,13 @@
 #pragma once
 
-#include <Spat/SpatatouilleModel.hpp>
+#include <Spat/WidgetIndex.hpp>
 
 namespace Spat
 {
 
 using namespace std;
 
-struct Spatatouille::custom_audio
+struct WidgetIndex::custom_audio
 {
     static constexpr double width() { return 300.; } // Axe X
     static constexpr double height() { return 300.; } // Axe Y
@@ -17,8 +17,6 @@ struct Spatatouille::custom_audio
     int num_current = 1;
 
     std::function<void(halp::xy_type<float>)> on_moved = [] (auto) {};
-    std::function<void(int)> source = [] (auto) {};
-    std::function<void()> on_pressed = [] { };
 
     double random_gen()
     {
@@ -48,15 +46,15 @@ struct Spatatouille::custom_audio
 
         float m_r = 15.;
 
-        ctx.set_stroke_color({200, 200, 200, 255});
-        ctx.set_stroke_width(2.);
+        ctx.update();
+
+        /* Background */
         ctx.set_fill_color({120, 120, 120, 255});
         ctx.begin_path();
         ctx.draw_rect(0., 0., width(), height());
         ctx.fill();
-        ctx.stroke();
 
-        /* Background color */
+        /* Ring color */
         ctx.set_stroke_width(8.);
         int ellipse = 0;
         for(int i = 145; i>= 5; i-=10){
@@ -138,6 +136,7 @@ struct Spatatouille::custom_audio
 
         }
         ctx.stroke();
+        ctx.update();
     }
 
     bool mouse_press(double x, double y, auto button)

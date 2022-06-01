@@ -151,7 +151,7 @@ struct Example::ui
         halp_meta(layout, halp::layouts::vbox)
         halp_meta(background, halp::colors::mid)
 
-        halp::custom_item<Example::custom_matrix, &ins::level> widget{{.x = 500, .y = 920}};
+        halp::custom_item<WidgetIndex::custom_matrix, &ins::level> widget{{.x = 500, .y = 920}};
     } custom_morpion;
 
 };

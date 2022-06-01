@@ -47,6 +47,8 @@ add_library(
   Spat/WidgetSpectSpat.hpp
   Spat/WidgetDomeSpat.hpp
 
+  Spat/WidgetIndex.hpp
+
   score_addon_spat.hpp
   score_addon_spat.cpp
 )

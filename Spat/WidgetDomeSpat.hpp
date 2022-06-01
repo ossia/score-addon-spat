@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Spat/SpatatouilleModel.hpp>
+#include <Spat/WidgetIndex.hpp>
 #include <cmath>
 
 namespace Spat
@@ -8,7 +8,7 @@ namespace Spat
 
 using namespace std;
 
-struct Spatatouille::custom_dome
+struct WidgetIndex::custom_dome
 {
     static constexpr double width() { return 300.; } // Axe X
     static constexpr double height() { return 300.; } // Axe Y
@@ -19,7 +19,6 @@ struct Spatatouille::custom_dome
 
     std::function<void(halp::xy_type<float>)> on_moved = [] (auto) {};
     std::function<void(int)> source = [] (auto) {};
-    std::function<void()> on_pressed = [] { };
 
     void paint(avnd::painter auto ctx)
     {
@@ -28,53 +27,50 @@ struct Spatatouille::custom_dome
         double c_r = 150;
         double c_r_bis = 4;
 
-        float m_r = 15.;
+        float m_r = 15.;     
 
+        ctx.update();
+
+        /* Background */
         ctx.set_fill_color({120, 120, 120, 255});
         ctx.begin_path();
         ctx.draw_rect(0., 0., width(), height());
         ctx.fill();
 
+        /* Circle background */
         ctx.begin_path();
         ctx.set_fill_color({235, 235, 235, 255});
         ctx.draw_circle(c_x, c_y, c_r);
         ctx.fill();
 
+        /* Ring */
         ctx.begin_path();
         ctx.set_stroke_color({150, 150, 150, 10});
         ctx.set_stroke_width(2.5);
         ctx.draw_circle(c_x, c_y, c_r/2);
         ctx.stroke();
 
+        /* Center */
         ctx.begin_path();
         ctx.set_fill_color({0, 0, 0, 255});
         ctx.draw_circle(c_x, c_y, c_r_bis);
         ctx.fill();
 
+        /* Curve */
         ctx.begin_path();
         ctx.set_stroke_color({0, 202, 169, 255});
 
-
         double max = 1 * M_PI;
-        double theta_1 = atan(pos.y/pos.x)*2 * M_PI;
+        double theta = atan(pos.y/pos.x)*2 * M_PI;
 
-        halp::xy_type<double> p0 = {cos(theta_1)+150, sin(theta_1)+150};
+        halp::xy_type<double> p0 = {std::cos(theta)+150, std::sin(theta)+150};
         halp::xy_type<double> p1 = {150, 150};
-        halp::xy_type<double> p2 = {cos(1)+150, sin(0)+150};
 
-
-        /*Test*/
-        double alpha = atan2(p0.y - p1.y, p0.x - p1.x);
-        double beta = atan2(p2.y - p1.y, p2.x - p1.x);
-        double angle = (beta - alpha);
-
-
-
-        for(double i = theta_1; i< max+theta_1; i+=0.01){
+        for(double i = theta; i< max+theta; i+=0.01){
             double amp = rand()%50+100;
             halp::xy_type<double> p1;
-            p1.x = amp * cos(i)+150;
-            p1.y = amp * sin(i)+150;
+            p1.x = amp * std::cos(i)+150;
+            p1.y = amp * std::sin(i)+150;
 
             ctx.draw_line (p0.x, p0.y, p1.x, p1.y);
 
@@ -82,6 +78,7 @@ struct Spatatouille::custom_dome
             p0.y = p1.y;
             ctx.stroke();
         }
+        ctx.update();
 
     }
 

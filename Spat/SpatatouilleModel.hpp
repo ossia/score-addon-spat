@@ -60,13 +60,5 @@ public:
   void operator()(halp::tick t);
 
   struct ui;
-
-  struct custom_spatatouille;
-
-  struct custom_audio;
-
-  struct custom_spect;
-
-  struct custom_dome;
 };
 }

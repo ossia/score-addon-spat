@@ -1,51 +1,48 @@
 #pragma once
 
-#include <Spat/ExampleModel.hpp>
+#include <Spat/WidgetIndex.hpp>
 
 namespace Spat
 {
 
 using namespace std;
 
-struct Example::custom_matrix
+struct WidgetIndex::custom_matrix
 {
+    halp::xy_type<float> pos;
+
+    std::function<void(halp::xy_type<float>)> on_moved = [] (auto) {};
+
     static constexpr double width() { return 300.; } // X
     static constexpr double height() { return 300.; } // Y
 
-    void set_value(const auto& control, halp::xy_type<float> value)
-    {
-      this->value = avnd::map_control_to_01(control, value);
-    }
-
-    static auto value_to_control(auto& control, halp::xy_type<float> value)
-    {
-      return avnd::map_control_from_01(control, value);
-    }
-
     void paint(avnd::painter auto ctx)
     {
-        float m_x = value.x * width();
-        float m_y = value.y * height();
-        float m_r = 16.;
+        float m_x = pos.x * width();
+        float m_y = pos.y * height();
+        float m_r = 16.;      
 
+        ctx.update();
+
+        /* Background */
         ctx.set_fill_color({114, 5, 35, 255});
         ctx.begin_path();
         ctx.draw_rect(0., 0., width(), height());
         ctx.fill();
 
+        /* Grid */
         for(int x = 19; x < width(); x += 38)
         {
           for(int y = 19; y < height(); y += 38)
           {
               ctx.begin_path();
-              //ctx.set_stroke_color({255, 255, 255, 255});
               ctx.set_fill_color({202, 127, 127, 255});
               ctx.draw_circle(x, y, m_r);
               ctx.fill();
-              //ctx.stroke();
           }
         }
 
+        /* Point */
         for(int x = 19; x < width(); x += 38)
         {
           for(int y = 19; y < height(); y += 38)
@@ -54,40 +51,35 @@ struct Example::custom_matrix
               if(formula < m_r)
               {
                   ctx.begin_path();
-                  //ctx.set_stroke_color({255, 255, 255, 255});
                   ctx.set_fill_color({255, 0, 0, 255});
                   ctx.draw_circle(x, y, m_r);
                   ctx.fill();
-                  //ctx.stroke();
               }
           }
         }
+        ctx.update();
     }
 
-    bool mouse_press(double x, double y)
+    bool mouse_press(double x, double y, auto button)
     {
-        transaction.start();
-        mouse_move(x, y);
+        mouse_move(x, y, button);
+        on_moved(pos);
         return true;
     }
 
-    void mouse_move(double x, double y)
+    void mouse_move(double x, double y, auto button)
     {
-        halp::xy_type<float> res;
-        res.x = std::clamp(x / width(), 0., 1.);
+        pos.x = std::clamp(x / width(), 0., 1.);
+        pos.y = std::clamp(y / height(), 0., 1.);
 
-        res.y = std::clamp(y / height(), 0., 1.);
-        transaction.update(res);
+        on_moved(pos);
     }
 
-    void mouse_release(double x, double y)
+    void mouse_release(double x, double y, auto button)
     {
-        //mouse_move(x, y);
-        transaction.commit();
+        mouse_move(x, y, button);
+        on_moved(pos);
     }
-
-    halp::transaction<halp::xy_type<float>> transaction;
-    halp::xy_type<float> value{};
 };
 }
 

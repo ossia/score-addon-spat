@@ -7,6 +7,7 @@
 
 #include <Spat/Example.hpp>
 #include <Spat/Spatatouille.hpp>
+#include <Spat/WidgetIndex.hpp>
 
 #include <Avnd/Factories.hpp>
 #include <score/plugins/FactorySetup.hpp>

@@ -6,3 +6,5 @@
 #include <Spat/WidgetAudioSpat.hpp>
 #include <Spat/WidgetSpectSpat.hpp>
 #include <Spat/WidgetDomeSpat.hpp>
+
+#include <Spat/WidgetIndex.hpp>
