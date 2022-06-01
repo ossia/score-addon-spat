@@ -8,10 +8,10 @@ project(score_addon_spat LANGUAGES CXX)
 
 add_library(
   score_addon_spat
-  Spat/AnEffectModel.hpp
-  Spat/AnEffectModel.cpp
-  Spat/AnEffectUi.hpp
-  Spat/AnEffect.hpp
+  Spat/ExampleModel.hpp
+  Spat/ExampleModel.cpp
+  Spat/ExampleUi.hpp
+  Spat/Example.hpp
 
   Spat/StereoToMonoModel.hpp
   Spat/StereoToMonoModel.cpp
@@ -36,16 +36,23 @@ add_library(
   Spat/AmbisonicMethods.hpp
   Spat/AmbisonicMethods.cpp
 
+  Spat/Spatatouille.hpp
+  Spat/SpatatouilleModel.cpp
+  Spat/SpatatouilleUi.hpp
+  Spat/Spatatouille.hpp
+
+  Spat/WidgetSpatatouille.hpp
+  Spat/WidgetAudioSpat.hpp
+  Spat/WidgetMatrix.hpp
+  Spat/WidgetSpectSpat.hpp
+  Spat/WidgetDomeSpat.hpp
+
+  Spat/WidgetIndex.hpp
+
   score_addon_spat.hpp
   score_addon_spat.cpp
 )
 
 setup_score_plugin(score_addon_spat)
 
-
-target_link_libraries(
-    score_addon_spat
-    PUBLIC
-    score_plugin_engine
-    score_plugin_avnd
-)
+target_link_libraries(score_addon_spat PUBLIC score_plugin_engine score_plugin_avnd)
