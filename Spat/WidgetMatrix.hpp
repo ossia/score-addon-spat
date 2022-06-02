@@ -5,9 +5,7 @@
 namespace Spat
 {
 
-using namespace std;
-
-struct WidgetIndex::custom_matrix
+struct custom_matrix
 {
     halp::xy_type<float> pos;
 

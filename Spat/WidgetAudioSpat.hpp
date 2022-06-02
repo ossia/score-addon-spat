@@ -5,9 +5,7 @@
 namespace Spat
 {
 
-using namespace std;
-
-struct WidgetIndex::custom_audio
+struct custom_audio
 {
     static constexpr double width() { return 300.; } // Axe X
     static constexpr double height() { return 300.; } // Axe Y
@@ -36,16 +34,6 @@ struct WidgetIndex::custom_audio
 
     void paint(avnd::painter auto ctx)
     {
-        double c_x = width()/2;
-        double c_y = height()/2;
-        double c_r = 150;
-        double c_r_bis = 4;
-
-        float m_x = pos.x * 150;// * width();
-        float m_y = pos.y * 15;// * height();
-
-        float m_r = 15.;
-
         ctx.update();
 
         /* Background */
@@ -141,23 +129,15 @@ struct WidgetIndex::custom_audio
 
     bool mouse_press(double x, double y, auto button)
     {
-        mouse_move(x, y, button);
-        on_moved(pos);
         return true;
     }
 
     void mouse_move(double x, double y, auto button)
     {
-        pos.x = std::clamp(x / width(), 0., 1.);
-        pos.y = std::clamp(y / height(), 0., 1.);
-
-        on_moved(pos);
     }
 
     void mouse_release(double x, double y, auto button)
     {
-        mouse_move(x, y, button);
-        on_moved(pos);
     }
 };
 }

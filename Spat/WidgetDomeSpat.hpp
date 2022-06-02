@@ -6,9 +6,7 @@
 namespace Spat
 {
 
-using namespace std;
-
-struct WidgetIndex::custom_dome
+struct custom_dome
 {
     static constexpr double width() { return 300.; } // Axe X
     static constexpr double height() { return 300.; } // Axe Y
@@ -22,12 +20,12 @@ struct WidgetIndex::custom_dome
 
     void paint(avnd::painter auto ctx)
     {
+        using namespace std;
+
         double c_x = width()/2;
         double c_y = height()/2;
         double c_r = 150;
         double c_r_bis = 4;
-
-        float m_r = 15.;     
 
         ctx.update();
 
@@ -63,14 +61,14 @@ struct WidgetIndex::custom_dome
         double max = 1 * M_PI;
         double theta = atan(pos.y/pos.x)*2 * M_PI;
 
-        halp::xy_type<double> p0 = {std::cos(theta)+150, std::sin(theta)+150};
+        halp::xy_type<double> p0 = {cos(theta)+150, sin(theta)+150};
         halp::xy_type<double> p1 = {150, 150};
 
         for(double i = theta; i< max+theta; i+=0.01){
             double amp = rand()%50+100;
             halp::xy_type<double> p1;
-            p1.x = amp * std::cos(i)+150;
-            p1.y = amp * std::sin(i)+150;
+            p1.x = amp * cos(i)+150;
+            p1.y = amp * sin(i)+150;
 
             ctx.draw_line (p0.x, p0.y, p1.x, p1.y);
 

@@ -11,17 +11,14 @@
 #include <cmath>
 #include <cstdio>
 
+#include <Spat/WidgetSpatatouille.hpp>
+#include <Spat/WidgetAudioSpat.hpp>
+#include <Spat/WidgetSpectSpat.hpp>
+#include <Spat/WidgetDomeSpat.hpp>
+#include <Spat/WidgetMatrix.hpp>
+
 namespace Spat
 {
-
-class WidgetIndex
-{
-public:
-    halp_meta(name, "WidgetIndex")
-    halp_meta(category, "Widget")
-    halp_meta(c_name, "widget index")
-    halp_meta(uuid, "fd65f345-b478-4ebc-a9dd-e9eb728dfddf")
-
     struct custom_test;
 
     struct custom_spatatouille;
@@ -33,6 +30,5 @@ public:
     struct custom_dome;
 
     struct custom_matrix;
-};
 }
 

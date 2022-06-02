@@ -5,9 +5,7 @@
 namespace Spat
 {
 
-using namespace std;
-
-struct WidgetIndex::custom_spatatouille
+struct custom_spatatouille
 {
     static constexpr double width() { return 300.; } // Axe X
     static constexpr double height() { return 300.; } // Axe Y
