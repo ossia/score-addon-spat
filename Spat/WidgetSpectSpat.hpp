@@ -5,22 +5,13 @@
 namespace Spat
 {
 
-using namespace std;
-
-struct WidgetIndex::custom_spect
+struct custom_spect
 {
     static constexpr double width() { return 300.; } // Axe X
     static constexpr double height() { return 300.; } // Axe Y
 
     void paint(avnd::painter auto ctx)
     {
-        double c_x = width()/2;
-        double c_y = height()/2;
-        double c_r = 150;
-        double c_r_bis = 4;
-
-        float m_r = 15.;      
-
         ctx.update();
 
         /* Background */
