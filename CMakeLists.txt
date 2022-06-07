@@ -42,9 +42,11 @@ add_library(
   Spat/Spatatouille.hpp
 
   Spat/WidgetSpatatouille.hpp
+  Spat/WidgetAudioSpatV0.hpp
   Spat/WidgetAudioSpat.hpp
   Spat/WidgetMatrix.hpp
   Spat/WidgetSpectSpat.hpp
+  Spat/WidgetDbBar.hpp
   Spat/WidgetDomeSpat.hpp
 
   Spat/WidgetIndex.hpp

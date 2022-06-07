@@ -12,8 +12,10 @@
 #include <cstdio>
 
 #include <Spat/WidgetSpatatouille.hpp>
+#include <Spat/WidgetAudioSpatV0.hpp>
 #include <Spat/WidgetAudioSpat.hpp>
 #include <Spat/WidgetSpectSpat.hpp>
+#include <Spat/WidgetDbBar.hpp>
 #include <Spat/WidgetDomeSpat.hpp>
 #include <Spat/WidgetMatrix.hpp>
 
@@ -22,6 +24,8 @@ namespace Spat
     struct custom_test;
 
     struct custom_spatatouille;
+
+    struct custom_audio_v0;
 
     struct custom_audio;
 

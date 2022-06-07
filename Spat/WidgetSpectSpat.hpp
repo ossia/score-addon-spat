@@ -64,8 +64,8 @@ struct custom_spect
             ctx.draw_line(p0.x, p0.y, p1.x, p1.y);
             p0.x = p1.x;
             p0.y = p1.y;
-            ctx.stroke();
-        }
+        }     
+        ctx.stroke();
         ctx.update();
     }
 

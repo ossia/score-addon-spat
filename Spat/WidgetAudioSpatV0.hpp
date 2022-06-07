@@ -5,25 +5,31 @@
 namespace Spat
 {
 
-struct custom_audio
+struct custom_audio_v0
 {
     static constexpr double width() { return 300.; } // Axe X
     static constexpr double height() { return 300.; } // Axe Y
+
+    halp::xy_type<float> pos;
+    int num = 0;
+    int num_current = 1;
+
+    std::function<void(halp::xy_type<float>)> on_moved = [] (auto) {};
 
     double random_gen()
     {
         double val = (double)rand() / RAND_MAX;
 
         if (val < 0.05)
-            return 130;
+            return 55;
         else if (val < 0.40)
-            return 120;
+            return 90;
         else if (val < 0.75)
             return 100;
         else if (val < 0.9)
-            return 90;
+            return 120;
         else
-            return 55;
+            return 130;
     }
 
     void paint(avnd::painter auto ctx)
@@ -61,48 +67,54 @@ struct custom_audio
                 ctx.set_stroke_color({255, 0, 0, 70});
             }
             if(!(i % 10 == 0)){
+                ctx.draw_circle(150, 150, i);
 
+                ctx.stroke();
 
             }
-            ctx.draw_circle(150, 150, i);
-
-            ctx.stroke();
             ellipse++;
+
         }
 
-        /* Parameters */
-        double x = 0;
-        double y = 0;
+        /* Volume mask */
+        ctx.set_stroke_color({200, 200, 200, 255});
+        ctx.set_stroke_width(1.);
 
-        double w = width();
-        double h = height();
+        for(int i = 0; i<8; i++){
+            int x = 151;
+            int y = 151;
+            int coord_arc = 149;
+            int size = 2;
+            int random = random_gen();
+            for(int j = 0; j<random; j++){
+                ctx.begin_path();
+                ctx.move_to(x, y);
+                ctx.arc_to(coord_arc, coord_arc, size, size, i*45, 45);
+                ctx.stroke();
+                if ((i == 0) || (i == 7)){
+                    x++;
+                }else if((i == 1) || (i == 2)){
+                    y--;
+                }else if((i == 3) || (i == 4)){
+                    x--;
+                }else if((i == 5) || (i == 6)){
+                    y++;
+                }
+                coord_arc--;
+                size+=2;
+            }
+        }
 
-        double channel = 1;
-        double max_channel = 16;
-
-        double rand_gen;
-
-        /* Border volume */
+        /* Edges */
         ctx.set_stroke_color({255, 255, 255, 255});
         ctx.set_stroke_width(2.);
         ctx.begin_path();
-        for(int i = 1; i <= max_channel; i++){
-            ctx.move_to(150, 150);
-            ctx.arc_to(x, y, w, h, ((i-1) / max_channel)*360, 360 / max_channel);
-        }
+        ctx.draw_line(0, 150, 300, 150);
+        ctx.draw_line(150, 0, 150, 300);
+        ctx.draw_line(44, 256, 256, 44);
+        ctx.draw_line(44, 44, 256, 256);
         ctx.stroke();
 
-        /* Volume */
-        ctx.set_fill_color({255, 255, 255, 255});
-        ctx.begin_path();
-        for(int i = 1; i <= max_channel; i++){
-            rand_gen = random_gen();
-            ctx.move_to(150, 150);
-            ctx.arc_to(x + rand_gen , y + rand_gen, w - 2 * rand_gen, h - 2 * rand_gen, ((i-1) / max_channel)*360, 360 / max_channel);
-        }
-        ctx.fill();
-
-        /* Border circles */
         ctx.begin_path();
         ctx.set_stroke_color({255, 255, 255, 255});
         ctx.set_stroke_width(2.);
@@ -112,7 +124,6 @@ struct custom_audio
 
         }
         ctx.stroke();
-
         ctx.update();
     }
 
