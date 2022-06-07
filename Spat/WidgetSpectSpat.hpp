@@ -26,20 +26,6 @@ struct custom_spect
         ctx.draw_rect(5, 5, width()-10, height()-10);
         ctx.fill();
 
-        /* Grid */
-        ctx.set_stroke_color({170, 170, 170, 255});
-        ctx.set_stroke_width(1.);
-        ctx.begin_path();
-        for(int i = 15; i<= 285; i+=25)
-        {
-            ctx.draw_line(i, 15, i, 285);
-        }
-        for(int i = 285; i>= 15; i-=25)
-        {
-            ctx.draw_line(15, i, 285, i);
-        }
-        ctx.stroke();
-
         /* Axes */
         ctx.set_stroke_color({0, 0, 0, 255});
         ctx.begin_path();
@@ -64,22 +50,9 @@ struct custom_spect
             ctx.draw_line(p0.x, p0.y, p1.x, p1.y);
             p0.x = p1.x;
             p0.y = p1.y;
-            ctx.stroke();
         }
+        ctx.stroke();
         ctx.update();
-    }
-
-    bool mouse_press(double x, double y, auto button)
-    {
-        return true;
-    }
-
-    void mouse_move(double x, double y, auto button)
-    {
-    }
-
-    void mouse_release(double x, double y, auto button)
-    {
     }
 };
 }

@@ -14,13 +14,14 @@
 #include <Spat/WidgetSpatatouille.hpp>
 #include <Spat/WidgetAudioSpat.hpp>
 #include <Spat/WidgetSpectSpat.hpp>
+#include <Spat/WidgetDbBar.hpp>
+#include <Spat/WidgetDbBarVu.hpp>
 #include <Spat/WidgetDomeSpat.hpp>
 #include <Spat/WidgetMatrix.hpp>
+#include <Spat/WidgetSpectralExample.hpp>
 
 namespace Spat
 {
-    struct custom_test;
-
     struct custom_spatatouille;
 
     struct custom_audio;
@@ -30,5 +31,11 @@ namespace Spat
     struct custom_dome;
 
     struct custom_matrix;
+
+    struct custom_db_bar;
+
+    struct custom_db_bar_vu;
+
+    struct custom_spect_example;
 }
 

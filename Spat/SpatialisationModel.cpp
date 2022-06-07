@@ -1,17 +1,15 @@
-#include "Spatatouille.hpp"
+#include "Spatialisation.hpp"
 
 namespace Spat
 {
 
-void Spatatouille::operator()(halp::tick t)
+void Spatialisation::operator()(halp::tick t)
 {
   using namespace std;
 
   auto volume = inputs.volume;
 
-  auto nbr_channels = inputs.audio.channels();
-  if (inputs.audio.channels() == 0)
-    nbr_channels = 1;
+  double nbr_channels;
 
   auto pos_x = m_local_data.pos_xy.x;
   auto pos_y = m_local_data.pos_xy.y;
@@ -35,6 +33,8 @@ void Spatatouille::operator()(halp::tick t)
 
     l_volume += pow(l_out[j], 2);
     r_volume += pow(r_out[j], 2);
+
+    nbr_channels = (double)inputs.audio.channels();
   }
 
   if (t.frames == 0)

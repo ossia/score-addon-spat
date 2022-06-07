@@ -8,10 +8,6 @@ project(score_addon_spat LANGUAGES CXX)
 
 add_library(
   score_addon_spat
-  Spat/ExampleModel.hpp
-  Spat/ExampleModel.cpp
-  Spat/ExampleUi.hpp
-  Spat/Example.hpp
 
   Spat/StereoToMonoModel.hpp
   Spat/StereoToMonoModel.cpp
@@ -33,19 +29,44 @@ add_library(
   Spat/AmbiToBinauralUi.hpp
   Spat/AmbiToBinaural.hpp
 
-  Spat/AmbisonicMethods.hpp
-  Spat/AmbisonicMethods.cpp
+  Spat/MonoToAmbiModel.hpp
+  Spat/MonoToAmbiModel.cpp
+  Spat/MonoToAmbiUi.hpp
+  Spat/MonoToAmbi.hpp
+
+  Spat/VbapModel.hpp
+  Spat/VbapModel.cpp
+  Spat/VbapUi.hpp
+  Spat/Vbap.hpp
+
+  Spat/_AmbisonicMethods.hpp
+  Spat/_AmbisonicMethods.cpp
+  Spat/_VbapMethods.hpp
+  Spat/_VbapMethods.cpp
 
   Spat/Spatatouille.hpp
   Spat/SpatatouilleModel.cpp
   Spat/SpatatouilleUi.hpp
   Spat/Spatatouille.hpp
 
+  Spat/SpatialisationModel.hpp
+  Spat/SpatialisationModel.cpp
+  Spat/SpatialisationUi.hpp
+  Spat/Spatialisation.hpp
+
+  Spat/SpectralExampleModel.hpp
+  Spat/SpectralExampleModel.cpp
+  Spat/SpectralExampleUi.hpp
+  Spat/SpectralExample.hpp
+
   Spat/WidgetSpatatouille.hpp
   Spat/WidgetAudioSpat.hpp
   Spat/WidgetMatrix.hpp
   Spat/WidgetSpectSpat.hpp
+  Spat/WidgetDbBar.hpp
+  Spat/WidgetDbBarVu.hpp
   Spat/WidgetDomeSpat.hpp
+  Spat/WidgetSpectralExample.hpp
 
   Spat/WidgetIndex.hpp
 

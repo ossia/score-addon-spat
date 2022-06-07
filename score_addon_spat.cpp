@@ -4,9 +4,12 @@
 #include <Spat/StereoPanning.hpp>
 #include <Spat/Rotator.hpp>
 #include <Spat/AmbiToBinaural.hpp>
+#include <Spat/MonoToAmbi.hpp>
+#include <Spat/Vbap.hpp>
 
-#include <Spat/Example.hpp>
 #include <Spat/Spatatouille.hpp>
+#include <Spat/Spatialisation.hpp>
+#include <Spat/SpectralExample.hpp>
 
 #include <Avnd/Factories.hpp>
 #include <score/plugins/FactorySetup.hpp>
@@ -23,8 +26,11 @@ score_addon_spat::factories(
     const score::ApplicationContext& ctx,
     const score::InterfaceKey& key) const
 {
-  return Avnd::instantiate_fx<   
+
+    return Avnd::instantiate_fx<
             Spat::Spatatouille
+          , Spat::Spatialisation
+          , Spat::SpectralExample
 //          , Spat::StereoToMono
 //          , Spat::StereoPanning
 //          , Spat::Rotator
