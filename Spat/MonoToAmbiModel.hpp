@@ -51,6 +51,7 @@ public:
         nSamples=info.frames;
 
         outVec.resize(max_nsh, std::vector<float>(nSamples));
+        y.resize(max_nsh);
     };
 
     void operator()(halp::tick tick);
@@ -59,6 +60,7 @@ private:
     int FuMA, order, nSH, nSamples;
     float azi, elev;
     std::vector<std::vector<float>> outVec{};
+    std::vector<float> y{};
 };
 }
 

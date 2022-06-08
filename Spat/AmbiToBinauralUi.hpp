@@ -14,6 +14,6 @@ struct AmbiToBinaural::ui
   halp_meta(background, dark)
 
   halp::label title{"My First Processor"};
-  halp::item<&ins::gain> gain;
+  //halp::item<&ins::gain> gain;
 };
 }

@@ -25,8 +25,6 @@ void MonoToAmbi::operator()(halp::tick t)
     // convert input signal into RSH
     azi = inputs.azi;
     elev = inputs.elev;
-    std::vector<float> y(nSH);
-    std::fill(y.begin(), y.end(), 0.0f);
 
     getRSH(order, azi, elev, y);
 

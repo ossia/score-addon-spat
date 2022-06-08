@@ -144,7 +144,7 @@ void getRSH
     getSHreal(N, azimuth, inclination, Y);
 
     // remove sqrt(4*pi) term
-   for(int i=0 ; i<nSH ; i++)
+    for(int i=0 ; i<nSH ; i++)
        Y[i] *= scale;
 }
 
