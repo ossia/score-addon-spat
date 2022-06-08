@@ -60,12 +60,10 @@ struct custom_audio
                 ctx.begin_path();
                 ctx.set_stroke_color({255, 0, 0, 70});
             }
-            if(!(i % 10 == 0)){
-
+            if(!(i % 10 == 0)){ 
+                ctx.draw_circle(150, 150, i);
 
             }
-            ctx.draw_circle(150, 150, i);
-
             ctx.stroke();
             ellipse++;
         }

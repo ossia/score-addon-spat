@@ -88,5 +88,15 @@ struct Spatatouille::ui
 
       halp::custom_actions_item<custom_spect> widget{.x = 0, .y = 0};
   } spect;
+
+  struct {
+      halp_meta(name, "Db Bar")
+      halp_meta(layout, halp::layouts::vbox)
+      halp_meta(background, halp::colors::mid)
+      halp_meta(width, 300)
+      halp_meta(height, 300)
+
+      halp::custom_actions_item<custom_db_bar> widget{.x = 0, .y = 0};
+  } db_bar;
 };
 }
