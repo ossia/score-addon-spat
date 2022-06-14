@@ -34,8 +34,15 @@ add_library(
   Spat/MonoToAmbiUi.hpp
   Spat/MonoToAmbi.hpp
 
-  Spat/AmbisonicMethods.hpp
-  Spat/AmbisonicMethods.cpp
+  Spat/VbapModel.hpp
+  Spat/VbapModel.cpp
+  Spat/VbapUi.hpp
+  Spat/Vbap.hpp
+
+  Spat/_AmbisonicMethods.hpp
+  Spat/_AmbisonicMethods.cpp
+  Spat/_VbapMethods.hpp
+  Spat/_VbapMethods.cpp
 
   score_addon_spat.hpp
   score_addon_spat.cpp

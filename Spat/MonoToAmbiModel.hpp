@@ -5,7 +5,7 @@
 #include <halp/meta.hpp>
 
 #include <iostream>
-#include <Spat/AmbisonicMethods.hpp>
+#include <Spat/_AmbisonicMethods.hpp>
 
 namespace Spat{
 
@@ -13,7 +13,6 @@ class MonoToAmbi
 {
     static constexpr int max_order = 7;
     static constexpr int max_nsh = ((max_order+1)*(max_order+1));
-    static constexpr float deg_to_rad = 2. * M_PI / 360.;
 
 public:
     halp_meta(name, "Mono To Ambisonics")

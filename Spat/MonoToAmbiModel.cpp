@@ -36,7 +36,7 @@ void MonoToAmbi::operator()(halp::tick t)
         convertACNtoFUMA(outVec, order, nSamples);
 
     for (int i = 0; i < nSH; i++)
-            std::copy(outVec[i].begin(), outVec[i].end(), out[i]);
+        std::copy(outVec[i].begin(), outVec[i].end(), out[i]);
 
     for (int i = nSH; i < outputs.audio.channels; i++)
       for (int j = 0; j < nSamples; j++)

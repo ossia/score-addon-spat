@@ -4,6 +4,7 @@
 #include <Spat/Rotator.hpp>
 #include <Spat/AmbiToBinaural.hpp>
 #include <Spat/MonoToAmbi.hpp>
+#include <Spat/Vbap.hpp>
 
 #include <Avnd/Factories.hpp>
 #include <score/plugins/FactorySetup.hpp>
@@ -26,6 +27,7 @@ score_addon_spat::factories(
           , Spat::Rotator
           , Spat::AmbiToBinaural
           , Spat::MonoToAmbi
+          , Spat::Vbap
             >(ctx, key);
 }
 

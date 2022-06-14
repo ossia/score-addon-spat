@@ -6,7 +6,19 @@
 * copyright notice and this permission notice appear in all copies.
 */
 
-#include <Spat/AmbisonicMethods.hpp>
+#include <Spat/_AmbisonicMethods.hpp>
+
+static constexpr float deg_to_rad = M_PI / 180.f;
+
+int64_t getFactorial(int n)
+{
+    int64_t result=1;
+    for(int i=1 ; i<=n ; i++)
+        result *= i;
+
+    return result;
+}
+
 
 void unnorm_legendreP
 (
@@ -67,14 +79,6 @@ void unnorm_legendreP
     y[n] *= scale;
 }
 
-int64_t factorial(int n)
-{
-    int64_t result=1;
-    for(int i=1 ; i<=n ; i++)
-        result *= i;
-
-    return result;
-}
 
 void getSHreal
 (
@@ -106,7 +110,7 @@ void getSHreal
 
         // normalisation
         for(int m=-n, j=0; m<=n; m++, j++)
-            norm_real[j] = sqrt( (2.0*n+1.0) * factorial(n-abs(m)) / (4.0*M_PI*factorial(n+abs(m))) );
+            norm_real[j] = sqrt( (2.0*n+1.0) * getFactorial(n-abs(m)) / (4.0*M_PI*getFactorial(n+abs(m))) );
 
         // norm_real * Lnm_real .* CosSin;
         for(int m=-n, j=0; m<=n; m++, j++){
