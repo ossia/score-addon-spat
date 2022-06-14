@@ -8,13 +8,6 @@ project(score_addon_spat LANGUAGES CXX)
 
 add_library(
   score_addon_spat
-<<<<<<< HEAD
-=======
-  Spat/ExampleModel.hpp
-  Spat/ExampleModel.cpp
-  Spat/ExampleUi.hpp
-  Spat/Example.hpp
->>>>>>> 9cd6993ddf1fab629d4bb9b1576a20b219992c62
 
   Spat/StereoToMonoModel.hpp
   Spat/StereoToMonoModel.cpp

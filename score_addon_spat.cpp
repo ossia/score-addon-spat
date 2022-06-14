@@ -1,8 +1,5 @@
 #include "score_addon_spat.hpp"
-<<<<<<< HEAD
-=======
 
->>>>>>> 9cd6993ddf1fab629d4bb9b1576a20b219992c62
 #include <Spat/StereoToMono.hpp>
 #include <Spat/StereoPanning.hpp>
 #include <Spat/Rotator.hpp>
@@ -10,7 +7,6 @@
 #include <Spat/MonoToAmbi.hpp>
 #include <Spat/Vbap.hpp>
 
-#include <Spat/Example.hpp>
 #include <Spat/Spatatouille.hpp>
 
 #include <Avnd/Factories.hpp>
@@ -28,25 +24,16 @@ score_addon_spat::factories(
     const score::ApplicationContext& ctx,
     const score::InterfaceKey& key) const
 {
-<<<<<<< HEAD
-  return Avnd::instantiate_fx<
-            Spat::StereoToMono
+
+    return Avnd::instantiate_fx<
+            Spat::Spatatouille
+          , Spat::StereoToMono
           , Spat::StereoPanning
           , Spat::Rotator
           , Spat::AmbiToBinaural
           , Spat::MonoToAmbi
           , Spat::Vbap
             >(ctx, key);
-=======
-  return Avnd::instantiate_fx<   
-            Spat::Spatatouille
-//          , Spat::StereoToMono
-//          , Spat::StereoPanning
-//          , Spat::Rotator
-//          , Spat::AmbiToBinaural
-//          , Spat::Example
-          >(ctx, key);
->>>>>>> 9cd6993ddf1fab629d4bb9b1576a20b219992c62
 }
 
 std::vector<score::PluginKey> score_addon_spat::required() const
