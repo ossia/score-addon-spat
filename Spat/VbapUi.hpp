@@ -1,10 +1,10 @@
 #pragma once
-#include <Spat/AmbiToBinauralModel.hpp>
+#include <Spat/VbapModel.hpp>
 #include <halp/layout.hpp>
 
 namespace Spat
 {
-struct AmbiToBinaural::ui
+struct Vbap::ui
 {
   using enum halp::colors;
   using enum halp::layouts;
@@ -13,7 +13,6 @@ struct AmbiToBinaural::ui
   halp_meta(layout, vbox)
   halp_meta(background, dark)
 
-  halp::label title{"My First Processor"};
-  //halp::item<&ins::gain> gain;
+  halp::label title{"VBAP"};
 };
 }
