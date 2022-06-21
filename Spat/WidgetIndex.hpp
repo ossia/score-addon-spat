@@ -15,6 +15,7 @@
 #include <Spat/WidgetAudioSpat.hpp>
 #include <Spat/WidgetSpectSpat.hpp>
 #include <Spat/WidgetDbBar.hpp>
+#include <Spat/WidgetDbBarVu.hpp>
 #include <Spat/WidgetDomeSpat.hpp>
 #include <Spat/WidgetMatrix.hpp>
 
@@ -31,5 +32,7 @@ namespace Spat
     struct custom_matrix;
 
     struct custom_db_bar;
+
+    struct custom_db_bar_vu;
 }
 

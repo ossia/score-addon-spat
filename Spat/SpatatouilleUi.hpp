@@ -29,9 +29,16 @@ struct Spatatouille::ui
         {
             this->send_message(ui_to_processor{.source = src});
         };
+
       }
 
-      static void process_message(ui& self){}
+      static void process_message(ui& ui, processor_to_ui op)
+      {
+        ui.db_bar.widget.l_volume = op.l_volume;
+        ui.db_bar.widget.r_volume = op.r_volume;
+
+        ui.audio.widget.volume = op.dome_volume;
+      }
 
       std::function<void(ui_to_processor)> send_message;
   };

@@ -7,6 +7,9 @@ namespace Spat
 
 struct custom_db_bar
 {
+    double l_volume = 0;
+    double r_volume = 0;
+
     static constexpr double width() { return 300.; } // Axe X
     static constexpr double height() { return 300.; } // Axe Y
 
@@ -30,40 +33,62 @@ struct custom_db_bar
     {
         ctx.update();
 
+        double l_x = 115;
+        double r_x = 165;
+
         /* Background */
         ctx.set_fill_color({120, 120, 120, 255});
         ctx.begin_path();
         ctx.draw_rect(0., 0., width(), height());
         ctx.fill();
 
-        /* Outline */
-        ctx.set_fill_color({255, 255, 255, 255});
-        ctx.begin_path();
-        ctx.draw_rect(30., 15., 60., 270.);
-        ctx.fill();
 
+        /*** Left part ***/
         /* Background dB */
         ctx.begin_path();
-        ctx.set_linear_gradient(35., 20., 35., 150., {255, 0, 0, 255}, {200, 175, 0, 255});
-        ctx.draw_rect(35., 20., 50., 130.);
+        ctx.set_linear_gradient(l_x, 20., l_x, 150., {255, 0, 0, 255}, {200, 175, 0, 255});
+        ctx.draw_rect(l_x, 20., 20., 130.);
         ctx.fill();
         ctx.begin_path();
-        ctx.set_linear_gradient(35., 150., 35., 280., {200, 175, 0, 255}, {0, 255, 0, 255});
-        ctx.draw_rect(35., 150., 50., 130.);
+        ctx.set_linear_gradient(l_x, 150., l_x, 280., {200, 175, 0, 255}, {0, 255, 0, 255});
+        ctx.draw_rect(l_x, 150., 20., 130.);
         ctx.fill();
 
         /* Mask */
-        ctx.set_fill_color({255, 255, 255, 255});
+        ctx.set_fill_color({85, 85, 85, 255});
         ctx.begin_path();
-        ctx.draw_rect(35., 20., 50., random_gen());
+        if(l_volume>1){l_volume = 1;}
+        ctx.draw_rect(l_x, 20., 20., 260*(1-l_volume));
         ctx.fill();
 
-        /* Text */
+
+        /*** Right part ***/
+        /* Background dB */
         ctx.begin_path();
-//        ctx.set_font('Ubuntu');
-        ctx.set_font_size(20.);
-//        ctx.draw_text(150., 150., (std::string_view)random_gen());
-        ctx.draw_text(170., 150., "20 dB");
+        ctx.set_linear_gradient(r_x, 20., r_x, 150., {255, 0, 0, 255}, {200, 175, 0, 255});
+        ctx.draw_rect(r_x, 20., 20., 130.);
+        ctx.fill();
+        ctx.begin_path();
+        ctx.set_linear_gradient(r_x, 150., r_x, 280., {200, 175, 0, 255}, {0, 255, 0, 255});
+        ctx.draw_rect(r_x, 150., 20., 130.);
+        ctx.fill();
+
+        /* Mask */
+        ctx.set_fill_color({85, 85, 85, 255});
+        ctx.begin_path();
+        if(r_volume>1){r_volume = 1;}
+        ctx.draw_rect(r_x, 20., 20., 260*(1-r_volume));
+        ctx.fill();
+
+        ctx.update();
+
+        /* Text */
+        ctx.set_font("Ubuntu");
+        ctx.set_font_size(20);
+        ctx.set_fill_color({255, 255, 255, 255});
+        ctx.begin_path();
+        ctx.draw_text(45, 280, "Left");
+        ctx.draw_text(205, 280, "Right");
         ctx.fill();
 
         ctx.update();
