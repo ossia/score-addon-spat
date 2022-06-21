@@ -7,7 +7,7 @@ namespace Spat
 
 struct custom_audio
 {
-    double volume;
+    double volume = 0;
 
     static constexpr double width() { return 300.; } // Axe X
     static constexpr double height() { return 300.; } // Axe
@@ -61,17 +61,21 @@ struct custom_audio
         double w = width();
         double h = height();
 
-        double channel = 1;
         double max_channel = 16;
+        double tab_volume[(int)max_channel+1];
 
-        double rand_gen;
+        for(int i = 1; i <= max_channel; i++){
+            tab_volume[i] = volume;
+        }
 
         /* Volume */
         ctx.set_fill_color({85, 85, 85, 255});
         ctx.begin_path();
         for(int i = 1; i <= max_channel; i++){
             ctx.move_to(150, 150);
-            ctx.arc_to(x + 150 * (volume) , y + 150 * (volume), w - 2 * 150 * (volume), h - 2 * 150 * (volume), ((i-1) / max_channel)*360, 360 / max_channel);
+            ctx.arc_to(x + 150 * (tab_volume[i]) , y + 150 * (tab_volume[i]),
+                       w - 2 * 150 * (tab_volume[i]), h - 2 * 150 * (tab_volume[i]),
+                       ((i-1) / max_channel)*360, 360 / max_channel);
         }
         ctx.fill();
 

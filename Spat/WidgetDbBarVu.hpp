@@ -18,22 +18,6 @@ struct custom_db_bar_vu
     static constexpr double width() { return 300.; } // Axe X
     static constexpr double height() { return 300.; } // Axe Y
 
-    double random_gen()
-    {
-        double val = (double)rand() / RAND_MAX;
-
-        if (val < 0.20)
-            return 50;
-        else if (val < 0.40)
-            return 120;
-        else if (val < 0.75)
-            return 170;
-        else if (val < 0.9)
-            return 220;
-        else
-            return 260;
-    }
-
     void paint(avnd::painter auto ctx)
     {
         ctx.update();
