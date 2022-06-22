@@ -30,7 +30,9 @@ public:
 
   struct processor_to_ui
   {
-      float volume;
+      double l_volume;
+      double r_volume;
+      double dome_volume;
   };
 
   ui_to_processor m_local_data{.pos_xy = {.x = 0.5, .y = 1.}};
@@ -54,6 +56,8 @@ public:
   void process_message(const ui_to_processor& m) {
      m_local_data = m;
   }
+
+  std::function<void(processor_to_ui)> send_message;
 
   using tick = halp::tick;
 

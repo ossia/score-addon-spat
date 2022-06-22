@@ -54,6 +54,7 @@ add_library(
   Spat/WidgetMatrix.hpp
   Spat/WidgetSpectSpat.hpp
   Spat/WidgetDbBar.hpp
+  Spat/WidgetDbBarVu.hpp
   Spat/WidgetDomeSpat.hpp
 
   Spat/WidgetIndex.hpp

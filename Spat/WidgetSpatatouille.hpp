@@ -119,14 +119,11 @@ struct custom_spatatouille
 
     bool mouse_press(double x, double y, auto button)
     {
-
         on_moved(pos);
 
         if (button == 1){
             mouse_move(x, y, button);
         }else if (button == 2){
-
-            fprintf(stderr, "Num current = %i \n", num_current);
             if(num == 0){
                 if(num_current == 3){
                     num_current = 1;
@@ -143,7 +140,7 @@ struct custom_spatatouille
                 num = 0;
             }
         }
-
+        mouse_move(x, y, button);
         return true;
     }
 
