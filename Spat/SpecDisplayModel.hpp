@@ -14,12 +14,12 @@
 namespace Spat
 {
 
-class SpectralExample
+class SpecDisplay
 {
 public:
-  halp_meta(name, "SpectralExample")
+  halp_meta(name, "SpecDisplay")
   halp_meta(category, "Audio")
-  halp_meta(c_name, "spectralExample")
+  halp_meta(c_name, "spec_display")
   halp_meta(uuid, "5855871d-dfdc-48ee-9225-ca26371ddea4")
 
 

@@ -1,9 +1,9 @@
-#include "SpectralExample.hpp"
+#include "SpecDisplay.hpp"
 
 namespace Spat
 {
 
-void SpectralExample::operator()(int N)
+void SpecDisplay::operator()(int N)
 {
     const auto channels = inputs.audio.channels;
 

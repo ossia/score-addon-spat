@@ -12,7 +12,7 @@ struct custom_audio
     double nbr_channels = 1;
 
     static constexpr double width() { return 300.; } // Axe X
-    static constexpr double height() { return 300.; } // Axe
+    static constexpr double height() { return 300.; } // Axe Y
 
     void paint(avnd::painter auto ctx)
     {

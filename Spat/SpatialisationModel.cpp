@@ -11,6 +11,8 @@ void Spatialisation::operator()(halp::tick t)
 
   double nbr_channels;
 
+  float spect;
+
   auto pos_x = m_local_data.pos_xy.x;
   auto pos_y = m_local_data.pos_xy.y;
   auto pos_z = inputs.z;
@@ -43,6 +45,6 @@ void Spatialisation::operator()(halp::tick t)
   r_volume = sqrt(r_volume / t.frames);
 
   send_message(processor_to_ui{
-      .l_volume = l_volume, .r_volume = r_volume, .dome_volume = l_volume, .nbr_channels = nbr_channels});
+      .l_volume = l_volume, .r_volume = r_volume, .dome_volume = l_volume, .nbr_channels = nbr_channels, .spect = spect});
 }
 }

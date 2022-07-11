@@ -18,7 +18,7 @@
 #include <Spat/WidgetDbBarVu.hpp>
 #include <Spat/WidgetDomeSpat.hpp>
 #include <Spat/WidgetMatrix.hpp>
-#include <Spat/WidgetSpectralExample.hpp>
+#include <Spat/WidgetSpecDisplay.hpp>
 
 namespace Spat
 {

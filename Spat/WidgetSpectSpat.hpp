@@ -7,6 +7,8 @@ namespace Spat
 
 struct custom_spect
 {
+    float spect = 0;
+
     static constexpr double width() { return 300.; } // Axe X
     static constexpr double height() { return 300.; } // Axe Y
 
@@ -37,7 +39,7 @@ struct custom_spect
         ctx.draw_line(285, 285, 280, 290);
         ctx.stroke();
 
-        /* Curve */
+        /* Spect */
         ctx.begin_path();
         ctx.set_stroke_color({0, 255, 0, 255});
         ctx.set_stroke_width(2.);
