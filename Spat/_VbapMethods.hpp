@@ -14,6 +14,8 @@ typedef struct
 static int cmp_desc_double(const void *a,const void *b);
 static int cmp_asc_double(const void *a,const void *b);
 
+float mod(float x, float y);
+
 void sortf
 (
     std::vector<double>& in_vec,

@@ -447,22 +447,3 @@ void convertFUMAtoACN(std::vector<std::vector<float>>& in, int order, int nSampl
         for(int j=0 ; j<nSamples ; j++)
             in[i][j] = ACNsig[i][j];
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

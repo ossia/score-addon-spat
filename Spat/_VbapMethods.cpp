@@ -18,6 +18,12 @@ static int cmp_asc_double(const void *a,const void *b) {
     else return 0;
 }
 
+float mod(float x, float y)
+{
+    float tmp = fmodf(x, y);
+    return tmp >= 0 ? tmp : tmp + y;
+}
+
 void sortf
 (
     std::vector<double>& in_vec,

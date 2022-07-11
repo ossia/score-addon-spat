@@ -41,12 +41,13 @@ public:
     halp::setup setup_info;
     void prepare(halp::setup info)
     {
-        nChannels=inputs.audio.channels;
+        nSources=inputs.audio.channels;
+        nChannels=outputs.audio.channels;
     };
     void operator()(halp::tick tick);
     
 private:
-    int nChannels, nSamples;
+    int nChannels, nSources, nSamples;
     float azi, elev;
     halp::fft<double> FFT;
 };
