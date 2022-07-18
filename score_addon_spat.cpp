@@ -9,7 +9,7 @@
 
 #include <Spat/Spatatouille.hpp>
 #include <Spat/Spatialisation.hpp>
-#include <Spat/SpectralExample.hpp>
+#include <Spat/SpecDisplay.hpp>
 
 #include <Avnd/Factories.hpp>
 #include <score/plugins/FactorySetup.hpp>
@@ -30,7 +30,7 @@ score_addon_spat::factories(
     return Avnd::instantiate_fx<
             Spat::Spatatouille
           , Spat::Spatialisation
-          , Spat::SpectralExample
+          , Spat::SpecDisplay
 //          , Spat::StereoToMono
 //          , Spat::StereoPanning
 //          , Spat::Rotator

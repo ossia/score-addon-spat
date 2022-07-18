@@ -73,7 +73,7 @@ struct custom_audio
         ctx.set_fill_color({85, 85, 85, 255});
         ctx.begin_path();
         for(int i = 1; i <= nbr_channels; i++){
-            ctx.move_to(300, 150);
+            ctx.move_to(150, 150);
             ctx.arc_to(x + 150 * (tab_volume[i]) , y + 150 * (tab_volume[i]),
                        w - 2 * 150 * (tab_volume[i]), h - 2 * 150 * (tab_volume[i]),
                        ((i-1) / nbr_channels)*360, 360 / nbr_channels);
@@ -91,7 +91,7 @@ struct custom_audio
         ctx.begin_path();
 
         for(int i = 1; i <= nbr_channels; i++){
-            ctx.move_to(300, 150);
+            ctx.move_to(150, 150);
             ctx.arc_to(x, y, w, h, ((i-1) / nbr_channels)*360, 360 / nbr_channels);
         }
         ctx.stroke();

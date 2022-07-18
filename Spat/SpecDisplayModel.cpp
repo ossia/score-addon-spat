@@ -1,14 +1,14 @@
-#include "SpectralExample.hpp"
+#include "SpecDisplay.hpp"
 
 namespace Spat
 {
 
-void SpectralExample::operator()(int N)
+void SpecDisplay::operator()(int N)
 {
     const auto channels = inputs.audio.channels;
-
     processor_to_ui p;
     p.spectrums.resize(channels);
+    p.zoom = inputs.zoom;
 
     for(int i = 0; i < channels; i++)
     {
@@ -20,6 +20,7 @@ void SpectralExample::operator()(int N)
         chan[k] = std::clamp(ampl[k] * ampl[k] + ph[k] * ph[k], 0., 1.);
       }
     }
+
 
     send_message(std::move(p));
 }
