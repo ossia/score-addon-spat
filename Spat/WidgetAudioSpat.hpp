@@ -98,20 +98,5 @@ struct custom_audio
 
         ctx.update();
     }
-
-    bool mouse_press(auto event)
-    {
-        return true;
-    }
-
-    bool mouse_move(auto event)
-    {
-        return true;
-    }
-
-    bool mouse_release(auto event)
-    {
-        return true;
-    }
 };
 }

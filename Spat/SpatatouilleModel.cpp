@@ -9,10 +9,6 @@ void Spatatouille::operator()(halp::tick t)
 
   auto volume = inputs.volume;
 
-  auto nbr_channels = inputs.audio.channels();
-  if (inputs.audio.channels() == 0)
-    nbr_channels = 1;
-
   auto pos_x = m_local_data.pos_xy.x;
   auto pos_y = m_local_data.pos_xy.y;
   auto pos_z = inputs.z;
@@ -43,6 +39,6 @@ void Spatatouille::operator()(halp::tick t)
   r_volume = sqrt(r_volume / t.frames);
 
   send_message(processor_to_ui{
-      .l_volume = l_volume, .r_volume = r_volume, .dome_volume = l_volume, .nbr_channels = nbr_channels});
+      .l_volume = l_volume, .r_volume = r_volume, .dome_volume = l_volume});
 }
 }

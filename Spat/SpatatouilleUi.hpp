@@ -61,6 +61,5 @@ struct Spatatouille::ui
       halp::item<&outs::output> output;
       halp::item<&outs::source> source;
   } option;
-
 };
 }

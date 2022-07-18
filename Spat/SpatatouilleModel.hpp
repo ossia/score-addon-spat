@@ -33,7 +33,6 @@ public:
       double l_volume;
       double r_volume;
       double dome_volume;
-      int nbr_channels;
   };
 
   ui_to_processor m_local_data{.pos_xy = {.x = 0.5, .y = 1.}};
