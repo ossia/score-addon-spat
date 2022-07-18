@@ -10,8 +10,8 @@ struct custom_spatatouille
     static constexpr double width() { return 300.; } // Axe X
     static constexpr double height() { return 300.; } // Axe Y
 
-    halp::xy_type<float> pos, pos_1, pos_2, pos_3;
-    int num = 0;
+    halp::xy_type<float> pos, pos_1, pos_2, pos_3, pos_4, pos_5;
+
     int num_current = 1;
 
     std::function<void(halp::xy_type<float>)> on_moved = [] (auto) {};
@@ -21,8 +21,8 @@ struct custom_spatatouille
     {
         double c_x = width()/2;
         double c_y = height()/2;
-        double c_r = 150;
-        double c_r_bis = 4;
+        double c_r = width()/2;
+        double c_r_bis = width()/75;
 
         float m_x_1 = pos_1.x * width();
         float m_y_1 = pos_1.y * height();
@@ -32,6 +32,12 @@ struct custom_spatatouille
 
         float m_x_3 = pos_3.x * width();
         float m_y_3 = pos_3.y * height();
+
+        float m_x_4 = pos_4.x * width();
+        float m_y_4 = pos_4.y * height();
+
+        float m_x_5 = pos_5.x * width();
+        float m_y_5 = pos_5.y * height();
 
         float m_r = 15.;  
 
@@ -114,41 +120,69 @@ struct custom_spatatouille
             ctx.draw_text(m_x_3-6, m_y_3+7, "3");
             ctx.fill();
         }
+
+        /* 4th source */
+        float formula_4 = sqrt(pow((m_x_4 - c_x), 2) + pow((m_y_4 - c_y), 2));
+        if(formula_4 < c_r){
+            ctx.begin_path();
+            ctx.set_fill_color({90, 90, 90, 255});
+            ctx.draw_circle(m_x_4, m_y_4, m_r);
+            ctx.fill();
+            ctx.close_path();
+
+            ctx.begin_path();
+            ctx.set_fill_color({255, 255, 255, 255});
+            ctx.set_font("Ubuntu");
+            ctx.set_font_size(15);
+            ctx.draw_text(m_x_4-6, m_y_4+7, "4");
+            ctx.fill();
+        }
+
+        /* 5th source */
+        float formula_5 = sqrt(pow((m_x_5 - c_x), 2) + pow((m_y_5 - c_y), 2));
+        if(formula_5 < c_r){
+            ctx.begin_path();
+            ctx.set_fill_color({90, 90, 90, 255});
+            ctx.draw_circle(m_x_5, m_y_5, m_r);
+            ctx.fill();
+            ctx.close_path();
+
+            ctx.begin_path();
+            ctx.set_fill_color({255, 255, 255, 255});
+            ctx.set_font("Ubuntu");
+            ctx.set_font_size(15);
+            ctx.draw_text(m_x_5-6, m_y_5+7, "5");
+            ctx.fill();
+        }
+
         ctx.update();
     }
 
-    bool mouse_press(double x, double y, auto button)
+    bool mouse_press(auto event)
     {
         on_moved(pos);
-
-        if (button == 1){
-            mouse_move(x, y, button);
-        }else if (button == 2){
-            if(num == 0){
-                if(num_current == 3){
-                    num_current = 1;
-                    source(num_current);
-                }else if(num_current == 1){
-                    num_current = 2;
-                    source(num_current);
-                }else if(num_current == 2){
-                    num_current = 3;
-                    source(num_current);
-                }
-                num = 1;
+        if (event.button == event.left){
+            mouse_move(event);
+        }else if (event.button == event.right){
+            if(num_current == 5){
+                num_current = 1;
+                source(num_current);
+            }else if(num_current == 1){
+                num_current = 2;
+                source(num_current);
             }else{
-                num = 0;
+                num_current += 1;
+                source(num_current);
             }
         }
-        mouse_move(x, y, button);
+        mouse_move(event);
         return true;
     }
 
-    void mouse_move(double x, double y, auto button)
+    bool mouse_move(auto event)
     {
-        pos.x = std::clamp(x / width(), 0., 1.);
-        pos.y = std::clamp(y / height(), 0., 1.);
-
+        pos.x = std::clamp(event.x / width(), 0., 1.);
+        pos.y = std::clamp(event.y / height(), 0., 1.);
         if (num_current == 1){
             pos_1.x = pos.x;
             pos_1.y = pos.y;
@@ -158,15 +192,22 @@ struct custom_spatatouille
         }else if(num_current == 3){
             pos_3.x = pos.x;
             pos_3.y = pos.y;
+        }else if(num_current == 4){
+            pos_4.x = pos.x;
+            pos_4.y = pos.y;
+        }else if(num_current == 5){
+            pos_5.x = pos.x;
+            pos_5.y = pos.y;
         }
-
         on_moved(pos);
+        return true;
     }
 
-    void mouse_release(double x, double y, auto button)
+    bool mouse_release(auto event)
     {
-        mouse_move(x, y, button);
+        mouse_move(event);
         on_moved(pos);
+        return true;
     }
 };
 }

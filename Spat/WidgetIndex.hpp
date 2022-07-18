@@ -18,6 +18,7 @@
 #include <Spat/WidgetDbBarVu.hpp>
 #include <Spat/WidgetDomeSpat.hpp>
 #include <Spat/WidgetMatrix.hpp>
+#include <Spat/WidgetSpecDisplay.hpp>
 
 namespace Spat
 {
@@ -34,5 +35,7 @@ namespace Spat
     struct custom_db_bar;
 
     struct custom_db_bar_vu;
+
+    struct custom_spec_display;
 }
 

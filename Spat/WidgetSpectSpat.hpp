@@ -50,22 +50,9 @@ struct custom_spect
             ctx.draw_line(p0.x, p0.y, p1.x, p1.y);
             p0.x = p1.x;
             p0.y = p1.y;
-        }     
+        }
         ctx.stroke();
         ctx.update();
-    }
-
-    bool mouse_press(double x, double y, auto button)
-    {
-        return true;
-    }
-
-    void mouse_move(double x, double y, auto button)
-    {
-    }
-
-    void mouse_release(double x, double y, auto button)
-    {
     }
 };
 }

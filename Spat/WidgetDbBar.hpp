@@ -49,6 +49,7 @@ struct custom_db_bar
         ctx.set_linear_gradient(l_x, 20., l_x, 150., {255, 0, 0, 255}, {200, 175, 0, 255});
         ctx.draw_rect(l_x, 20., 20., 130.);
         ctx.fill();
+
         ctx.begin_path();
         ctx.set_linear_gradient(l_x, 150., l_x, 280., {200, 175, 0, 255}, {0, 255, 0, 255});
         ctx.draw_rect(l_x, 150., 20., 130.);
@@ -92,19 +93,6 @@ struct custom_db_bar
         ctx.fill();
 
         ctx.update();
-    }
-
-    bool mouse_press(double x, double y, auto button)
-    {
-        return true;
-    }
-
-    void mouse_move(double x, double y, auto button)
-    {
-    }
-
-    void mouse_release(double x, double y, auto button)
-    {
     }
 };
 }
