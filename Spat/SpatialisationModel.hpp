@@ -33,14 +33,14 @@ public:
       double l_volume;
       double r_volume;
       double dome_volume;
-      double nbr_channels;
+      int nbr_channels;
   };
 
   ui_to_processor m_local_data{.pos_xy = {.x = 0.5, .y = 1.}};
 
   struct ins
   {
-    halp::fixed_audio_bus<"Input", double, 2> audio;
+    halp::dynamic_audio_bus<"Input", double> audio;
 
     halp::hslider_f32<"Volume", halp::range{.min = 0., .max = 3., .init = 1.}> volume;
     halp::vslider_f32<"Z", halp::range{.min = 0., .max = 1., .init = 0.}> z;

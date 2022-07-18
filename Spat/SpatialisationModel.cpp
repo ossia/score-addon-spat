@@ -9,7 +9,7 @@ void Spatialisation::operator()(halp::tick t)
 
   auto volume = inputs.volume;
 
-  double nbr_channels;
+  int nbr_channels = inputs.audio.channels;
 
   auto pos_x = m_local_data.pos_xy.x;
   auto pos_y = m_local_data.pos_xy.y;
@@ -33,8 +33,6 @@ void Spatialisation::operator()(halp::tick t)
 
     l_volume += pow(l_out[j], 2);
     r_volume += pow(r_out[j], 2);
-
-    nbr_channels = (double)inputs.audio.channels();
   }
 
   if (t.frames == 0)
