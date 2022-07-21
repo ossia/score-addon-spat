@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <avnd/concepts/painter.hpp>
 #include <avnd/concepts/processor.hpp>
@@ -15,12 +15,12 @@
 namespace Spat
 {
 
-class Spatatouille
+class AudioSpat
 {
 public:
-  halp_meta(name, "Spatatouille") halp_meta(category, "Audio")
-      halp_meta(c_name, "spatatouille")
-          halp_meta(uuid, "96ab8e9d-9b83-428c-b3fa-7f82b00261dd")
+  halp_meta(name, "AudioSpat") halp_meta(category, "Audio")
+      halp_meta(c_name, "audio_spat")
+          halp_meta(uuid, "2152994d-4aa1-4502-a531-06e39c62a3be")
 
               struct ui_to_processor
   {
@@ -30,32 +30,23 @@ public:
 
   struct processor_to_ui
   {
-    double l_volume;
-    double r_volume;
-    double dome_volume;
+    std::vector<double> channel_volume;
+    double nbr_channels;
   };
 
   ui_to_processor m_local_data{.pos_xy = {.x = 0.5, .y = 1.}};
 
   struct ins
   {
-    halp::fixed_audio_bus<"Input", double, 2> audio;
+    halp::dynamic_audio_bus<"Input", double> audio;
 
     halp::hslider_f32<"Volume", halp::range{.min = 0., .max = 3., .init = 1.}>
         volume;
-    halp::vslider_f32<"Z", halp::range{.min = 0., .max = 1., .init = 0.}> z;
   } inputs;
 
   struct outs
   {
     halp::dynamic_audio_bus<"Output", double> audio;
-
-    halp::hbargraph_f32<
-        "Left/Right balance output",
-        halp::range{.min = -1., .max = 1., .init = 0.}>
-        output;
-    halp::hbargraph_i32<"Source", halp::range{.min = 1, .max = 3, .init = 1}>
-        source;
   } outputs;
 
   void process_message(const ui_to_processor& m) { m_local_data = m; }

@@ -15,12 +15,12 @@
 namespace Spat
 {
 
-class Spatatouille
+class Spatialisation
 {
 public:
-  halp_meta(name, "Spatatouille") halp_meta(category, "Audio")
-      halp_meta(c_name, "spatatouille")
-          halp_meta(uuid, "96ab8e9d-9b83-428c-b3fa-7f82b00261dd")
+  halp_meta(name, "Spatialisation") halp_meta(category, "Audio")
+      halp_meta(c_name, "spatialisation")
+          halp_meta(uuid, "8d502211-ff88-4ed2-a726-985f45d7ab89")
 
               struct ui_to_processor
   {
@@ -33,13 +33,15 @@ public:
     double l_volume;
     double r_volume;
     double dome_volume;
+    std::vector<double> channel_volume;
+    double nbr_channels;
   };
 
   ui_to_processor m_local_data{.pos_xy = {.x = 0.5, .y = 1.}};
 
   struct ins
   {
-    halp::fixed_audio_bus<"Input", double, 2> audio;
+    halp::dynamic_audio_bus<"Input", double> audio;
 
     halp::hslider_f32<"Volume", halp::range{.min = 0., .max = 3., .init = 1.}>
         volume;
