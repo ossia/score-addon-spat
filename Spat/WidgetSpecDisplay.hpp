@@ -16,15 +16,15 @@ struct custom_spec_display
   {
     ctx.set_fill_color({0, 202, 169, 255});
     ctx.begin_path();
-    for(std::size_t c = 0; c < spectrums.size(); c++)
+    for (std::size_t c = 0; c < spectrums.size(); c++)
     {
       auto& spectrum = spectrums[c];
       const double h = height() / spectrums.size();
-      const double barw = width() / (spectrum.size()/zoom);
+      const double barw = width() / (spectrum.size() / zoom);
 
-      for(std::size_t i = 0; i < spectrum.size(); i++)
+      for (std::size_t i = 0; i < spectrum.size(); i++)
       {
-        double barh = std::pow(spectrum[i], 1./4.);
+        double barh = std::pow(spectrum[i], 1. / 4.);
         ctx.draw_rect(i * barw, c * h + (h - barh * h), barw, barh * h);
       }
     }

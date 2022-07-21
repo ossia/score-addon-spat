@@ -59,6 +59,11 @@ add_library(
   Spat/SpecDisplayUi.hpp
   Spat/SpecDisplay.hpp
 
+  Spat/AudioSpatModel.hpp
+  Spat/AudioSpatModel.cpp
+  Spat/AudioSpatUi.hpp
+  Spat/AudioSpat.hpp
+
   Spat/WidgetSpatatouille.hpp
   Spat/WidgetAudioSpat.hpp
   Spat/WidgetMatrix.hpp
