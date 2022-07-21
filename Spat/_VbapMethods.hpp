@@ -1,15 +1,17 @@
 #pragma once
 
-#include <cmath>
 #include <algorithm>
 #include <iostream>
 #include <span>
+#include <Spat/_Methods.hpp>
 
 typedef struct
 {
     double val;
     int idx;
 } sort_double;
+
+static constexpr int max_2d_output_channels = 16;
 
 static int cmp_desc_double(const void *a,const void *b);
 static int cmp_asc_double(const void *a,const void *b);

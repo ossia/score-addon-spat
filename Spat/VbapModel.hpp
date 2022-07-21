@@ -29,6 +29,12 @@ public:
             azi;
         halp::knob_f32<"Elevation", halp::range{.min = -180.0, .max = 180.0, .init = 0}>
             elev;
+        halp::knob_f32<"Yaw", halp::range{.min = -180.0, .max = 180.0, .init = 0}>
+            yaw;
+        halp::knob_f32<"Pitch", halp::range{.min = -180.0, .max = 180.0, .init = 0}>
+            pitch;
+        halp::knob_f32<"Roll", halp::range{.min = -180.0, .max = 180.0, .init = 0}>
+            roll;
     } inputs;
 
     struct
@@ -41,15 +47,22 @@ public:
     halp::setup setup_info;
     void prepare(halp::setup info)
     {
-        nSources=inputs.audio.channels;
+        //nSources=inputs.audio.channels;
         nChannels=outputs.audio.channels;
-    };
+
+        gains2D.resize(nChannels);
+        vbap_gtable.resize(nChannels);
+    }
+
     void operator()(halp::tick tick);
     
 private:
     int nChannels, nSources, nSamples;
     float azi, elev;
+    float yaw, pitch, roll;
     halp::fft<double> FFT;
+    std::vector<double> gains2D{}, vbap_gtable{};
+    std::vector<std::vector<double>> src_dirs_xyz;
 };
 }
 

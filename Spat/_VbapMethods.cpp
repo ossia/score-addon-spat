@@ -1,6 +1,6 @@
 #include <Spat/_VbapMethods.hpp>
 
-static constexpr float deg_to_rad = M_PI / 180.f;
+// static constexpr float deg_to_rad = M_PI / 180.f;
 
 static int cmp_desc_double(const void *a,const void *b) {
     sort_double *a1 = (sort_double*) a;
