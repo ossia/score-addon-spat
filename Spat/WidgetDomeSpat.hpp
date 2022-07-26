@@ -83,23 +83,24 @@ struct custom_dome
   bool mouse_press(auto event)
   {
     on_moved(pos);
-    if (event.button == event.left)
+    switch (event.button)
     {
-      mouse_move(event);
+      case event.left:
+        mouse_move(event);
+        break;
+      case event.right:
+        switch (num_current)
+        {
+          case 2:
+            num_current = 1;
+            source(num_current);
+            break;
+          default:
+            num_current += 1;
+            source(num_current);
+        }
     }
-    else if (event.button == event.right)
-    {
-      if (num_current == 2)
-      {
-        num_current = 1;
-        source(num_current);
-      }
-      else if (num_current == 1)
-      {
-        num_current = 2;
-        source(num_current);
-      }
-    }
+    mouse_move(event);
     return true;
   }
 

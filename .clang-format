@@ -41,7 +41,7 @@ BreakBeforeBinaryOperators: All
 BreakBeforeBraces: Allman
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: true
-ColumnLimit: 79
+ColumnLimit: 89
 CommentPragmas: '^ IWYU pragma:'
 ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
@@ -76,30 +76,23 @@ Standard: c++20
 TabWidth: 2
 UseTab: Never
 CommentPragmas: '^ clang-format:'
-StatementMacros: ['E_SIGNAL', 'PROPERTY', 'W_SIGNAL', 'W_PROPERTY', 'W_SLOT']
+StatementMacros: ['E_SIGNAL', 'PROPERTY', 'W_SIGNAL', 'W_PROPERTY', 'W_SLOT', 'halp__enum', 'halp__enum_combobox', 'halp_meta', 'halp_flag', 'halp_flags', 'gpp_attribute', 'gpp_compute', 'halp_lambda', 'halp_free_fun', 'halp_free_fun_t', 'halp_mem_fun', 'halp_mem_fun_t']
 SortIncludes: true
 IncludeBlocks: Regroup
 IncludeCategories:
   - Regex:           '^"'
     Priority:        1
-  - Regex:           '^<(Vst|Vst3|Audio|Magnetism|Control|ControlSurface|RemoteScenario|Explorer|Protocols|Process|State|Device|Media|Midi|JS|Curve|Inspector|Automation|Dataflow|Fx|Library|Mapping|Loop|Recording|PluginSettings|Gfx|Nodal|Pd|LV2|Mixer|Video|Effect|Execution|Engine|LocalTree)'
-    Priority:        2
-  - Regex:           '^<score/'
-    Priority:        3
-  - Regex:           '^<core/'
-    Priority:        4
-  - Regex:           '^<ossia/detail/config'
-    Priority:        5
-  - Regex:           '^<ossia/'
-    Priority:        6
-  - Regex:           '^<ossia-qt/'
-    Priority:        6
-  - Regex:           '^<boost'
-    Priority:        7
-  - Regex:           '^<Q'
-    Priority:        8
   - Regex:           '<([[:alnum:]_]+\/?)+.(h|hpp)>'
-    Priority:        9
+    Priority:        5
+  - Regex:           '^<common/'
+    Priority:        10
+  - Regex:           '^<avnd/'
+    Priority:        15
+  - Regex:           '^<boost'
+    Priority:        20
+  - Regex:           '^<Q'
+    Priority:        25
   - Regex:           '<[[:alnum:]]+>'
     Priority:        800
+
 

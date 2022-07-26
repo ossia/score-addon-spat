@@ -12,7 +12,7 @@ struct custom_spatatouille
 
   halp::xy_type<float> pos, pos_1, pos_2, pos_3, pos_4, pos_5;
 
-  int num_current = 1;
+  int num_current = 0;
 
   std::function<void(halp::xy_type<float>)> on_moved = [](auto) {};
   std::function<void(int)> source = [](auto) {};
@@ -166,27 +166,22 @@ struct custom_spatatouille
   bool mouse_press(auto event)
   {
     on_moved(pos);
-    if (event.button == event.left)
+    switch (event.button)
     {
-      mouse_move(event);
-    }
-    else if (event.button == event.right)
-    {
-      if (num_current == 5)
-      {
-        num_current = 1;
-        source(num_current);
-      }
-      else if (num_current == 1)
-      {
-        num_current = 2;
-        source(num_current);
-      }
-      else
-      {
-        num_current += 1;
-        source(num_current);
-      }
+      case event.left:
+        mouse_move(event);
+        break;
+      case event.right:
+        switch (num_current)
+        {
+          case 5:
+            num_current = 1;
+            source(num_current);
+            break;
+          default:
+            num_current += 1;
+            source(num_current);
+        }
     }
     mouse_move(event);
     return true;
@@ -196,31 +191,30 @@ struct custom_spatatouille
   {
     pos.x = std::clamp(event.x / width(), 0., 1.);
     pos.y = std::clamp(event.y / height(), 0., 1.);
-    if (num_current == 1)
+
+    switch (num_current)
     {
-      pos_1.x = pos.x;
-      pos_1.y = pos.y;
+      case 1:
+        pos_1.x = pos.x;
+        pos_1.y = pos.y;
+        break;
+      case 2:
+        pos_2.x = pos.x;
+        pos_2.y = pos.y;
+        break;
+      case 3:
+        pos_3.x = pos.x;
+        pos_3.y = pos.y;
+        break;
+      case 4:
+        pos_4.x = pos.x;
+        pos_4.y = pos.y;
+        break;
+      case 5:
+        pos_5.x = pos.x;
+        pos_5.y = pos.y;
     }
-    else if (num_current == 2)
-    {
-      pos_2.x = pos.x;
-      pos_2.y = pos.y;
-    }
-    else if (num_current == 3)
-    {
-      pos_3.x = pos.x;
-      pos_3.y = pos.y;
-    }
-    else if (num_current == 4)
-    {
-      pos_4.x = pos.x;
-      pos_4.y = pos.y;
-    }
-    else if (num_current == 5)
-    {
-      pos_5.x = pos.x;
-      pos_5.y = pos.y;
-    }
+
     on_moved(pos);
     return true;
   }

@@ -4,8 +4,7 @@ namespace Spat
 {
 void Vbap::operator()(halp::tick t)
 {
-  if (inputs.audio.channels <= 0 || nSamples == 0
-      || outputs.audio.channels < 2)
+  if (inputs.audio.channels <= 0 || nSamples == 0 || outputs.audio.channels < 2)
     return;
 
   double** in = inputs.audio.samples;

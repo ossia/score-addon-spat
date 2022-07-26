@@ -18,11 +18,12 @@ namespace Spat
 class AudioSpat
 {
 public:
-  halp_meta(name, "AudioSpat") halp_meta(category, "Audio")
-      halp_meta(c_name, "audio_spat")
-          halp_meta(uuid, "2152994d-4aa1-4502-a531-06e39c62a3be")
+  halp_meta(name, "AudioSpat")
+  halp_meta(category, "Audio")
+  halp_meta(c_name, "audio_spat")
+  halp_meta(uuid, "2152994d-4aa1-4502-a531-06e39c62a3be")
 
-              struct ui_to_processor
+  struct ui_to_processor
   {
     halp::xy_type<float> pos_xy;
     int source;
@@ -40,8 +41,7 @@ public:
   {
     halp::dynamic_audio_bus<"Input", double> audio;
 
-    halp::hslider_f32<"Volume", halp::range{.min = 0., .max = 3., .init = 1.}>
-        volume;
+    halp::hslider_f32<"Volume", halp::range{.min = 0., .max = 3., .init = 1.}> volume;
   } inputs;
 
   struct outs

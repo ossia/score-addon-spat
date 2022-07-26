@@ -74,10 +74,7 @@ void invertLsMtx2D(
   }
 }
 
-int findLsPairs(
-    std::vector<double> ls_dirs_deg,
-    int L,
-    std::vector<int>& out_pairs)
+int findLsPairs(std::vector<double> ls_dirs_deg, int L, std::vector<int>& out_pairs)
 {
   std::vector<double> ls_dirs_deg_tmp(L);
   std::vector<int> idx_sorted(L);

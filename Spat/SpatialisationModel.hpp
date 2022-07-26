@@ -18,11 +18,12 @@ namespace Spat
 class Spatialisation
 {
 public:
-  halp_meta(name, "Spatialisation") halp_meta(category, "Audio")
-      halp_meta(c_name, "spatialisation")
-          halp_meta(uuid, "8d502211-ff88-4ed2-a726-985f45d7ab89")
+  halp_meta(name, "Spatialisation")
+  halp_meta(category, "Audio")
+  halp_meta(c_name, "spatialisation")
+  halp_meta(uuid, "8d502211-ff88-4ed2-a726-985f45d7ab89")
 
-              struct ui_to_processor
+  struct ui_to_processor
   {
     halp::xy_type<float> pos_xy;
     int source;
@@ -43,8 +44,7 @@ public:
   {
     halp::dynamic_audio_bus<"Input", double> audio;
 
-    halp::hslider_f32<"Volume", halp::range{.min = 0., .max = 3., .init = 1.}>
-        volume;
+    halp::hslider_f32<"Volume", halp::range{.min = 0., .max = 3., .init = 1.}> volume;
     halp::vslider_f32<"Z", halp::range{.min = 0., .max = 1., .init = 0.}> z;
   } inputs;
 
@@ -56,8 +56,7 @@ public:
         "Left/Right balance output",
         halp::range{.min = -1., .max = 1., .init = 0.}>
         output;
-    halp::hbargraph_i32<"Source", halp::range{.min = 1, .max = 3, .init = 1}>
-        source;
+    halp::hbargraph_i32<"Source", halp::range{.min = 1, .max = 3, .init = 1}> source;
   } outputs;
 
   void process_message(const ui_to_processor& m) { m_local_data = m; }

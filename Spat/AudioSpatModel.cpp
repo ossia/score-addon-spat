@@ -21,7 +21,6 @@ void AudioSpat::operator()(halp::tick t)
 
   for (int j = 0; j < t.frames; j++)
   {
-
     for (int k = 0; k < nbr_channels; k++)
     {
       out[k][j] = in[k][j] * volume;
@@ -37,7 +36,7 @@ void AudioSpat::operator()(halp::tick t)
     channel_volume[k] = sqrt(channel_volume[k] / t.frames) * 100;
   }
 
-  send_message(processor_to_ui{
-      .channel_volume = channel_volume, .nbr_channels = nbr_channels});
+  send_message(
+      processor_to_ui{.channel_volume = channel_volume, .nbr_channels = nbr_channels});
 }
 }

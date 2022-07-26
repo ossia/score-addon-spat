@@ -9,6 +9,16 @@ void Spatatouille::operator()(halp::tick t)
 
   auto volume = inputs.volume;
 
+  double nbr_channels = (double)inputs.audio.channels;
+
+  if (nbr_channels <= 1)
+    return;
+
+  auto** in = inputs.audio.samples;
+  auto** out = outputs.audio.samples;
+
+  std::vector<double> channel_volume;
+
   auto pos_x = m_local_data.pos_xy.x;
   auto pos_y = m_local_data.pos_xy.y;
   auto pos_z = inputs.z;
@@ -31,6 +41,9 @@ void Spatatouille::operator()(halp::tick t)
 
     l_volume += pow(l_out[j], 2);
     r_volume += pow(r_out[j], 2);
+
+
+    fprintf(stderr,"Source (Model) : %d \n" ,m_local_data.source);
   }
 
   if (t.frames == 0)

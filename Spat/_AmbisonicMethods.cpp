@@ -49,8 +49,7 @@ void unnorm_legendreP(int n, float cos, std::vector<float>& y)
 
   // 3-step downwards recursion to m == 0
   for (int m = n - 2; m >= 0; m--)
-    P[m] = (P[m + 1] * tc * (m + 1.0)
-            - P[m + 2] * sqrt_n[n + m + 2] * sqrt_n[n - m - 1])
+    P[m] = (P[m + 1] * tc * (m + 1.0) - P[m + 2] * sqrt_n[n + m + 2] * sqrt_n[n - m - 1])
            / (sqrt_n[n + m + 1] * sqrt_n[n - m]);
 
   // keep up to the last 3 elements in P
@@ -76,11 +75,7 @@ void unnorm_legendreP(int n, float cos, std::vector<float>& y)
   y[n] *= scale;
 }
 
-void getSHreal(
-    int order,
-    float azimuth,
-    float inclination,
-    std::vector<float>& Y)
+void getSHreal(int order, float azimuth, float inclination, std::vector<float>& Y)
 {
   using namespace std;
 
@@ -113,13 +108,11 @@ void getSHreal(
     for (int m = -n, j = 0; m <= n; m++, j++)
     {
       if (j < n)
-        Y[j + idx_Y]
-            = (norm_real[j] * Lnm[j] * sqrt(2.0) * sin((n - j) * azimuth));
+        Y[j + idx_Y] = (norm_real[j] * Lnm[j] * sqrt(2.0) * sin((n - j) * azimuth));
       else if (j == n)
         Y[j + idx_Y] = (norm_real[j] * Lnm[j]);
       else /* (j>n) */
-        Y[j + idx_Y]
-            = (norm_real[j] * Lnm[j] * sqrt(2.0) * cos((abs(m)) * azimuth));
+        Y[j + idx_Y] = (norm_real[j] * Lnm[j] * sqrt(2.0) * cos((abs(m)) * azimuth));
     }
 
     // increment
@@ -155,18 +148,14 @@ void yawPitchRoll2Rzyx(
 {
   using namespace std;
 
-  float R1[3][3] = {
-      {cos(yaw), sin(yaw), 0.f}, {sin(yaw), cos(yaw), 0.f}, {0.f, 0.f, 1.f}};
+  float R1[3][3]
+      = {{cos(yaw), sin(yaw), 0.f}, {sin(yaw), cos(yaw), 0.f}, {0.f, 0.f, 1.f}};
 
   float R2[3][3]
-      = {{cos(pitch), 0.f, -sin(pitch)},
-         {0.f, 1.f, 0.f},
-         {sin(pitch), 0.f, cos(pitch)}};
+      = {{cos(pitch), 0.f, -sin(pitch)}, {0.f, 1.f, 0.f}, {sin(pitch), 0.f, cos(pitch)}};
 
   float R3[3][3]
-      = {{1.f, 0.f, 0.f},
-         {0.f, cos(roll), sin(roll)},
-         {0.f, -sin(roll), cos(roll)}};
+      = {{1.f, 0.f, 0.f}, {0.f, cos(roll), sin(roll)}, {0.f, -sin(roll), cos(roll)}};
 
   float Rtmp[3][3];
 
@@ -198,13 +187,11 @@ float getP(int M, int i, int l, int a, int b, float R_1[3][3], float* R_lm1)
   float ri0 = R_1[i + 1][1];
 
   if (b == -l)
-    ret = ri1 * R_lm1[(a + l - 1) * M + 0]
-          + rim1 * R_lm1[(a + l - 1) * M + (2 * l - 2)];
+    ret = ri1 * R_lm1[(a + l - 1) * M + 0] + rim1 * R_lm1[(a + l - 1) * M + (2 * l - 2)];
   else
   {
     if (b == l)
-      ret = ri1 * R_lm1[(a + l - 1) * M + (2 * l - 2)]
-            - rim1 * R_lm1[(a + l - 1) * M];
+      ret = ri1 * R_lm1[(a + l - 1) * M + (2 * l - 2)] - rim1 * R_lm1[(a + l - 1) * M];
     else
       ret = ri0 * R_lm1[(a + l - 1) * M + (b + l - 1)];
   }
@@ -279,11 +266,7 @@ float getW(int M, int l, int m, int n, float R_1[3][3], float* R_lm1)
   return ret;
 }
 
-void getSHrotMtxReal(
-    float Rxyz[3][3],
-    int L,
-    std::vector<float>& RotMtx,
-    int size)
+void getSHrotMtxReal(float Rxyz[3][3], int L, std::vector<float>& RotMtx, int size)
 {
   using namespace std;
 
@@ -327,9 +310,7 @@ void getSHrotMtxReal(
         int denom = abs(n) == l ? (2 * l) * (2 * l - 1) : (l * l - n * n);
 
         float u = sqrt((float)((l * l - m * m)) / (float)denom);
-        float v = sqrt(
-                      (float)((1 + d) * (l + abs(m) - 1) * (l + abs(m)))
-                      / (float)denom)
+        float v = sqrt((float)((1 + d) * (l + abs(m) - 1) * (l + abs(m))) / (float)denom)
                   * (float)(1 - 2 * d) * 0.5f;
         float w = sqrt((float)((l - abs(m) - 1) * (l - abs(m))) / (float)denom)
                   * (float)(1 - d) * (-0.5f);
@@ -356,10 +337,7 @@ void getSHrotMtxReal(
   }
 }
 
-void convertACNtoFUMA(
-    std::vector<std::vector<float>>& in,
-    int order,
-    int nSamples)
+void convertACNtoFUMA(std::vector<std::vector<float>>& in, int order, int nSamples)
 {
   using namespace std;
 
@@ -417,10 +395,7 @@ void convertACNtoFUMA(
       in[i][j] = FuMAsig[i][j];
 }
 
-void convertFUMAtoACN(
-    std::vector<std::vector<float>>& in,
-    int order,
-    int nSamples)
+void convertFUMAtoACN(std::vector<std::vector<float>>& in, int order, int nSamples)
 {
   using namespace std;
 

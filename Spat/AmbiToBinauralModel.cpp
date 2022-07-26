@@ -4,8 +4,7 @@ namespace Spat
 {
 void AmbiToBinaural::operator()(halp::tick t)
 {
-  if (inputs.audio.channels <= 0 || nSamples == 0
-      || outputs.audio.channels < 2)
+  if (inputs.audio.channels <= 0 || nSamples == 0 || outputs.audio.channels < 2)
     return;
 
   // Process the input buffer
@@ -34,8 +33,8 @@ void AmbiToBinaural::operator()(halp::tick t)
   yawPitchRoll2Rzyx(yaw, pitch, roll, 0, Rxyz);
   getSHrotMtxReal(Rxyz, order, M_rot_tmp, max_nsh * max_nsh);
 
-  std::complex<float>** specs = (std::complex<float>**)alloca(
-      sizeof(std::complex<float>) * (nSH * nSamples));
+  std::complex<float>** specs
+      = (std::complex<float>**)alloca(sizeof(std::complex<float>) * (nSH * nSamples));
   float* ambiVec = (float*)alloca(sizeof(float) * nSamples);
 
   for (int i = 0; i < nSH; i++)

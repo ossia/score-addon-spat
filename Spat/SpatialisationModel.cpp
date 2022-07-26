@@ -54,12 +54,6 @@ void Spatialisation::operator()(halp::tick t)
   l_volume = sqrt(l_volume / t.frames);
   r_volume = sqrt(r_volume / t.frames);
 
-  for (int k = 0; k < nbr_channels; k++)
-  {
-    //      fprintf(stderr,"Channel %d : %f \n",k, channel_volume[k]);
-    //      channel_volume[k] = sqrt(channel_volume[k] / t.frames);;
-  }
-
   send_message(processor_to_ui{
       .l_volume = l_volume,
       .r_volume = r_volume,

@@ -12,11 +12,12 @@ namespace Spat
 class StereoPanning
 {
 public:
-  halp_meta(name, "Stereo Panning") halp_meta(category, "Audio")
-      halp_meta(c_name, "avnd_stereopanning")
-          halp_meta(uuid, "82bdb9c5-9cf8-440e-8675-c0caf4fc59b9")
+  halp_meta(name, "Stereo Panning")
+  halp_meta(category, "Audio")
+  halp_meta(c_name, "avnd_stereopanning")
+  halp_meta(uuid, "82bdb9c5-9cf8-440e-8675-c0caf4fc59b9")
 
-              using setup = halp::setup;
+  using setup = halp::setup;
   using tick = halp::tick;
 
   struct ins

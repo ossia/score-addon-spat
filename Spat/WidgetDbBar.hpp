@@ -45,14 +45,12 @@ struct custom_db_bar
     /*** Left part ***/
     /* Background dB */
     ctx.begin_path();
-    ctx.set_linear_gradient(
-        l_x, 20., l_x, 150., {255, 0, 0, 255}, {200, 175, 0, 255});
+    ctx.set_linear_gradient(l_x, 20., l_x, 150., {255, 0, 0, 255}, {200, 175, 0, 255});
     ctx.draw_rect(l_x, 20., 20., 130.);
     ctx.fill();
 
     ctx.begin_path();
-    ctx.set_linear_gradient(
-        l_x, 150., l_x, 280., {200, 175, 0, 255}, {0, 255, 0, 255});
+    ctx.set_linear_gradient(l_x, 150., l_x, 280., {200, 175, 0, 255}, {0, 255, 0, 255});
     ctx.draw_rect(l_x, 150., 20., 130.);
     ctx.fill();
 
@@ -69,13 +67,11 @@ struct custom_db_bar
     /*** Right part ***/
     /* Background dB */
     ctx.begin_path();
-    ctx.set_linear_gradient(
-        r_x, 20., r_x, 150., {255, 0, 0, 255}, {200, 175, 0, 255});
+    ctx.set_linear_gradient(r_x, 20., r_x, 150., {255, 0, 0, 255}, {200, 175, 0, 255});
     ctx.draw_rect(r_x, 20., 20., 130.);
     ctx.fill();
     ctx.begin_path();
-    ctx.set_linear_gradient(
-        r_x, 150., r_x, 280., {200, 175, 0, 255}, {0, 255, 0, 255});
+    ctx.set_linear_gradient(r_x, 150., r_x, 280., {200, 175, 0, 255}, {0, 255, 0, 255});
     ctx.draw_rect(r_x, 150., 20., 130.);
     ctx.fill();
 

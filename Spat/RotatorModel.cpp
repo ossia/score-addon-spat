@@ -5,8 +5,7 @@ namespace Spat
 
 void Rotator::operator()(halp::tick t)
 {
-  if (inputs.audio.channels <= 0 || nSamples == 0
-      || outputs.audio.channels <= 0)
+  if (inputs.audio.channels <= 0 || nSamples == 0 || outputs.audio.channels <= 0)
     return;
 
   FuMA = inputs.conv;

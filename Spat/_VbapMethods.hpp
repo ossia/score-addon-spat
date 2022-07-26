@@ -28,10 +28,7 @@ void invertLsMtx2D(
     std::vector<double>& layoutInvMtx /* N_group x 4 */
 );
 
-int findLsPairs(
-    std::vector<double> ls_dirs_deg,
-    int L,
-    std::vector<int>& out_pairs);
+int findLsPairs(std::vector<double> ls_dirs_deg, int L, std::vector<int>& out_pairs);
 
 void Vbap2D(
     int ls_num,

@@ -26,6 +26,8 @@ struct custom_audio
     ctx.draw_rect(0., 0., width(), height());
     ctx.fill();
 
+    if (nbr_channels > 1){
+
     /* Ring color */
     ctx.set_stroke_width(8.);
     int ellipse = 0;
@@ -63,6 +65,7 @@ struct custom_audio
       ctx.stroke();
       ellipse++;
     }
+    }
 
     /* Parameters */
     double x = 0;
@@ -77,9 +80,6 @@ struct custom_audio
     for (int i = 1; i <= nbr_channels; i++)
     {
       ctx.move_to(150, 150);
-
-      fprintf(
-          stderr, "AUDIO Channel %d : %f \n", i - 1, channel_volume.at(i - 1));
 
       if (channel_volume.at(i - 1) > 1)
       {
@@ -109,8 +109,7 @@ struct custom_audio
     for (int i = 1; i <= nbr_channels; i++)
     {
       ctx.move_to(150, 150);
-      ctx.arc_to(
-          x, y, w, h, ((i - 1) / nbr_channels) * 360, 360 / nbr_channels);
+      ctx.arc_to(x, y, w, h, ((i - 1) / nbr_channels) * 360, 360 / nbr_channels);
     }
     ctx.stroke();
 

@@ -19,34 +19,23 @@ class AmbiToBinaural
   static constexpr float deg_to_rad = M_PI / 180.f;
 
 public:
-  halp_meta(name, "Ambisonics to Binaural") halp_meta(category, "Audio")
-      halp_meta(c_name, "ambi_to_binaural")
-          halp_meta(uuid, "0fb2b7f5-8811-472a-abad-905e1fa0e6db")
+  halp_meta(name, "Ambisonics to Binaural")
+  halp_meta(category, "Audio")
+  halp_meta(c_name, "ambi_to_binaural")
+  halp_meta(uuid, "0fb2b7f5-8811-472a-abad-905e1fa0e6db")
 
-              struct ins
+  struct ins
   {
     //halp::dynamic_audio_bus<"Input", float>
     //    audio;
     halp::dynamic_audio_spectrum_bus<"Input", float> audio;
-    halp::knob_f32<
-        "Azimuth",
-        halp::range{.min = -180.0, .max = 180.0, .init = 0}>
-        azi;
-    halp::knob_f32<
-        "Elevation",
-        halp::range{.min = -180.0, .max = 180.0, .init = 0}>
+    halp::knob_f32<"Azimuth", halp::range{.min = -180.0, .max = 180.0, .init = 0}> azi;
+    halp::knob_f32<"Elevation", halp::range{.min = -180.0, .max = 180.0, .init = 0}>
         elev;
-    halp::hslider_i32<
-        "Order",
-        halp::range{.min = 0, .max = max_order, .init = 0}>
-        order;
-    halp::knob_f32<"Yaw", halp::range{.min = -180.0, .max = 180.0, .init = 0}>
-        yaw;
-    halp::
-        knob_f32<"Pitch", halp::range{.min = -180.0, .max = 180.0, .init = 0}>
-            pitch;
-    halp::knob_f32<"Roll", halp::range{.min = -180.0, .max = 180.0, .init = 0}>
-        roll;
+    halp::hslider_i32<"Order", halp::range{.min = 0, .max = max_order, .init = 0}> order;
+    halp::knob_f32<"Yaw", halp::range{.min = -180.0, .max = 180.0, .init = 0}> yaw;
+    halp::knob_f32<"Pitch", halp::range{.min = -180.0, .max = 180.0, .init = 0}> pitch;
+    halp::knob_f32<"Roll", halp::range{.min = -180.0, .max = 180.0, .init = 0}> roll;
   } inputs;
 
   struct
