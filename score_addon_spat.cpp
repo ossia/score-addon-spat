@@ -8,7 +8,7 @@
 #include <Spat/Vbap.hpp>
 
 #include <Spat/Spatatouille.hpp>
-#include <Spat/Spatialisation.hpp>
+//#include <Spat/Spatialisation.hpp>
 #include <Spat/SpecDisplay.hpp>
 #include <Spat/AudioSpat.hpp>
 
@@ -31,7 +31,7 @@ score_addon_spat::factories(
     return Avnd::instantiate_fx<
             Spat::AudioSpat
           , Spat::Spatatouille
-          , Spat::Spatialisation
+//          , Spat::Spatialisation
           , Spat::SpecDisplay
           , Spat::StereoToMono
           , Spat::StereoPanning

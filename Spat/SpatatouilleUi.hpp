@@ -26,7 +26,9 @@ struct Spatatouille::ui
       };
 
       ui.spatatouille.widget.source
-          = [&](int src) { this->send_message(ui_to_processor{.source = src}); };
+          = [&](int src) { this->send_message(ui_to_processor{.source = src});
+          fprintf(stderr,"Source (Ui) : %d \n" , src);};
+
     }
 
     static void process_message(ui& ui, processor_to_ui op) { }

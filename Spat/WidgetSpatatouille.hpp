@@ -159,7 +159,6 @@ struct custom_spatatouille
       ctx.draw_text(m_x_5 - 6, m_y_5 + 7, "5");
       ctx.fill();
     }
-
     ctx.update();
   }
 
@@ -172,16 +171,9 @@ struct custom_spatatouille
         mouse_move(event);
         break;
       case event.right:
-        switch (num_current)
-        {
-          case 5:
-            num_current = 1;
-            source(num_current);
-            break;
-          default:
-            num_current += 1;
-            source(num_current);
-        }
+        num_current = (num_current + 1) % 5;
+        source(num_current);
+        break;
     }
     mouse_move(event);
     return true;

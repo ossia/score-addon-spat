@@ -26,7 +26,7 @@ public:
   struct ui_to_processor
   {
     halp::xy_type<float> pos_xy;
-    int source;
+    std::optional<int> source;
   };
 
   struct processor_to_ui

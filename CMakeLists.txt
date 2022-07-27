@@ -49,10 +49,10 @@ add_library(
   Spat/SpatatouilleUi.hpp
   Spat/Spatatouille.hpp
 
-  Spat/SpatialisationModel.hpp
-  Spat/SpatialisationModel.cpp
-  Spat/SpatialisationUi.hpp
-  Spat/Spatialisation.hpp
+#  Spat/SpatialisationModel.hpp
+#  Spat/SpatialisationModel.cpp
+#  Spat/SpatialisationUi.hpp
+#  Spat/Spatialisation.hpp
 
   Spat/SpecDisplayModel.hpp
   Spat/SpecDisplayModel.cpp
