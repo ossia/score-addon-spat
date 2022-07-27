@@ -6,6 +6,7 @@
 #include <halp/fft.hpp>
 
 #include <iostream>
+#include <algorithm>
 #include <Spat/_VbapMethods.hpp>
 
 namespace Spat{
@@ -25,6 +26,8 @@ public:
     {
         halp::dynamic_audio_spectrum_bus<"Input", double>
             audio;
+        halp::hslider_i32<"Room - 0:Normal room, 1:Listening room, 2:Anechoic room", halp::range{.min = 0, .max = 2, .init = 0}>
+            room;
         halp::knob_f32<"Azimuth", halp::range{.min = -180.0, .max = 180.0, .init = 0}>
             azi;
         halp::knob_f32<"Elevation", halp::range{.min = -180.0, .max = 180.0, .init = 0}>
@@ -52,17 +55,20 @@ public:
 
         gains2D.resize(nChannels);
         vbap_gtable.resize(nChannels);
+        //G_src.resize();
     }
 
     void operator()(halp::tick tick);
     
 private:
     int nChannels, nSources, nSamples;
+    int room;
     float azi, elev;
     float yaw, pitch, roll;
     halp::fft<double> FFT;
     std::vector<double> gains2D{}, vbap_gtable{};
     std::vector<std::vector<double>> src_dirs_xyz;
+    std::vector<std::vector<std::complex<double>>> G_src{};
 };
 }
 

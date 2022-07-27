@@ -14,5 +14,7 @@ struct Vbap::ui
   halp_meta(background, dark)
 
   halp::label title{"VBAP"};
+  halp::item<&ins::room> room;
+  halp::item<&ins::azi> azi;
 };
 }

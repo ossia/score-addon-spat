@@ -13,20 +13,18 @@ void Vbap::operator()(halp::tick t)
     azi = inputs.azi;
     elev = inputs.elev;
 
-    std::complex<double>** specs = (std::complex<double>**) alloca(sizeof(std::complex<double>)*(nChannels*nSamples));
-    double* specOut = (double*) alloca(sizeof(double)*nSamples);
+    std::complex<double>** inFrameSpec = (std::complex<double>**) alloca(sizeof(std::complex<double>)*(nChannels*nSamples));
+    double* inFrame = (double*) alloca(sizeof(double)*nSamples);
+
+    std::complex<double>** outFrameSpec = (std::complex<double>**) alloca(sizeof(std::complex<double>)*(nChannels*nSamples));
+    double* outFrame = (double*) alloca(sizeof(double)*nSamples);
 
     for (int i = 0; i < nChannels; i++)
     {
         for (int j = 0; j < nSamples; j++)
-            specOut[j] = in[0][j];
-        specs[i] = FFT.execute(specOut, nSamples);
+            inFrame[j] = in[0][j];
+        inFrameSpec[i] = FFT.execute(inFrame, nSamples);
     }
-
-    //algo ici
-    /*
-
-        }*/
 
     /*
     float Rxyz[3][3];
@@ -53,41 +51,51 @@ void Vbap::operator()(halp::tick t)
     src_dirs_rot_deg[1] = rad_to_deg * atan2f(src_dirs_rot_xyz[2], hypotxy);                //elev
     */
 
-    float azi=0.f;
+    float room = inputs.room/2.f;
+    float azi = inputs.azi;
     int az_res_deg = 1;
-    generateVBAPgainTable2D((float*)pData->loudpkrs_dirs_deg, nChannels, az_res_deg,
-                                    &vbap_gtable, nChannels);
 
+    // TODO : generateVBAPgainTable2D(loudpkrs_dirs_deg, nChannels, az_res_deg,
+    //                                &vbap_gtable, nChannels);
+
+    int HYBRID_BANDS = 0, TIME_SLOTS = 0; // TODO
     // recalculate frequency dependent panning gains
     int idx2D = (int)((mod(azi+180.0f,360.0f))+0.5f);
     for (int ls = 0; ls < nChannels; ls++)
         gains2D[ls] = vbap_gtable[idx2D*nChannels+ls];
     for (int band = 0; band < HYBRID_BANDS; band++){
         // apply pValue per frequency
-        pv_f = pData->pValue[band];
+        double pv_f = 0; // TODO : pValue[band];
         if(pv_f != 2.0f){
-            float gains2D_sum_pvf = 0.0f;
+            double gains2D_sum_pvf = 0.f;
             for (int ls = 0; ls < nChannels; ls++)
-                gains2D_sum_pvf += powf(SAF_MAX(gains2D[ls], 0.0f), pv_f);
+                gains2D_sum_pvf += pow(std::max(gains2D[ls], 0.0), pv_f);
             gains2D_sum_pvf = powf(gains2D_sum_pvf, 1.0f/(pv_f+2.23e-9f));
             for (int ls = 0; ls < nChannels; ls++)
-                G_src[band][ls] = cmplxf(gains2D[ls] / (gains2D_sum_pvf+2.23e-9f), 0.0f);
+            {
+                std::complex<double> gain(gains2D[ls] / (gains2D_sum_pvf+2.23e-9f), 0.0f);
+                G_src[band][ls] = gain;
+            }
         }
         else
             for (int ls = 0; ls < nChannels; ls++)
-                G_src[band][ls] = cmplxf(gains2D[ls], 0.0f);
+            {
+                std::complex<double> gain(gains2D[ls], 0.0f);
+                G_src[band][ls] = gain;
+            }
     }
 
     // apply panning gains
     for (int band = 0; band < HYBRID_BANDS; band++){
         for (int ls = 0; ls < nChannels; ls++)
             for (int t = 0; t < TIME_SLOTS; t++)
-                outputframeTF[band][ls][t] = ccaddf(pData->outputframeTF[band][ls][t], ccmulf(pData->inputframeTF[band][ch][t], pData->G_src[band][ch][ls]));
+                std::cout << "TODO" << std::endl;
+                // TODO : outFrameSpec[band][ls][t] = ccaddf(pData->outFrameSpec[band][ls][t], ccmulf(pData->inFrameSpec[band][ch][t], pData->G_src[band][ch][ls]));
     }
 
     for (int i = 0 ; i < nChannels ; i++)
     {
-        out[i] = FFT.execute(specs[i], nSamples);
+        out[i] = FFT.execute(outFrameSpec[i], nSamples);
         for(int j = 0 ; j < nSamples ; j++)
             out[i][j] /= nSamples ;     // normalisation
     }
