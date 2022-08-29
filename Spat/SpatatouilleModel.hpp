@@ -25,6 +25,7 @@ public:
 
   struct ui_to_processor
   {
+//    std::optional<halp::xy_type<float>> pos_xy;
     halp::xy_type<float> pos_xy;
     std::optional<int> source;
   };
@@ -36,7 +37,7 @@ public:
     double dome_volume;
   };
 
-  ui_to_processor m_local_data{.pos_xy = {.x = 0.5, .y = 1.}, .source = 1};
+  ui_to_processor m_local_data{};
 
   struct ins
   {
@@ -57,7 +58,15 @@ public:
     halp::hbargraph_i32<"Source", halp::range{.min = 1, .max = 3, .init = 1}> source;
   } outputs;
 
-  void process_message(const ui_to_processor& m) { m_local_data = m; }
+//  void process_message(const ui_to_processor& m) { m_local_data = m; }
+
+  void process_message(const ui_to_processor& m)
+  {
+//      if(m.pos_xy)
+//          m_local_data.pos_xy = *m.pos_xy;
+      if(m.source)
+          m_local_data.source = *m.source;
+  }
 
   std::function<void(processor_to_ui)> send_message;
 
