@@ -6,29 +6,33 @@ jobs:
   build:
     name: "${{ matrix.config.name }} ${{ matrix.config.version }}"
     runs-on: ${{ matrix.config.os }}
+    container: ${{ matrix.config.container }}
     timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
-        version: [3.0.8]
+        version: [3.8.2]
         config:
           - {
               name: "Windows",
               os: windows-latest,
+              container: "",
               score: "win64.exe",
-              sdk: windows-sdk.zip,
+              sdk: sdk-windows-x86_64.zip,
             }
           - {
               name: "Ubuntu",
-              os: ubuntu-latest,
-              score: "linux-amd64.AppImage",
-              sdk: linux-sdk.zip,
+              os: [self-hosted, linux, x64, sat-builder],
+              container: "ubuntu:noble",
+              score: "linux-x86_64.AppImage",
+              sdk: sdk-linux-x86_64.zip,
             }
           - {
               name: "macOS",
               os: macos-latest,
-              score: "macOS.dmg",
-              sdk: mac-sdk.zip,
+              container: "",
+              score: "macOS-AppleSilicon.dmg",
+              sdk: sdk-darwin-aarch64.zip,
             }
 
     steps:
@@ -100,6 +104,7 @@ jobs:
   build_head:
     name: "${{ matrix.config.name }} (latest)"
     runs-on: ${{ matrix.config.os }}
+    container: ${{ matrix.config.container }}
     timeout-minutes: 10
     strategy:
       fail-fast: false
@@ -108,20 +113,23 @@ jobs:
           - {
               name: "Windows",
               os: windows-latest,
+              container: "",
               score: "win64.exe",
-              sdk: windows-sdk.zip,
+              sdk: sdk-windows-x86_64.zip,
             }
           - {
               name: "Ubuntu",
-              os: ubuntu-latest,
-              score: "linux-amd64.AppImage",
-              sdk: linux-sdk.zip,
+              os: [self-hosted, linux, x64, sat-builder],
+              container: "ubuntu:noble",
+              score: "linux-x86_64.AppImage",
+              sdk: sdk-linux-x86_64.zip,
             }
           - {
               name: "macOS",
               os: macos-latest,
-              score: "macOS.dmg",
-              sdk: mac-sdk.zip,
+              container: "",
+              score: "macOS-AppleSilicon.dmg",
+              sdk: sdk-darwin-aarch64.zip,
             }
 
     steps:
