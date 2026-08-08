@@ -9,6 +9,8 @@ struct custom_audio
 {
     double volume = 0;
 
+    int nbr_channels = 0;
+
     static constexpr double width() { return 300.; } // Axe X
     static constexpr double height() { return 300.; } // Axe
 
@@ -46,7 +48,7 @@ struct custom_audio
                 ctx.begin_path();
                 ctx.set_stroke_color({255, 0, 0, 70});
             }
-            if(!(i % 10 == 0)){ 
+            if(!(i % 10 == 0)){
                 ctx.draw_circle(150, 150, i);
 
             }
@@ -61,21 +63,21 @@ struct custom_audio
         double w = width();
         double h = height();
 
-        double max_channel = 16;
-        double tab_volume[(int)max_channel+1];
+        double tab_volume[nbr_channels+1];
 
-        for(int i = 1; i <= max_channel; i++){
+        for(int i = 1; i <= nbr_channels; i++){
             tab_volume[i] = volume;
         }
 
         /* Volume */
         ctx.set_fill_color({85, 85, 85, 255});
         ctx.begin_path();
-        for(int i = 1; i <= max_channel; i++){
+        for(int i = 0; i < nbr_channels; i++){
             ctx.move_to(150, 150);
+            if(nbr_channels == 0){nbr_channels = 1;};
             ctx.arc_to(x + 150 * (tab_volume[i]) , y + 150 * (tab_volume[i]),
                        w - 2 * 150 * (tab_volume[i]), h - 2 * 150 * (tab_volume[i]),
-                       ((i-1) / max_channel)*360, 360 / max_channel);
+                       ((i-1) / nbr_channels)*360, 360 / nbr_channels);
         }
         ctx.fill();
 
@@ -88,26 +90,15 @@ struct custom_audio
         }
         ctx.stroke();
         ctx.begin_path();
-        for(int i = 1; i <= max_channel; i++){
+
+        for(int i = 0; i < nbr_channels; i++){
             ctx.move_to(150, 150);
-            ctx.arc_to(x, y, w, h, ((i-1) / max_channel)*360, 360 / max_channel);
+            if(nbr_channels == 0){nbr_channels = 1;};
+            ctx.arc_to(x, y, w, h, ((i-1) / nbr_channels)*360, 360 / nbr_channels);
         }
         ctx.stroke();
 
         ctx.update();
-    }
-
-    bool mouse_press(double x, double y, auto button)
-    {
-        return true;
-    }
-
-    void mouse_move(double x, double y, auto button)
-    {
-    }
-
-    void mouse_release(double x, double y, auto button)
-    {
     }
 };
 }

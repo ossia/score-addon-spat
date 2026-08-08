@@ -58,25 +58,26 @@ struct custom_matrix
         ctx.update();
     }
 
-    bool mouse_press(double x, double y, auto button)
+    bool mouse_press(auto event)
     {
-        mouse_move(x, y, button);
+        mouse_move(event);
         on_moved(pos);
         return true;
     }
 
-    void mouse_move(double x, double y, auto button)
+    bool mouse_move(auto event)
     {
-        pos.x = std::clamp(x / width(), 0., 1.);
-        pos.y = std::clamp(y / height(), 0., 1.);
-
+        pos.x = std::clamp(event.x / width(), 0., 1.);
+        pos.y = std::clamp(event.y / height(), 0., 1.);
         on_moved(pos);
+        return true;
     }
 
-    void mouse_release(double x, double y, auto button)
+    bool mouse_release(auto event)
     {
-        mouse_move(x, y, button);
+        mouse_move(event);
         on_moved(pos);
+        return true;
     }
 };
 }

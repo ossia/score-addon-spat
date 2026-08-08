@@ -60,26 +60,5 @@ struct custom_db_bar_vu
 
         ctx.update();
     }
-
-    bool mouse_press(double x, double y, auto button)
-    {
-        mouse_move(x, y, button);
-        on_moved(pos);
-        return true;
-    }
-
-    void mouse_move(double x, double y, auto button)
-    {
-        pos.x = std::clamp(x / width(), 0., 1.);
-        pos.y = std::clamp(y / height(), 0., 1.);
-
-        on_moved(pos);
-    }
-
-    void mouse_release(double x, double y, auto button)
-    {
-        mouse_move(x, y, button);
-        on_moved(pos);
-    }
 };
 }

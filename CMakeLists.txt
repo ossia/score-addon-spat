@@ -49,6 +49,16 @@ add_library(
   Spat/SpatatouilleUi.hpp
   Spat/Spatatouille.hpp
 
+  Spat/SpatialisationModel.hpp
+  Spat/SpatialisationModel.cpp
+  Spat/SpatialisationUi.hpp
+  Spat/Spatialisation.hpp
+
+  Spat/SpecDisplayModel.hpp
+  Spat/SpecDisplayModel.cpp
+  Spat/SpecDisplayUi.hpp
+  Spat/SpecDisplay.hpp
+
   Spat/WidgetSpatatouille.hpp
   Spat/WidgetAudioSpat.hpp
   Spat/WidgetMatrix.hpp
@@ -56,6 +66,7 @@ add_library(
   Spat/WidgetDbBar.hpp
   Spat/WidgetDbBarVu.hpp
   Spat/WidgetDomeSpat.hpp
+  Spat/WidgetSpecDisplay.hpp
 
   Spat/WidgetIndex.hpp
 
