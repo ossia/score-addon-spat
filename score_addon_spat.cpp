@@ -8,6 +8,9 @@
 #include <Spat/Vbap.hpp>
 
 #include <Spat/Spatatouille.hpp>
+#include <Spat/Spatialisation.hpp>
+#include <Spat/SpecDisplay.hpp>
+#include <Spat/AudioSpat.hpp>
 
 #include <Avnd/Factories.hpp>
 #include <score/plugins/FactorySetup.hpp>
@@ -26,14 +29,15 @@ score_addon_spat::factories(
 {
 
     return Avnd::instantiate_fx<
-            Spat::Spatatouille
+            Spat::AudioSpat
+          , Spat::Spatatouille
+          , Spat::Spatialisation
+          , Spat::SpecDisplay
           , Spat::StereoToMono
           , Spat::StereoPanning
           , Spat::Rotator
           , Spat::AmbiToBinaural
-          , Spat::MonoToAmbi
-          , Spat::Vbap
-            >(ctx, key);
+          >(ctx, key);
 }
 
 std::vector<score::PluginKey> score_addon_spat::required() const
