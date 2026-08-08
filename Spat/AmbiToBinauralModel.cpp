@@ -30,7 +30,7 @@ void AmbiToBinaural::operator()(halp::tick t)
 
     getRSH(order, azi, elev, y);
 
-    yawPitchRoll2Rzyx(yaw, pitch, roll, 0, Rxyz);
+    yawPitchRoll2Rzyx(yaw, pitch, roll, Rxyz);
     getSHrotMtxReal(Rxyz, order, M_rot_tmp, max_nsh*max_nsh);
 
     std::complex<float>** specs = (std::complex<float>**) alloca(sizeof(std::complex<float>)*(nSH*nSamples));

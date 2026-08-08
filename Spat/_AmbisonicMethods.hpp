@@ -8,10 +8,10 @@
 
 #pragma once
 
-#include <cmath>
 #include <algorithm>
 #include <iostream>
 #include <span>
+#include <Spat/_Methods.hpp>
 
 static constexpr int max_FuMA_order = 3;
 static constexpr int max_FuMA_nsh = ((max_FuMA_order+1)*(max_FuMA_order+1));
@@ -19,15 +19,6 @@ static constexpr int max_FuMA_nsh = ((max_FuMA_order+1)*(max_FuMA_order+1));
 void unnorm_legendreP (int n, float cos, std::vector<float>& y);
 void getSHreal (int order, float azimuth, float inclination, std::vector<float>& Y);
 void getRSH (int N, float azi, float elev, std::vector<float>& Y);
-
-void yawPitchRoll2Rzyx
-(
-    float yaw,
-    float pitch,
-    float roll,
-    int rollPitchYawFLAG,
-    float R[3][3]
-);
 
 /* Ivanic, J., Ruedenberg, K. (1998). Rotation Matrices for Real Spherical Harmonics. Direct Determination
  * by Recursion Page: Additions and Corrections. Journal of Physical Chemistry A, 102(45), 9099?9100. */

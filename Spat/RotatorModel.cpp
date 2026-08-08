@@ -45,7 +45,7 @@ void Rotator::operator()(halp::tick t)
     if(FuMA)
         convertFUMAtoACN(inFrame, order, nSamples);
 
-    yawPitchRoll2Rzyx(yaw, pitch, roll, 0, Rxyz);
+    yawPitchRoll2Rzyx(yaw, pitch, roll, Rxyz);
     getSHrotMtxReal(Rxyz, order, M_rot_tmp, max_nsh*max_nsh);
 
     bool sameRot = true;

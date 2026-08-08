@@ -43,6 +43,8 @@ add_library(
   Spat/_AmbisonicMethods.cpp
   Spat/_VbapMethods.hpp
   Spat/_VbapMethods.cpp
+  Spat/_Methods.hpp
+  Spat/_Methods.cpp
 
   Spat/Spatatouille.hpp
   Spat/SpatatouilleModel.cpp
