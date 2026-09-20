@@ -80,38 +80,27 @@ struct custom_dome
 
     }
 
-    bool mouse_press(double x, double y, auto button)
+    bool mouse_press(auto event)
     {
-
         on_moved(pos);
-
-        if (button == 1){
-            mouse_move(x, y, button);
-        }else if (button == 2){
-
-            fprintf(stderr, "Num current = %i \n", num_current);
-            if(num == 0){
-                if(num_current == 2){
-                    num_current = 1;
-                    source(num_current);
-                }else if(num_current == 1){
-                    num_current = 2;
-                    source(num_current);
-                }
-                num = 1;
-            }else{
-                num = 0;
+        if (event.button == event.left){
+            mouse_move(event);
+        }else if (event.button == event.right){
+            if(num_current == 2){
+                num_current = 1;
+                source(num_current);
+            }else if(num_current == 1){
+                num_current = 2;
+                source(num_current);
             }
         }
-
         return true;
     }
 
-    void mouse_move(double x, double y, auto button)
+    bool mouse_move(auto event)
     {
-        pos.x = std::clamp(x / width(), 0., 1.);
-        pos.y = std::clamp(y / height(), 0., 1.);
-
+        pos.x = std::clamp(event.x / width(), 0., 1.);
+        pos.y = std::clamp(event.y / height(), 0., 1.);
         if (num_current == 1){
             pos_1.x = pos.x;
             pos_1.y = pos.y;
@@ -119,14 +108,15 @@ struct custom_dome
             pos_2.x = pos.x;
             pos_2.y = pos.y;
         }
-
         on_moved(pos);
+        return true;
     }
 
-    void mouse_release(double x, double y, auto button)
+    bool mouse_release(auto event)
     {
-        mouse_move(x, y, button);
+        mouse_move(event);
         on_moved(pos);
+        return true;
     }
 };
 }
