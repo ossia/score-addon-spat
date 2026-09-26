@@ -72,8 +72,6 @@ struct Spatatouille::ui
       halp::item<&ins::volume> volume;
       halp::item<&ins::z> z;
 
-      halp::item<&outs::output> output;
-      halp::item<&outs::source> source;
   } option;
 
   struct {

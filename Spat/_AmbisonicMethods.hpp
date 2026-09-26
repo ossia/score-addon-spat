@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <iostream>
 #include <span>
+#include <vector>
 
 static constexpr int max_FuMA_order = 3;
 static constexpr int max_FuMA_nsh = ((max_FuMA_order+1)*(max_FuMA_order+1));

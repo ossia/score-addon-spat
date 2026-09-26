@@ -28,7 +28,7 @@ public:
     {
         halp::dynamic_audio_bus<"Input", float>
             audio;
-        halp::toggle_t<"Convert to FuMA (ACN by default)", halp::toggle_setup{false}>
+        halp::toggle<"Convert to FuMA (ACN by default)", halp::toggle_setup{false}>
             conv;
         halp::hslider_i32<"Order", halp::range{.min = 0, .max = max_order, .init = 0}>
             order;

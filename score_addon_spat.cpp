@@ -1,39 +1,66 @@
 #include "score_addon_spat.hpp"
 
-#include <Spat/StereoToMono.hpp>
-#include <Spat/StereoPanning.hpp>
-#include <Spat/Rotator.hpp>
+#include <Gris/Commands.hpp>
+#include <Gris/Executor.hpp>
+#include <Gris/Inspector.hpp>
+#include <Gris/Layer.hpp>
+#include <Gris/Model.hpp>
+#include <Gris/SpeakerSetupInlet.hpp>
+
 #include <Spat/AmbiToBinaural.hpp>
 #include <Spat/MonoToAmbi.hpp>
-#include <Spat/Vbap.hpp>
-
+#include <Spat/Rotator.hpp>
 #include <Spat/Spatatouille.hpp>
+#include <Spat/StereoPanning.hpp>
+#include <Spat/StereoToMono.hpp>
 
 #include <Avnd/Factories.hpp>
+#include <Dataflow/WidgetInletFactory.hpp>
+#include <Effect/EffectFactory.hpp>
+#include <Process/Dataflow/PortFactory.hpp>
+#include <Process/GenericProcessFactory.hpp>
+
 #include <score/plugins/FactorySetup.hpp>
+
+#include <score_addon_spat_commands_files.hpp>
 #include <score_plugin_engine.hpp>
 
-/**
- * This file instantiates the classes that are provided by this plug-in.
- */
 score_addon_spat::score_addon_spat() = default;
 score_addon_spat::~score_addon_spat() = default;
 
-std::vector<std::unique_ptr<score::InterfaceBase>>
-score_addon_spat::factories(
-    const score::ApplicationContext& ctx,
-    const score::InterfaceKey& key) const
+std::vector<score::InterfaceBase*> score_addon_spat::factories(
+    const score::ApplicationContext& ctx, const score::InterfaceKey& key) const
 {
+  auto fx = instantiate_factories<
+      score::ApplicationContext,
+      FW<Process::ProcessModelFactory, Process::ProcessFactory_T<Gris::SpatModel>>,
+      FW<Process::LayerFactory, Gris::LayerFactory>,
+      FW<Process::PortFactory,
+         Dataflow::WidgetInletFactory<
+             Gris::SpeakerSetupInlet, WidgetFactory::SpeakerSetupWidget>>,
+      FW<Execution::ProcessComponentFactory, Gris::ExecutorFactory>,
+      FW<Inspector::InspectorWidgetFactory, Gris::InspectorFactory>>(ctx, key);
 
-    return Avnd::instantiate_fx<
-            Spat::Spatatouille
-          , Spat::StereoToMono
-          , Spat::StereoPanning
-          , Spat::Rotator
-          , Spat::AmbiToBinaural
-          , Spat::MonoToAmbi
-          , Spat::Vbap
-            >(ctx, key);
+  Avnd::instantiate_fx<Spat::Spatatouille>(fx, ctx, key);
+  Avnd::instantiate_fx<Spat::StereoToMono>(fx, ctx, key);
+  Avnd::instantiate_fx<Spat::StereoPanning>(fx, ctx, key);
+  Avnd::instantiate_fx<Spat::Rotator>(fx, ctx, key);
+  Avnd::instantiate_fx<Spat::AmbiToBinaural>(fx, ctx, key);
+  Avnd::instantiate_fx<Spat::MonoToAmbi>(fx, ctx, key);
+  return fx;
+}
+
+std::pair<const CommandGroupKey, CommandGeneratorMap> score_addon_spat::make_commands()
+{
+  using namespace Gris;
+  std::pair<const CommandGroupKey, CommandGeneratorMap> cmds{
+      CommandFactoryName(), CommandGeneratorMap{}};
+
+  ossia::for_each_type<
+#include <score_addon_spat_commands.hpp>
+      >(score::commands::FactoryInserter{cmds.second});
+
+  return cmds;
 }
 
 std::vector<score::PluginKey> score_addon_spat::required() const

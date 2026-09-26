@@ -27,7 +27,7 @@ public:
     {
         halp::dynamic_audio_bus<"Input", float>
             audio;
-        halp::toggle_t<"Convert to FuMA (ACN by default)", halp::toggle_setup{false}>
+        halp::toggle<"Convert to FuMA (ACN by default)", halp::toggle_setup{false}>
             conv;
         halp::knob_f32<"Azimuth", halp::range{.min = -180.0, .max = 180.0, .init = 0}>
             azi;
